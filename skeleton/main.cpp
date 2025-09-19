@@ -60,16 +60,42 @@ void initPhysics(bool interactive)
 	
 	//1. Crear geometria
 	PxSphereGeometry gSphere = PxSphereGeometry();
-	gSphere.radius = 5;
+	gSphere.radius = 2;
 
 	//2. Crear shape
 	PxShape* esferaShape = CreateShape(gSphere, gMaterial);
 
 	//3. Crear item (con Transform)
 	PxTransform* esferaTr = new PxTransform(PxVec3(0, 0, 0));
-	RenderItem* rEsfera = new RenderItem(esferaShape, esferaTr, Vector4(1.0f, 0.0f, 0.0f, 1.0f));
+	RenderItem* rEsfera = new RenderItem(esferaShape, esferaTr, Vector4(1.0f, 1.0f, 1.0f, 1.0f));
 	RegisterRenderItem(rEsfera); //y registrar item a renderizar
-	}
+
+	//CREAR EJE:
+	//1. Eje X
+	PxSphereGeometry gSphere1 = PxSphereGeometry();
+	gSphere1.radius = 2;
+	PxShape* esferaShape1 = CreateShape(gSphere1, gMaterial);
+	PxTransform* esferaTr1 = new PxTransform(PxVec3(20, 0, 0));
+	RenderItem* rEsfera1 = new RenderItem(esferaShape1, esferaTr1, Vector4(1.0f, 0.0f, 0.0f, 1.0f));
+	RegisterRenderItem(rEsfera1);
+
+	//2. Eje Y
+	PxSphereGeometry gSphere2 = PxSphereGeometry();
+	gSphere2.radius = 2;
+	PxShape* esferaShape2 = CreateShape(gSphere2, gMaterial);
+	PxTransform* esferaTr2 = new PxTransform(PxVec3(0, 20, 0));
+	RenderItem* rEsfera2 = new RenderItem(esferaShape2, esferaTr2, Vector4(0.0f, 1.0f, 0.0f, 1.0f));
+	RegisterRenderItem(rEsfera2);
+
+	//3. Eje Z
+	PxSphereGeometry gSphere3 = PxSphereGeometry();
+	gSphere3.radius = 2;
+	PxShape* esferaShape3 = CreateShape(gSphere3, gMaterial);
+	PxTransform* esferaTr3 = new PxTransform(PxVec3(0, 0, 20));
+	RenderItem* rEsfera3 = new RenderItem(esferaShape3, esferaTr3, Vector4(0.0f, 0.0f, 1.0f, 1.0f));
+	RegisterRenderItem(rEsfera3);
+	
+}
 
 
 // Function to configure what happens in each step of physics
