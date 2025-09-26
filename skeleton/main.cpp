@@ -8,6 +8,7 @@
 #include "RenderUtils.hpp"
 #include "callbacks.hpp"
 #include "Vector3D.h"
+#include "Particula.h"
 
 #include <iostream>
 
@@ -91,7 +92,12 @@ void initPhysics(bool interactive)
 	PxTransform* esferaTr3 = new PxTransform(PxVec3(ejeZ.getX(), ejeZ.getY(), ejeZ.getZ()));
 	RenderItem* rEsfera3 = new RenderItem(esferaShape, esferaTr3, Vector4(0.0f, 0.0f, 1.0f, 1.0f));
 	RegisterRenderItem(rEsfera3);
-	
+
+
+	//PARTICULA
+	Particula* p = new Particula(Vector3(0, 20, 0), Vector3(0, 0.5, 0), Vector3(0, -1, 0));
+	RenderItem* renderItem = new RenderItem(esferaShape, p->getTr(), Vector4(1.0f, 1.0f, 0.0f, 1.0f));
+	p->setRenderItem(renderItem);
 }
 
 
