@@ -97,7 +97,7 @@ void initPhysics(bool interactive)
 
 
 	//PARTICULA
-	p = new Particula(Vector3(0, 20, 0), Vector3(0, 3, 0), Vector3(0, -1, 0), 0.98);
+	p = new Particula(Vector3(0, 50, 0), Vector3(0, 0.5, 0), Vector3(0, -0.3, 0), 0.98);
 	RenderItem* renderItem = new RenderItem(esferaShape, p->getTr(), Vector4(1.0f, 1.0f, 0.0f, 1.0f));
 	p->setRenderItem(renderItem);
 }
@@ -108,8 +108,15 @@ void initPhysics(bool interactive)
 // t: time passed since last call in milliseconds
 void stepPhysics(bool interactive, double t)
 {
-	if (p->getTimeVida() <= 0.0) delete p;
-	else p->integrate(t);
+	if (p != nullptr)
+	{
+		p->integrate(t);
+		if (p->getTimeVida() <= 0.0)
+		{
+			delete p;
+			p = nullptr;
+		}
+	}
 
 	PX_UNUSED(interactive);
 

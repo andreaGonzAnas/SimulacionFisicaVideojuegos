@@ -12,6 +12,7 @@ Particula::Particula(Vector3 pos, Vector3 vel, Vector3 a, double d): vel(vel), a
     tVida = 10.0;
 
     tr = new PxTransform(pos);
+    prePos = pos - vel;
 }
 
 Particula::~Particula()
@@ -84,7 +85,6 @@ void Particula::setTimeVida(double t)
 void Particula::integrate(double t)
 {
     Vector3 actualPos = tr->p;
-
     if (tVida > 0.0 && masa > 0.0)
     {
         tVida -= t;
@@ -92,6 +92,10 @@ void Particula::integrate(double t)
         //euler semi-implicito
         vel = (vel * pow(damping, t)) + acceleration * t;
         tr->p = actualPos + t * vel;
+
+        //verlet
+        //tr->p = 2 * tr->p - prePos * pow(damping, t) + acceleration * (t*t);
+        //prePos = actualPos;
     }
     
 }

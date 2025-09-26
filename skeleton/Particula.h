@@ -12,6 +12,7 @@ private:
 	double damping;
 	double masa;
 	double tVida; //tiempo de vida
+	Vector3 prePos;
 
 public:
 	Particula();
