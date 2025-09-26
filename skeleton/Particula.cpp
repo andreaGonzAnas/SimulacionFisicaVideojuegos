@@ -85,5 +85,12 @@ void Particula::setTimeVida(double t)
 
 void Particula::integrate(double t)
 {
+    Vector3 actualPos = tr->p;
 
+    if (masa <= 0.0) return;
+
+    //vel = vel + acceleration * t;
+
+    tr->p = actualPos + t * vel;
+    
 }

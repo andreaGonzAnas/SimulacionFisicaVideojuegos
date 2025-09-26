@@ -32,6 +32,8 @@ PxDefaultCpuDispatcher*	gDispatcher = NULL;
 PxScene*				gScene      = NULL;
 ContactReportCallback gContactReportCallback;
 
+Particula* p;
+
 
 // Initialize physics engine
 void initPhysics(bool interactive)
@@ -95,7 +97,7 @@ void initPhysics(bool interactive)
 
 
 	//PARTICULA
-	Particula* p = new Particula(Vector3(0, 20, 0), Vector3(0, 0.5, 0), Vector3(0, -1, 0));
+	p = new Particula(Vector3(0, 20, 0), Vector3(0, 3, 0), Vector3(0, -1, 0));
 	RenderItem* renderItem = new RenderItem(esferaShape, p->getTr(), Vector4(1.0f, 1.0f, 0.0f, 1.0f));
 	p->setRenderItem(renderItem);
 }
@@ -106,6 +108,7 @@ void initPhysics(bool interactive)
 // t: time passed since last call in milliseconds
 void stepPhysics(bool interactive, double t)
 {
+	p->integrate(t);
 	PX_UNUSED(interactive);
 
 	gScene->simulate(t);
