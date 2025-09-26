@@ -9,12 +9,13 @@ private:
 	physx::PxTransform* tr;
 	Vector3 vel;
 	Vector3 acceleration;
+	double damping;
 	double masa;
 	double tVida; //tiempo de vida
 
 public:
 	Particula();
-	Particula(Vector3 pos, Vector3 vel, Vector3 a);
+	Particula(Vector3 pos, Vector3 vel, Vector3 a, double damping);
 	~Particula(); //destructora
 
 	//gets

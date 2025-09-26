@@ -5,15 +5,13 @@ Particula::Particula()
 {
 }
 
-Particula::Particula(Vector3 pos, Vector3 vel, Vector3 a): vel(vel), acceleration(a)
+Particula::Particula(Vector3 pos, Vector3 vel, Vector3 a, double d): vel(vel), acceleration(a), damping(d)
 {
     //atributos a cambiar
-    masa = 5;
-    tVida = 5;
+    masa = 1.0;
+    tVida = 10.0;
 
     tr = new PxTransform(pos);
-
-    
 }
 
 Particula::~Particula()
@@ -87,10 +85,13 @@ void Particula::integrate(double t)
 {
     Vector3 actualPos = tr->p;
 
-    if (masa <= 0.0) return;
+    if (tVida > 0.0 && masa > 0.0)
+    {
+        tVida -= t;
 
-    //vel = vel + acceleration * t;
-
-    tr->p = actualPos + t * vel;
+        //euler semi-implicito
+        vel = (vel * pow(damping, t)) + acceleration * t;
+        tr->p = actualPos + t * vel;
+    }
     
 }
