@@ -15,6 +15,15 @@ Particula::Particula(Vector3 pos, Vector3 vel, Vector3 a, double d): vel(vel), a
     prePos = pos - vel;
 }
 
+Particula::Particula(Vector3 pos, Vector3 vel, Vector3 a, double damping, double m) : vel(vel), acceleration(a), damping(damping), masa(m)
+{
+    //atributos a cambiar
+    tVida = 10.0;
+
+    tr = new PxTransform(pos);
+    prePos = pos - vel;
+}
+
 Particula::~Particula()
 {
     // deregistrar el objeto RenderItem de la escena
@@ -99,3 +108,5 @@ void Particula::integrate(double t)
     }
     
 }
+
+

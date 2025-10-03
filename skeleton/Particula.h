@@ -16,7 +16,8 @@ private:
 
 public:
 	Particula();
-	Particula(Vector3 pos, Vector3 vel, Vector3 a, double damping);
+	Particula(Vector3 pos, Vector3 vel, Vector3 a, double damping); //para particula
+	Particula(Vector3 pos, Vector3 vel, Vector3 a, double damping, double masa); //para proyectil
 	~Particula(); //destructora
 
 	//gets
@@ -40,5 +41,6 @@ public:
 
 	//damping entre 0 y 1. Creo q usaremos 0.98
 
+	
 };
 

@@ -11,6 +11,7 @@
 #include "Particula.h"
 
 #include <iostream>
+#include <cmath> 
 
 std::string display_text = "This is a test";
 
@@ -34,6 +35,7 @@ ContactReportCallback gContactReportCallback;
 
 Particula* p;
 
+std::vector<Particula*> _bullets;
 
 // Initialize physics engine
 void initPhysics(bool interactive)
@@ -95,13 +97,19 @@ void initPhysics(bool interactive)
 	RenderItem* rEsfera3 = new RenderItem(esferaShape, esferaTr3, Vector4(0.0f, 0.0f, 1.0f, 1.0f));
 	RegisterRenderItem(rEsfera3);
 
+	
+	
+	
 
+	/*
 	//PARTICULA
-	p = new Particula(Vector3(0, 50, 0), Vector3(0, 0.5, 0), Vector3(0, -0.3, 0), 0.98);
+	p = new Particula(Vector3(0, 50, 0), Vector3(0, 0.5, 0), Vector3(0, -0.5, 0), 0.98);
 	RenderItem* renderItem = new RenderItem(esferaShape, p->getTr(), Vector4(1.0f, 1.0f, 0.0f, 1.0f));
-	p->setRenderItem(renderItem);
-}
+	p->setRenderItem(renderItem);*/
 
+	//PROYECTIL (bala CAÑON)
+	//p->setMasa(40.0);
+}
 
 // Function to configure what happens in each step of physics
 // interactive: true if the game is rendering, false if it offline
@@ -110,12 +118,20 @@ void stepPhysics(bool interactive, double t)
 {
 	if (p != nullptr)
 	{
+		/*
 		p->integrate(t);
 		if (p->getTimeVida() <= 0.0)
 		{
 			delete p;
 			p = nullptr;
-		}
+		}*/
+	}
+
+	//balas
+	if (!_bullets.empty())
+	{
+		for (auto b : _bullets)
+			b->integrate(t);
 	}
 
 	PX_UNUSED(interactive);
@@ -142,6 +158,31 @@ void cleanupPhysics(bool interactive)
 	gFoundation->release();
 	}
 
+void createBullet()
+{
+	//Geometria
+	PxSphereGeometry gSphere = PxSphereGeometry();
+	gSphere.radius = 1.5;
+	PxShape* esferaShape = CreateShape(gSphere, gMaterial);
+
+	//PARA PROYECTIL
+	double v0 = 25.0;
+	Vector3 pos = GetCamera()->getTransform().p; // pos inicial cañon
+
+	//vector velocidad
+	Vector3 vel = GetCamera()->getDir() * v0;
+
+	//la aceleracion del proyectil es la gravedad
+	Vector3 aceleracion(0, -9.8, 0);
+
+	// Crear el proyectil (partícula)
+	Particula* pAux = new Particula(pos, vel, aceleracion, 0.99, 1.0);
+	RenderItem* renderItem = new RenderItem(esferaShape, pAux->getTr(), Vector4(1.0f, 1.0f, 0.0f, 1.0f));
+	pAux->setRenderItem(renderItem);
+
+	_bullets.push_back(pAux);
+}
+
 // Function called when a key is pressed
 void keyPress(unsigned char key, const PxTransform& camera)
 {
@@ -149,12 +190,17 @@ void keyPress(unsigned char key, const PxTransform& camera)
 
 	switch(toupper(key))
 	{
-	//case 'B': break;
-	//case ' ':	break;
+	case 'B':
+	{
+		//disparar bola de cañon
+		createBullet();
+		break;
+	}
 	case ' ':
 	{
 		break;
 	}
+	
 	default:
 		break;
 	}
