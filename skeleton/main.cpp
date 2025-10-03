@@ -158,25 +158,25 @@ void cleanupPhysics(bool interactive)
 	gFoundation->release();
 	}
 
-void createBullet()
+void createProyectil(Vector4 color, double size, double masaR, double velR, double velS)
 {
 	//Geometria
 	PxSphereGeometry gSphere = PxSphereGeometry();
-	gSphere.radius = 1.5;
+	gSphere.radius = size;
 	PxShape* esferaShape = CreateShape(gSphere, gMaterial);
 
 	//PARA PROYECTIL
 
 	//calcular la energia real
-	double masaR = 17; //kg
-	double velR = 250; // m/s
+	//double masaR = 17; //kg
+	//double velR = 250; // m/s
 	
 
 	double energiaR = 1 / 2 * masaR * velR * velR;
 	
 	//energia simulada
 	double energiaS = energiaR;
-	double velS = 25; // m/s velocidad simulada (la que quiero utilizar)
+	//double velS = 25; // m/s velocidad simulada (la que quiero utilizar)
 
 	double masaS = masaR * pow((velR / velS), 2); //masa simulada
 
@@ -186,7 +186,7 @@ void createBullet()
 	Vector3 aceleracion(0, -9.8, 0); //la aceleracion del proyectil es solo la gravedad
 
 	Particula* pAux = new Particula(pos, vel, aceleracion, 0.98, masaS);
-	RenderItem* renderItem = new RenderItem(esferaShape, pAux->getTr(), Vector4(1.0f, 1.0f, 0.0f, 1.0f));
+	RenderItem* renderItem = new RenderItem(esferaShape, pAux->getTr(), Vector4(1.0f, 0.0f, 0.0f, 1.0f));
 	pAux->setRenderItem(renderItem);
 
 	_bullets.push_back(pAux);
@@ -199,10 +199,28 @@ void keyPress(unsigned char key, const PxTransform& camera)
 
 	switch(toupper(key))
 	{
-	case 'B':
+	case '1':
 	{
 		//disparar bola de cañon
-		createBullet();
+		createProyectil(Vector4((1.0f, 0.0f, 0.349f, 1.0f)), 0.8, 17, 250, 25);
+		break;
+	}
+	case '2':
+	{
+		//disparar tanque
+		createProyectil(Vector4(1.0f, 1.0f, 0.0f, 1.0f), 1.3, 25, 1800, 100);
+		break;
+	}
+	case '3':
+	{
+		//disparar pistola
+		createProyectil(Vector4(1.0f, 1.0f, 0.0f, 1.0f), 0.3, 5, 330, 200);
+		break;
+	}
+	case '4':
+	{
+		//disparar pistola laser
+		createProyectil(Vector4(1.0f, 1.0f, 0.0f, 1.0f), 0.5, 2, 300000000, 1000);
 		break;
 	}
 	case ' ':
