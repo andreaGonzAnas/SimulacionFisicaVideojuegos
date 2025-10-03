@@ -166,17 +166,26 @@ void createBullet()
 	PxShape* esferaShape = CreateShape(gSphere, gMaterial);
 
 	//PARA PROYECTIL
-	double v0 = 25.0;
-	Vector3 pos = GetCamera()->getTransform().p; // pos inicial cañon
 
-	//vector velocidad
-	Vector3 vel = GetCamera()->getDir() * v0;
+	//calcular la energia real
+	double masaR = 17; //kg
+	double velR = 250; // m/s
+	
 
-	//la aceleracion del proyectil es la gravedad
-	Vector3 aceleracion(0, -9.8, 0);
+	double energiaR = 1 / 2 * masaR * velR * velR;
+	
+	//energia simulada
+	double energiaS = energiaR;
+	double velS = 25; // m/s velocidad simulada (la que quiero utilizar)
 
-	// Crear el proyectil (partícula)
-	Particula* pAux = new Particula(pos, vel, aceleracion, 0.99, 1.0);
+	double masaS = masaR * pow((velR / velS), 2); //masa simulada
+
+	Vector3 pos = GetCamera()->getTransform().p; // pos inicial cañon = pos de la camara
+	Vector3 vel = GetCamera()->getDir() * velS; //velocidad inicial: la direccion es la de la camara * velocidad simulada
+	
+	Vector3 aceleracion(0, -9.8, 0); //la aceleracion del proyectil es solo la gravedad
+
+	Particula* pAux = new Particula(pos, vel, aceleracion, 0.98, masaS);
 	RenderItem* renderItem = new RenderItem(esferaShape, pAux->getTr(), Vector4(1.0f, 1.0f, 0.0f, 1.0f));
 	pAux->setRenderItem(renderItem);
 
