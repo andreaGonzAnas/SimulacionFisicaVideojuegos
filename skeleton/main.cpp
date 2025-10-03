@@ -186,7 +186,7 @@ void createProyectil(Vector4 color, double size, double masaR, double velR, doub
 	Vector3 aceleracion(0, -9.8, 0); //la aceleracion del proyectil es solo la gravedad
 
 	Particula* pAux = new Particula(pos, vel, aceleracion, 0.98, masaS);
-	RenderItem* renderItem = new RenderItem(esferaShape, pAux->getTr(), Vector4(1.0f, 0.0f, 0.0f, 1.0f));
+	RenderItem* renderItem = new RenderItem(esferaShape, pAux->getTr(), color);
 	pAux->setRenderItem(renderItem);
 
 	_bullets.push_back(pAux);
@@ -202,25 +202,25 @@ void keyPress(unsigned char key, const PxTransform& camera)
 	case '1':
 	{
 		//disparar bola de cañon
-		createProyectil(Vector4((1.0f, 0.0f, 0.349f, 1.0f)), 0.8, 17, 250, 25);
+		createProyectil(Vector4(0.490f, 0.404f, 0.349f, 1.0f), 0.8, 17, 250, 25);
 		break;
 	}
 	case '2':
 	{
 		//disparar tanque
-		createProyectil(Vector4(1.0f, 1.0f, 0.0f, 1.0f), 1.3, 25, 1800, 100);
+		createProyectil(Vector4(0.392f, 0.514f, 0.459f, 1.0f), 1.3, 25, 1800, 100);
 		break;
 	}
 	case '3':
 	{
 		//disparar pistola
-		createProyectil(Vector4(1.0f, 1.0f, 0.0f, 1.0f), 0.3, 5, 330, 200);
+		createProyectil(Vector4(0.592f, 0.667f, 0.675f, 1.0f), 0.3, 5, 330, 200);
 		break;
 	}
 	case '4':
 	{
 		//disparar pistola laser
-		createProyectil(Vector4(1.0f, 1.0f, 0.0f, 1.0f), 0.5, 2, 300000000, 1000);
+		createProyectil(Vector4(1.0f, 0.0f, 0.0f, 1.0f), 0.5, 2, 300000000, 1100);
 		break;
 	}
 	case ' ':
