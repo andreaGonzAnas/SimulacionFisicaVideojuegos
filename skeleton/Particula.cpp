@@ -103,10 +103,6 @@ void Particula::integrate(double t)
         //vel = (vel * pow(damping, t)) + acceleration * t;
         //tr->p = actualPos + t * vel;
 
-        //verlet
-        //Xi+1 = xi + vi* (variacion tiempo)
-        //xi+1 = 2 * xi - xi-1 + ai * (variacion tiempo)^2
-
 
         if (firstFrame) {
             // euler semi-implicito para el primer paso
