@@ -10,6 +10,7 @@ private:
 	std::list<Particula*> _particles;
 	std::list<ParticleGen*> _generators;
 	//particula modelo
+	Particula* _modelP;
 
 public:
 	ParticleSystem();

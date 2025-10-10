@@ -11,6 +11,6 @@ public:
 	UniformalGen();
 	~UniformalGen();
 
-	void generateP() override;
+	std::list<Particula*> generateP() override;
 };
 

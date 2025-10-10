@@ -3,24 +3,26 @@
 #include <random>
 #include "core.hpp"
 
+#include "Particula.h"
+#include <list>
+
 class ParticleGen
 {
 private:
-	int nParticulas;
-	
 	Vector3 initialPos;
 	Vector3 initialVel;
 	double initialDuration;
 	double probGeneration;
 
 protected:
+	int nParticulas;
 	std::mt19937 _mt;
 	std::uniform_real_distribution<double> _u{ 0,1 };
 
 public:
 	ParticleGen();
 	virtual ~ParticleGen();
-	virtual void generateP() = 0;
+	virtual std::list<Particula*> generateP() = 0;
 
 	//getters y setters
 	Vector3 getInitialPos() { return initialPos; }
