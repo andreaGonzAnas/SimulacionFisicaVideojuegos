@@ -11,6 +11,8 @@
 #include "Particula.h"
 
 #include <iostream>
+#include <chrono>
+#include <thread>
 #include <cmath> 
 
 std::string display_text = "This is a test";
@@ -97,10 +99,6 @@ void initPhysics(bool interactive)
 	RenderItem* rEsfera3 = new RenderItem(esferaShape, esferaTr3, Vector4(0.0f, 0.0f, 1.0f, 1.0f));
 	RegisterRenderItem(rEsfera3);
 
-	
-	
-	
-
 	/*
 	//PARTICULA
 	p = new Particula(Vector3(0, 50, 0), Vector3(0, 0.5, 0), Vector3(0, -0.5, 0), 0.98);
@@ -138,6 +136,10 @@ void stepPhysics(bool interactive, double t)
 
 	gScene->simulate(t);
 	gScene->fetchResults(true);
+
+	//slow down the simulation, necessary for Verlet integration
+	//TODO: review the physics timestep and the integrator stability
+	std::this_thread::sleep_for(std::chrono::microseconds(10));
 }
 
 // Function to clean data

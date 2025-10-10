@@ -1,0 +1,57 @@
+PRACTICA 2 FISICAS:
+- lista *Particula
+- lista *GeneradorP
+- update(t): recorrer lista partícula e integrar cada partícula (como está en el main ahora mismo)
+- revisar si hay q eliminar la partícula: o por tiempo de vida o por zona de interés (se sale de un campo preestablecido)
+	- elimina y borra de la lista
+- crea nuevas partículas, a partir de un generador de partículas
+	- llamar generadorP (podemos tener varios), devuelve una lista de x partículas y se meten en la lista general
+
+¿CÓMO CREAR PARTÍCULAS NUEVAS?
+- Utilizamos el generador de partículas, que usará la distribución uniforme y la distribución normal.
+- Clase abstracta Generador. Para poder llamar a uno uniforme o gausiano (normal).
+	- virtual GenerateP() = 0; función a sobreescribir en todas las clases
+	- set/get para el origen: donde voy a crear partículas
+	- set/get velocidad media
+	- set/get duración (factor aleatorio, para que no desaparezcan todas a la vez)
+	- set/get ProbG, en cada update se cambia aleatoriamente cuantas partículas se crean en cada frame.
+	- nParticulas
+
+- Necesitamos una partícula "molde"
+
+- Generador: std::mt19937 -mt (generador aleatorio)
+	- ciclo de este generador 2^19937 -1 (mejor que random)
+	- std::uniform_real_distribution<double> -u {0,1} (generador uniforme?)
+	- std::normal_real_distribution<double> -d{0,1} (distribución normal)
+	- 2 generadores (uniforme y normal)
+
+
+GAUSSIANPGEN
+	- Vector3 desP (desviación posicion)
+	- Vector3 desV (desviación velocidad)
+	- double desT (desviación tiempo de vida)
+
+-> Posición: x = xMedia + d(_mt) * desP.x; //d(-mt) -> es llamar a la distribución normal
+-> Velocidad: …
+
+-> Clonar partícula modelo, se le pone la posición, velocidad y tiempo calculado (tmb puede ser el color o cualquier
+parámetro que queramos cambiar)
+
+
+-> GENERAR PARTICULAS
+
+generateP(...)
+{
+	inicializar listaAuxiliar
+	_nPart
+	- mirar probGenerarParticulas
+	for
+		p = _modelP
+		calcular nuevas propiedades
+		y cambiar p con lo nuevo calculado
+		listaAux.push(p)
+	return listaAux
+}
+
+-> Particula modelo en generador de partículas???
+

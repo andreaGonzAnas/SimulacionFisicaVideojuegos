@@ -13,6 +13,7 @@ private:
 	double masa;
 	double tVida; //tiempo de vida
 	Vector3 prePos;
+	bool firstFrame;
 
 public:
 	Particula();

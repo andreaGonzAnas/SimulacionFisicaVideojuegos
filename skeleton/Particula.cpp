@@ -5,7 +5,7 @@ Particula::Particula()
 {
 }
 
-Particula::Particula(Vector3 pos, Vector3 vel, Vector3 a, double d): vel(vel), acceleration(a), damping(d)
+Particula::Particula(Vector3 pos, Vector3 vel, Vector3 a, double d) : vel(vel), acceleration(a), damping(d), firstFrame(true)
 {
     //atributos a cambiar
     masa = 1.0;
@@ -15,7 +15,7 @@ Particula::Particula(Vector3 pos, Vector3 vel, Vector3 a, double d): vel(vel), a
     prePos = pos - vel;
 }
 
-Particula::Particula(Vector3 pos, Vector3 vel, Vector3 a, double damping, double m) : vel(vel), acceleration(a), damping(damping), masa(m)
+Particula::Particula(Vector3 pos, Vector3 vel, Vector3 a, double damping, double m) : vel(vel), acceleration(a), damping(damping), masa(m), firstFrame(true)
 {
     //atributos a cambiar
     tVida = 10.0;
@@ -94,17 +94,36 @@ void Particula::setTimeVida(double t)
 void Particula::integrate(double t)
 {
     Vector3 actualPos = tr->p;
+    
     if (tVida > 0.0 && masa > 0.0)
     {
         tVida -= t;
 
         //euler semi-implicito
-        vel = (vel * pow(damping, t)) + acceleration * t;
-        tr->p = actualPos + t * vel;
+        //vel = (vel * pow(damping, t)) + acceleration * t;
+        //tr->p = actualPos + t * vel;
 
         //verlet
-        //tr->p = 2 * tr->p - prePos * pow(damping, t) + acceleration * (t*t);
-        //prePos = actualPos;
+        //Xi+1 = xi + vi* (variacion tiempo)
+        //xi+1 = 2 * xi - xi-1 + ai * (variacion tiempo)^2
+
+
+        if (firstFrame) {
+            // euler semi-implicito para el primer paso
+            vel = (vel * pow(damping, t)) + acceleration * t;
+            tr->p = actualPos + t * vel;
+            prePos = actualPos;
+            firstFrame = false;
+        }
+        else
+        {
+            //verlet
+            Vector3 newPos = actualPos + (actualPos - prePos) * damping + acceleration * (t * t);
+            prePos = actualPos;
+            tr->p = newPos;
+        }
+        
+        
     }
     
 }
