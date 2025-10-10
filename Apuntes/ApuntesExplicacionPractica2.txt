@@ -44,7 +44,7 @@ generateP(...)
 {
 	inicializar listaAuxiliar
 	_nPart
-	- mirar probGenerarParticulas
+	mirar probGenerarParticulas
 	for
 		p = _modelP
 		calcular nuevas propiedades
