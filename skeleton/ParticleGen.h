@@ -20,8 +20,8 @@ protected:
 	std::uniform_real_distribution<double> _u{ 0,1 };
 
 public:
-	ParticleGen();
-	virtual ~ParticleGen();
+	ParticleGen() {};
+	//virtual ~ParticleGen();
 	virtual std::list<Particula*> generateP() = 0;
 
 	//getters y setters

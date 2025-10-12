@@ -7,10 +7,11 @@ GaussianGen::GaussianGen()
 
 }
 
+/*
 GaussianGen::~GaussianGen()
 {
 
-}
+}*/
 
 std::list<Particula*> GaussianGen::generateP()
 {
@@ -24,17 +25,17 @@ std::list<Particula*> GaussianGen::generateP()
 		for (int i = 0; i < nParticulas; i++)
 		{
 			//clonar modelP
-			Particula* clonedP = _modelP;
+			//Particula* clonedP = _modelP;
 
 			//calcular nuevas propiedades
 			//cambiar p con lo nuevo calculado
 
 			//posicion
-			Vector3 newPos = Vector3(0,0,0) + _d(_mt) * desP;
-			Vector3 newVel = Vector3(0,0,0) + _d(_mt) * desV;
-			Vector3 newDuration = Vector3(0,0,0) + _d(_mt) * desDur;
+			//Vector3 newPos = Vector3(0,0,0) + _d(_mt) * desP;
+			//Vector3 newVel = Vector3(0,0,0) + _d(_mt) * desV;
+			//Vector3 newDuration = Vector3(0,0,0) + _d(_mt) * desDur;
 			
-			auxList.push_back(clonedP);
+			//auxList.push_back(clonedP);
 		}
 	}
 
