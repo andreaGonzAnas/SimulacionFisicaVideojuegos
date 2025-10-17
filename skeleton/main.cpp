@@ -107,11 +107,11 @@ void initPhysics(bool interactive)
 	// 1. Particula modelo
 	//Geometria
 	Particula* pAux = new Particula(Vector3(0, 50, 0), Vector3(0, 0.5, 0), Vector3(0, -0.5, 0), 0.98);
-	RenderItem* renderItem = new RenderItem(esferaShape, pAux->getTr(), Vector4(1.0f, 1.0f, 0.0f, 1.0f));
+	RenderItem* renderItem = new RenderItem(esferaShape, pAux->getTr(), Vector4(1.0f, 0.0f, 1.0f, 1.0f));
 	pAux->setRenderItem(renderItem);
 
 	// 2. Sistema de particulas
-	ParticleSystem* pSys = new ParticleSystem(pAux);
+	_partSys = new ParticleSystem(pAux);
 }
 
 // Function to configure what happens in each step of physics
