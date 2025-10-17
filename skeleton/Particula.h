@@ -19,6 +19,7 @@ public:
 	Particula();
 	Particula(Vector3 pos, Vector3 vel, Vector3 a, double damping); //para particula
 	Particula(Vector3 pos, Vector3 vel, Vector3 a, double damping, double masa); //para proyectil
+	Particula(Particula* p);
 	~Particula(); //destructora
 
 	//gets
@@ -28,6 +29,9 @@ public:
 	Vector3 getAcc();
 	double getMasa();
 	double getTimeVida();
+	double getDamping();
+	physx::PxTransform* getTransform();
+	Vector3 getPrePos();
 
 	//sets
 	void setTr(physx::PxTransform*);
@@ -36,6 +40,7 @@ public:
 	void setAcc(Vector3 a);
 	void setMasa(double masa);
 	void setTimeVida(double t);
+	void setPrePos(Vector3 pos);
 
 	//actualizar posicion de la particula
 	void integrate(double t);

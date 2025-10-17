@@ -8,16 +8,14 @@
 
 class ParticleGen
 {
-private:
-	Vector3 initialPos;
-	Vector3 initialVel;
-	double initialDuration;
-	double probGeneration;
-
 protected:
 	int nParticulas;
 	std::mt19937 _mt;
 	std::uniform_real_distribution<double> _u{ 0,1 };
+	Vector3 desP;
+	Vector3 desVel;
+	double desDur;
+	double probGeneration;
 
 public:
 	ParticleGen() {};
@@ -25,16 +23,19 @@ public:
 	virtual std::list<Particula*> generateP() = 0;
 
 	//getters y setters
-	Vector3 getInitialPos() { return initialPos; }
-	void setInitialPos(Vector3 pos) { initialPos = pos; }
+	Vector3 getInitialPos() { return desP; }
+	void setInitialPos(Vector3 pos) { desP = pos; }
 	
-	Vector3 getVel() { return initialPos; }
-	void setVel(Vector3 vel) { initialVel = vel; }
+	Vector3 getVel() { return desP; }
+	void setVel(Vector3 vel) { desVel = vel; }
 
-	double getDuration() { return initialDuration; }
-	void setDuration(double duration) { initialDuration = duration; }
+	double getDuration() { return desDur; }
+	void setDuration(double duration) { desDur = duration; }
 
 	double getProbGen() { return probGeneration; }
 	void setProbGen(double prob) { probGeneration = prob; }
+
+	int getParticulas() { return nParticulas; }
+	void setParticulas(int n) { nParticulas = n; }
 };
 

@@ -24,6 +24,12 @@ Particula::Particula(Vector3 pos, Vector3 vel, Vector3 a, double damping, double
     prePos = pos - vel;
 }
 
+Particula::Particula(Particula* p) : vel(p->getVel()), acceleration(p->getAcc()), damping(p->getDamping()), firstFrame(true),
+masa(p->getMasa()), tVida(p->getTimeVida()), tr(p->getTransform()), prePos(p->getPrePos())
+{
+
+}
+
 Particula::~Particula()
 {
     // deregistrar el objeto RenderItem de la escena
@@ -60,6 +66,21 @@ double Particula::getTimeVida()
     return tVida;
 }
 
+double Particula::getDamping()
+{
+    return damping;
+}
+
+physx::PxTransform* Particula::getTransform()
+{
+    return tr;
+}
+
+Vector3 Particula::getPrePos()
+{
+    return prePos;
+}
+
 void Particula::setTr(physx::PxTransform* newTr)
 {
     tr = newTr;
@@ -89,6 +110,11 @@ void Particula::setMasa(double m)
 void Particula::setTimeVida(double t)
 {
     tVida = t;
+}
+
+void Particula::setPrePos(Vector3 pos)
+{
+    prePos = pos;
 }
 
 void Particula::integrate(double t)

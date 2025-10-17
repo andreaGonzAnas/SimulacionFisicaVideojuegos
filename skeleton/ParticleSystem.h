@@ -13,7 +13,8 @@ private:
 	Particula* _modelP;
 
 public:
-	ParticleSystem();
+	//ParticleSystem();
+	ParticleSystem(Particula* p);
 	~ParticleSystem();
 
 	void update(double t);

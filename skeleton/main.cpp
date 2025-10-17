@@ -9,6 +9,8 @@
 #include "callbacks.hpp"
 #include "Vector3D.h"
 #include "Particula.h"
+#include "ParticleSystem.h"
+
 
 #include <iostream>
 #include <chrono>
@@ -38,6 +40,7 @@ ContactReportCallback gContactReportCallback;
 Particula* p;
 
 std::vector<Particula*> _bullets;
+ParticleSystem* _partSys;
 
 // Initialize physics engine
 void initPhysics(bool interactive)
@@ -99,14 +102,16 @@ void initPhysics(bool interactive)
 	RenderItem* rEsfera3 = new RenderItem(esferaShape, esferaTr3, Vector4(0.0f, 0.0f, 1.0f, 1.0f));
 	RegisterRenderItem(rEsfera3);
 
-	/*
-	//PARTICULA
-	p = new Particula(Vector3(0, 50, 0), Vector3(0, 0.5, 0), Vector3(0, -0.5, 0), 0.98);
-	RenderItem* renderItem = new RenderItem(esferaShape, p->getTr(), Vector4(1.0f, 1.0f, 0.0f, 1.0f));
-	p->setRenderItem(renderItem);*/
+	// SISTEMA DE PARTICULAS
 
-	//PROYECTIL (bala CAÑON)
-	//p->setMasa(40.0);
+	// 1. Particula modelo
+	//Geometria
+	Particula* pAux = new Particula(Vector3(0, 50, 0), Vector3(0, 0.5, 0), Vector3(0, -0.5, 0), 0.98);
+	RenderItem* renderItem = new RenderItem(esferaShape, pAux->getTr(), Vector4(1.0f, 1.0f, 0.0f, 1.0f));
+	pAux->setRenderItem(renderItem);
+
+	// 2. Sistema de particulas
+	ParticleSystem* pSys = new ParticleSystem(pAux);
 }
 
 // Function to configure what happens in each step of physics
@@ -131,6 +136,9 @@ void stepPhysics(bool interactive, double t)
 		for (auto b : _bullets)
 			b->integrate(t);
 	}
+
+	//sistema particulas
+	_partSys->update(t);
 
 	PX_UNUSED(interactive);
 
