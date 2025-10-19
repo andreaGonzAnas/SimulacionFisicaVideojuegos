@@ -13,7 +13,7 @@ private:
 
 public:
 	GaussianGen();
-	GaussianGen(int nPart, double p, Particula*);
+	GaussianGen(int nPart, double p, Particula*, PxPhysics* gPhysics);
 	//~GaussianGen() override;
 
 	std::list<Particula*> generateP() override;

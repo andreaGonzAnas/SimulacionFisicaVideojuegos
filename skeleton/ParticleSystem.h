@@ -16,10 +16,12 @@ private:
 
 public:
 	//ParticleSystem();
-	ParticleSystem(Particula* p);
+	ParticleSystem(Particula* p, PxPhysics*);
 	~ParticleSystem();
 
 	void update(double t);
 	void debugPrint();
+
+	std::list<Particula*> getParticleList() {return _particles;}
 };
 

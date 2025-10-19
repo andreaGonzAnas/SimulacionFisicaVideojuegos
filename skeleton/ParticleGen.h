@@ -6,6 +6,10 @@
 #include "Particula.h"
 #include <list>
 
+#include "PxPhysicsAPI.h"
+using namespace physx;
+
+
 class ParticleGen
 {
 protected:
@@ -16,6 +20,8 @@ protected:
 	Vector3 desVel;
 	double desDur;
 	double probGeneration;
+
+	PxPhysics* gPhysics;
 
 public:
 	ParticleGen();

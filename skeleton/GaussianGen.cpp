@@ -1,5 +1,6 @@
 ﻿#include "GaussianGen.h"
 #include "PxShape.h"
+#include <iostream>
 
 using namespace physx;
 
@@ -7,7 +8,7 @@ GaussianGen::GaussianGen()
 {
 }
 
-GaussianGen::GaussianGen(int nPart, double prob, Particula* p) : ParticleGen(), _d(0.0, 1.0), _modelP(p)
+GaussianGen::GaussianGen(int nPart, double prob, Particula* p, PxPhysics* gPhysic) : ParticleGen(), _d(0.0, 1.0), _modelP(p)
 {
 
 
@@ -21,6 +22,7 @@ GaussianGen::GaussianGen(int nPart, double prob, Particula* p) : ParticleGen(), 
 	//setear particula
 	//_modelP = p;
 
+	gPhysics = gPhysic;
 }
 
 /*
@@ -77,7 +79,14 @@ std::list<Particula*> GaussianGen::generateP()
 	
 	std::list<Particula*> auxList;
 
-	
+	int cant = 0;
+
+	// Crear geometría y material una sola vez
+	static PxSphereGeometry gSphere(1.5f);
+	static PxMaterial* gMaterial = gPhysics->createMaterial(0.5f, 0.5f, 0.6f);
+	static physx::PxShape* esferaShape = CreateShape(gSphere, gMaterial);
+
+
 	for (int i = 0; i < nParticulas; i++)
 	{
 		//comprobar probabilidad para crear o no particulas
@@ -88,22 +97,24 @@ std::list<Particula*> GaussianGen::generateP()
 			//clonar modelP
 			Particula* clonedP = new Particula(_modelP);
 
+			// Variación gaussiana de atributos
+			Vector3 newPos = _modelP->getPrePos() + _d(_mt) * desP;
+			Vector3 newVel = _modelP->getVel() + _d(_mt) * desVel;
+			double newDuration = _modelP->getTimeVida() + _d(_mt) * desDur;
 
-			//las propiedades siguientes varian dependiendo de x prob
-
-			//posicion
-			Vector3 newPos = Vector3(0, 50, 0) + _d(_mt) * desP;
-			Vector3 newVel = clonedP->getVel() + _d(_mt) * desVel;
-			double newDuration = clonedP->getTimeVida() + _d(_mt) * desDur;
-
-			clonedP->setPrePos(newPos);
-			clonedP->setVel(newVel * 50000000);
+			// Inicializar prePos para Verlet
+			clonedP->setPos(newPos);
+			clonedP->setVel(newVel);
 			clonedP->setTimeVida(newDuration);
 			clonedP->setAcc(Vector3(0, -9.8, 0));
 
+			// RenderItem único
+			clonedP->setRenderItem(new RenderItem(esferaShape, clonedP->getTransform(), Vector4(1, 0, 0, 1)));
+
 			auxList.push_back(clonedP);
+			cant++;
 		}
 	}
-
+	std::cout << "Cantidad de partículas creadas: " << cant << std::endl;
 	return auxList;
 }

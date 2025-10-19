@@ -25,13 +25,15 @@ Particula::Particula(Vector3 pos, Vector3 vel, Vector3 a, double damping, double
 }
 
 Particula::Particula(Particula* p) : vel(p->getVel()), acceleration(p->getAcc()), damping(p->getDamping()), firstFrame(true),
-masa(p->getMasa()), tVida(p->getTimeVida()), prePos(p->getPrePos())
+masa(p->getMasa()), tVida(p->getTimeVida())
 {
     // Clonar el transform si existe
         if (p->getTransform())
             tr = new PxTransform(*p->getTransform());
         else
             tr = new PxTransform();
+
+    prePos = tr->p - vel;
 }
 
 Particula::~Particula()
@@ -119,6 +121,11 @@ void Particula::setTimeVida(double t)
 void Particula::setPrePos(Vector3 pos)
 {
     prePos = pos;
+}
+
+void Particula::setPos(Vector3 pos)
+{
+    tr->p = pos;
 }
 
 void Particula::integrate(double t)

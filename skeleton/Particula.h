@@ -41,6 +41,7 @@ public:
 	void setMasa(double masa);
 	void setTimeVida(double t);
 	void setPrePos(Vector3 pos);
+	void setPos(Vector3 pos);
 
 	//actualizar posicion de la particula
 	void integrate(double t);

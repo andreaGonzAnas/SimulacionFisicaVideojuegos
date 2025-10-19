@@ -10,10 +10,10 @@ ParticleSystem::ParticleSystem()
 	
 }*/
 
-ParticleSystem::ParticleSystem(Particula* p): _particles()
+ParticleSystem::ParticleSystem(Particula* p, PxPhysics* gPhysics): _particles()
 {
 	// crear generador
-	GaussianGen* gausGen = new GaussianGen(20, 0.5, p);
+	GaussianGen* gausGen = new GaussianGen(20, 0.5, p, gPhysics);
 	_generators.push_back(gausGen);
 
 	// generar partículas y moverlas a _particles

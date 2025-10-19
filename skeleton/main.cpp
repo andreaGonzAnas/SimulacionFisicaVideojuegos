@@ -111,7 +111,7 @@ void initPhysics(bool interactive)
 	//pAux->setRenderItem(renderItem);
 
 	// 2. Sistema de particulas
-	_partSys = new ParticleSystem(pAux);
+	_partSys = new ParticleSystem(pAux, gPhysics);
 }
 
 // Function to configure what happens in each step of physics
@@ -137,8 +137,12 @@ void stepPhysics(bool interactive, double t)
 			b->integrate(t);
 	}
 
+	for (auto b : _partSys->getParticleList())
+		b->integrate(t);
+
+
 	//sistema particulas
-	_partSys->update(t);
+	//_partSys->update(t);
 
 	PX_UNUSED(interactive);
 
