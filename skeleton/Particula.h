@@ -14,6 +14,7 @@ private:
 	double tVida; //tiempo de vida
 	Vector3 prePos;
 	bool firstFrame;
+	Vector4 color;
 
 public:
 	Particula();
@@ -32,6 +33,8 @@ public:
 	double getDamping();
 	physx::PxTransform* getTransform();
 	Vector3 getPrePos();
+	Vector3 getPos();
+	Vector4 getColor();
 
 	//sets
 	void setTr(physx::PxTransform*);
@@ -42,6 +45,7 @@ public:
 	void setTimeVida(double t);
 	void setPrePos(Vector3 pos);
 	void setPos(Vector3 pos);
+	void setColor(Vector4 color);
 
 	//actualizar posicion de la particula
 	void integrate(double t);

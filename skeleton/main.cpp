@@ -107,6 +107,7 @@ void initPhysics(bool interactive)
 	// 1. Particula modelo
 	//Geometria
 	Particula* pAux = new Particula(Vector3(0, 50, 0), Vector3(0, 0.5, 0), Vector3(0, -0.5, 0), 0.98);
+	pAux->setColor(Vector4(1.0f, 0.5f, 0.0f, 1.0f));
 	//RenderItem* renderItem = new RenderItem(esferaShape, pAux->getTr(), Vector4(1.0f, 0.0f, 1.0f, 1.0f));
 	//pAux->setRenderItem(renderItem);
 
@@ -137,12 +138,13 @@ void stepPhysics(bool interactive, double t)
 			b->integrate(t);
 	}
 
+	/*
 	for (auto b : _partSys->getParticleList())
-		b->integrate(t);
+		b->integrate(t);*/
 
 
 	//sistema particulas
-	//_partSys->update(t);
+	_partSys->update(t);
 
 	PX_UNUSED(interactive);
 

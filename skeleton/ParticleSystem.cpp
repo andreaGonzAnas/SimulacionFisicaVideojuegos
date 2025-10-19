@@ -13,7 +13,7 @@ ParticleSystem::ParticleSystem()
 ParticleSystem::ParticleSystem(Particula* p, PxPhysics* gPhysics): _particles()
 {
 	// crear generador
-	GaussianGen* gausGen = new GaussianGen(20, 0.5, p, gPhysics);
+	GaussianGen* gausGen = new GaussianGen(10, 0.5, p, gPhysics);
 	_generators.push_back(gausGen);
 
 	// generar partículas y moverlas a _particles
@@ -30,36 +30,33 @@ ParticleSystem::~ParticleSystem()
 
 void ParticleSystem::update(double t)
 {
-    /*
+    
     // Generar nuevas partículas cada frame
     if (!_generators.empty()) {
         auto newParticles = _generators.front()->generateP();
         if (!newParticles.empty())
             _particles.splice(_particles.end(), newParticles);
-    }*/
+    }
 
     // Actualizar todas las existentes
     for (auto p : _particles) {
         p->integrate(t);
     }
 
-    //_particles.front()->integrate(t);
+    _particles.remove_if([](Particula* p) {
+        if (p->getTimeVida() <= 0.0) {
+            // eliminar render item si existe
+            if (p->getRenderItem()) {
+                DeregisterRenderItem(p->getRenderItem()); // función de tu motor
+                delete p->getRenderItem();
+            }
 
-    // LIMPIAR muertas (ver apartado 5)
-    debugPrint(); // después
+            delete p; // eliminar partícula
+            return true;
+        }
+        return false;
+        });
 
+    
 }
-
-void ParticleSystem::debugPrint()
-{
-    std::cout << "ParticleSystem: count = " << _particles.size() << std::endl;
-    int i = 0;
-    for (auto& p : _particles) {
-        if (i++ >= 5) break;
-        auto pos = p->getTransform()->p; // o getPrePos() según tu API de Particula
-        std::cout << "  p[" << (&p) << "] pos=(" << pos.x << "," << pos.y << "," << pos.z
-            << ") life=" << p->getTimeVida() << std::endl;
-    }
-}
-
 

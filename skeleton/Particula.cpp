@@ -25,7 +25,7 @@ Particula::Particula(Vector3 pos, Vector3 vel, Vector3 a, double damping, double
 }
 
 Particula::Particula(Particula* p) : vel(p->getVel()), acceleration(p->getAcc()), damping(p->getDamping()), firstFrame(true),
-masa(p->getMasa()), tVida(p->getTimeVida())
+masa(p->getMasa()), tVida(p->getTimeVida()), color(p->getColor())
 {
     // Clonar el transform si existe
         if (p->getTransform())
@@ -87,6 +87,16 @@ Vector3 Particula::getPrePos()
     return prePos;
 }
 
+Vector3 Particula::getPos()
+{
+    return tr->p;
+}
+
+Vector4 Particula::getColor()
+{
+    return color;
+}
+
 void Particula::setTr(physx::PxTransform* newTr)
 {
     tr = newTr;
@@ -126,6 +136,11 @@ void Particula::setPrePos(Vector3 pos)
 void Particula::setPos(Vector3 pos)
 {
     tr->p = pos;
+}
+
+void Particula::setColor(Vector4 c)
+{
+    color = c;
 }
 
 void Particula::integrate(double t)

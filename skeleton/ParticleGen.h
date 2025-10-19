@@ -20,6 +20,7 @@ protected:
 	Vector3 desVel;
 	double desDur;
 	double probGeneration;
+	Vector4 desColor;
 
 	PxPhysics* gPhysics;
 
