@@ -74,7 +74,7 @@ void initPhysics(bool interactive)
 	gSphere.radius = 1.5;
 
 	//2. Crear shape
-	PxShape* esferaShape = CreateShape(gSphere, gMaterial);
+	physx::PxShape* esferaShape = CreateShape(gSphere, gMaterial);
 
 	//3. Crear item (con Transform)
 	PxTransform* esferaTr = new PxTransform(PxVec3(0, 0, 0));
@@ -107,8 +107,8 @@ void initPhysics(bool interactive)
 	// 1. Particula modelo
 	//Geometria
 	Particula* pAux = new Particula(Vector3(0, 50, 0), Vector3(0, 0.5, 0), Vector3(0, -0.5, 0), 0.98);
-	RenderItem* renderItem = new RenderItem(esferaShape, pAux->getTr(), Vector4(1.0f, 0.0f, 1.0f, 1.0f));
-	pAux->setRenderItem(renderItem);
+	//RenderItem* renderItem = new RenderItem(esferaShape, pAux->getTr(), Vector4(1.0f, 0.0f, 1.0f, 1.0f));
+	//pAux->setRenderItem(renderItem);
 
 	// 2. Sistema de particulas
 	_partSys = new ParticleSystem(pAux);
@@ -173,7 +173,7 @@ void createProyectil(Vector4 color, double size, double masaR, double velR, doub
 	//Geometria
 	PxSphereGeometry gSphere = PxSphereGeometry();
 	gSphere.radius = size;
-	PxShape* esferaShape = CreateShape(gSphere, gMaterial);
+	physx::PxShape* esferaShape = CreateShape(gSphere, gMaterial);
 
 	//PARA PROYECTIL
 

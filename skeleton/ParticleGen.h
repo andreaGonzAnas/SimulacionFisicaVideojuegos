@@ -11,14 +11,14 @@ class ParticleGen
 protected:
 	int nParticulas;
 	std::mt19937 _mt;
-	std::uniform_real_distribution<double> _u{ 0,1 };
+	std::uniform_real_distribution<double> _u{ 0.0,1.0 };
 	Vector3 desP;
 	Vector3 desVel;
 	double desDur;
 	double probGeneration;
 
 public:
-	ParticleGen() {};
+	ParticleGen();
 	//virtual ~ParticleGen();
 	virtual std::list<Particula*> generateP() = 0;
 

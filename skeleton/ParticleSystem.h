@@ -4,6 +4,8 @@
 #include "Particula.h"
 #include "ParticleGen.h"
 
+class PxShape;
+
 class ParticleSystem
 {
 private:
@@ -18,5 +20,6 @@ public:
 	~ParticleSystem();
 
 	void update(double t);
+	void debugPrint();
 };
 
