@@ -42,6 +42,34 @@ Particula* p;
 std::vector<Particula*> _bullets;
 ParticleSystem* _partSys;
 
+void createProyectil(Vector4 color, double size, double masaR, double velR, double velS)
+{
+	//Geometria
+	PxSphereGeometry gSphere = PxSphereGeometry();
+	gSphere.radius = size;
+	physx::PxShape* esferaShape = CreateShape(gSphere, gMaterial);
+
+	//PARA PROYECTIL
+	double energiaR = 1 / 2 * masaR * velR * velR;
+
+	//energia simulada
+	double energiaS = energiaR;
+	//double velS = 25; // m/s velocidad simulada (la que quiero utilizar)
+
+	double masaS = masaR * pow((velR / velS), 2); //masa simulada
+
+	Vector3 pos = GetCamera()->getTransform().p; // pos inicial cañon = pos de la camara
+	Vector3 vel = GetCamera()->getDir() * velS; //velocidad inicial: la direccion es la de la camara * velocidad simulada
+
+
+	Particula* pAux = new Particula(pos, vel, 0.98, masaS);
+	RenderItem* renderItem = new RenderItem(esferaShape, pAux->getTr(), color);
+	pAux->setRenderItem(renderItem);
+
+
+	_bullets.push_back(pAux);
+}
+
 // Initialize physics engine
 void initPhysics(bool interactive)
 {
@@ -105,11 +133,13 @@ void initPhysics(bool interactive)
 	// SISTEMA DE PARTICULAS
 
 	// 1. Particula modelo
-	//Geometria
-	Particula* pAux = new Particula(Vector3(0, 50, 0), Vector3(0, 0.5, 0), Vector3(0, -0.5, 0), 0.98);
+	double energiaR = 1 / 2 * 17 * 250 * 250;
+
+	//energia simulada
+	double energiaS = energiaR;
+	double masaS = 17 * pow((250 / 25), 2); //masa simulada
+	Particula* pAux = new Particula(Vector3(0, 50, 0), Vector3(0, 0.5, 0), 0.98, masaS);
 	pAux->setColor(Vector4(1.0f, 0.5f, 0.0f, 1.0f));
-	//RenderItem* renderItem = new RenderItem(esferaShape, pAux->getTr(), Vector4(1.0f, 0.0f, 1.0f, 1.0f));
-	//pAux->setRenderItem(renderItem);
 
 	// 2. Sistema de particulas
 	_partSys = new ParticleSystem(pAux, gPhysics);
@@ -120,28 +150,12 @@ void initPhysics(bool interactive)
 // t: time passed since last call in milliseconds
 void stepPhysics(bool interactive, double t)
 {
-	if (p != nullptr)
-	{
-		/*
-		p->integrate(t);
-		if (p->getTimeVida() <= 0.0)
-		{
-			delete p;
-			p = nullptr;
-		}*/
-	}
-
 	//balas
 	if (!_bullets.empty())
 	{
 		for (auto b : _bullets)
 			b->integrate(t);
 	}
-
-	/*
-	for (auto b : _partSys->getParticleList())
-		b->integrate(t);*/
-
 
 	//sistema particulas
 	_partSys->update(t);
@@ -174,39 +188,7 @@ void cleanupPhysics(bool interactive)
 	gFoundation->release();
 	}
 
-void createProyectil(Vector4 color, double size, double masaR, double velR, double velS)
-{
-	//Geometria
-	PxSphereGeometry gSphere = PxSphereGeometry();
-	gSphere.radius = size;
-	physx::PxShape* esferaShape = CreateShape(gSphere, gMaterial);
 
-	//PARA PROYECTIL
-
-	//calcular la energia real
-	//double masaR = 17; //kg
-	//double velR = 250; // m/s
-	
-
-	double energiaR = 1 / 2 * masaR * velR * velR;
-	
-	//energia simulada
-	double energiaS = energiaR;
-	//double velS = 25; // m/s velocidad simulada (la que quiero utilizar)
-
-	double masaS = masaR * pow((velR / velS), 2); //masa simulada
-
-	Vector3 pos = GetCamera()->getTransform().p; // pos inicial cañon = pos de la camara
-	Vector3 vel = GetCamera()->getDir() * velS; //velocidad inicial: la direccion es la de la camara * velocidad simulada
-	
-	Vector3 aceleracion(0, -9.8, 0); //la aceleracion del proyectil es solo la gravedad
-
-	Particula* pAux = new Particula(pos, vel, aceleracion, 0.98, masaS);
-	RenderItem* renderItem = new RenderItem(esferaShape, pAux->getTr(), color);
-	pAux->setRenderItem(renderItem);
-
-	_bullets.push_back(pAux);
-}
 
 // Function called when a key is pressed
 void keyPress(unsigned char key, const PxTransform& camera)

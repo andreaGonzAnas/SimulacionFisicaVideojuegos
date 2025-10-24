@@ -16,10 +16,13 @@ private:
 	bool firstFrame;
 	Vector4 color;
 
+	Vector3 forceAccum; // fuerzas acumuladas
+	double gravity = -9.8f; // fuerzas acumuladas
+
 public:
 	Particula();
-	Particula(Vector3 pos, Vector3 vel, Vector3 a, double damping); //para particula
-	Particula(Vector3 pos, Vector3 vel, Vector3 a, double damping, double masa); //para proyectil
+	Particula(Vector3 pos, Vector3 vel, double damping); //para particula
+	Particula(Vector3 pos, Vector3 vel, double damping, double masa); //para proyectil
 	Particula(Particula* p);
 	~Particula(); //destructora
 
@@ -52,6 +55,8 @@ public:
 
 	//damping entre 0 y 1. Creo q usaremos 0.98
 
-	
+	//Fuerzas
+	void addForce(physx::PxVec3 force);
+	void clearForces();
 };
 

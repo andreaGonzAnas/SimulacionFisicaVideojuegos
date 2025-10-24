@@ -5,6 +5,8 @@
 #include "ParticleGen.h"
 
 class PxShape;
+class ParticleForceRegistry;
+class GravityForceGenerator;
 
 class ParticleSystem
 {
@@ -13,6 +15,11 @@ private:
 	std::list<ParticleGen*> _generators;
 	//particula modelo
 	Particula* _modelP;
+
+	//registro de fuerzas
+	ParticleForceRegistry* _registry;
+
+	GravityForceGenerator* gravityEarth;
 
 public:
 	//ParticleSystem();

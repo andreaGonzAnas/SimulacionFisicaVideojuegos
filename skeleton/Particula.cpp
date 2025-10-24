@@ -1,31 +1,38 @@
 #include "Particula.h"
+#include <iostream>
+
+
 using namespace physx;
 
 Particula::Particula()
 {
 }
 
-Particula::Particula(Vector3 pos, Vector3 vel, Vector3 a, double d) : vel(vel), acceleration(a), damping(d), firstFrame(true)
+Particula::Particula(Vector3 pos, Vector3 vel, double d) : vel(vel), damping(d), firstFrame(true)
 {
     //atributos a cambiar
     masa = 1.0;
-    tVida = 10.0;
+    tVida = 0.5;
 
     tr = new PxTransform(pos);
     prePos = pos - vel;
+    acceleration = Vector3(0, 0, 0);
+    forceAccum = Vector3(0, 0, 0);
 }
 
-Particula::Particula(Vector3 pos, Vector3 vel, Vector3 a, double damping, double m) : vel(vel), acceleration(a), damping(damping), masa(m), firstFrame(true)
+Particula::Particula(Vector3 pos, Vector3 vel, double damping, double m) : vel(vel), damping(damping), masa(m), firstFrame(true)
 {
     //atributos a cambiar
-    tVida = 10.0;
+    tVida = 5.0;
 
     tr = new PxTransform(pos);
     prePos = pos - vel;
+    acceleration = Vector3(0, 0, 0);
+    forceAccum = Vector3(0, 0, 0);
 }
 
 Particula::Particula(Particula* p) : vel(p->getVel()), acceleration(p->getAcc()), damping(p->getDamping()), firstFrame(true),
-masa(p->getMasa()), tVida(p->getTimeVida()), color(p->getColor())
+masa(p->getMasa()), tVida(p->getTimeVida()), color(p->getColor()), forceAccum(Vector3(0, 0, 0))
 {
     // Clonar el transform si existe
         if (p->getTransform())
@@ -147,15 +154,13 @@ void Particula::integrate(double t)
 {
     Vector3 actualPos = tr->p;
     
+    acceleration = forceAccum * (1.0 / masa);
+
     if (tVida > 0.0 && masa > 0.0)
     {
         tVida -= t;
 
-        //euler semi-implicito
-        //vel = (vel * pow(damping, t)) + acceleration * t;
-        //tr->p = actualPos + t * vel;
-
-
+        
         if (firstFrame) {
             // euler semi-implicito para el primer paso
             vel = (vel * pow(damping, t)) + acceleration * t;
@@ -173,7 +178,24 @@ void Particula::integrate(double t)
         
         
     }
+
+    clearForces();
     
+}
+
+//añadir fuerza a una particula
+
+
+void Particula::addForce(physx::PxVec3 force)
+{
+    // Acumular fuerzas (suma de todas las que le afectan)
+    forceAccum += Vector3(force.x, force.y, force.z);
+}
+
+//quitar la fuerza de la particula
+void Particula::clearForces()
+{
+    forceAccum = Vector3(0, 0, 0);
 }
 
 

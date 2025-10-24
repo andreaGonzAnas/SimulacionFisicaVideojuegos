@@ -13,7 +13,7 @@ GaussianGen::GaussianGen(int nPart, double prob, Particula* p, PxPhysics* gPhysi
 	//setear desviaciones
 	desP = Vector3(0, 0, 0);
 	desVel = Vector3(10, 10, 10);
-	desDur = 10;
+	desDur = 1;
 	setParticulas(nPart);
 	setProbGen(prob);
 
@@ -67,7 +67,7 @@ std::list<Particula*> GaussianGen::generateP()
 			clonedP->setPos(newPos);
 			clonedP->setVel(newVel);
 			clonedP->setTimeVida(newDuration);
-			clonedP->setAcc(Vector3(0, -9.8, 0));
+			//clonedP->setAcc(Vector3(0, -9.8, 0));
 
 			float r = clonedP->getColor().x + (_d(_mt) * desColor.x);
 			float g = clonedP->getColor().y + (_d(_mt) * desColor.y);
