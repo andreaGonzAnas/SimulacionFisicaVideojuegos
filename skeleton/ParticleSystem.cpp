@@ -32,21 +32,20 @@ ParticleSystem::ParticleSystem(Particula* p, PxPhysics* gPhysics): _particles()
 
     //añadir fuerza gravitatoria
     // Crear dos generadores de gravedad diferentes
-    gravityEarth = new GravityForceGenerator();
+    //gravityEarth = new GravityForceGenerator();
 
     // Registrar fuerzas
-    for (auto p : _particles)
-    {
-        _registry->add(p, gravityEarth);
-    }
+    //for (auto p : _particles)
+    //{
+    //    _registry->add(p, gravityEarth);
+   // }
 
-    //windForce = new WindForceGenerator(Vector3(50.0, 50.0, 0.0), 5.0, 1.0);
+    windForce = new WindForceGenerator(Vector3(0.0, 6.0, 0.0), 0.04, 0.002);
 
     // Asignar a partículas
-    /*
     for (auto p : _particles) {
         _registry->add(p, windForce);
-    }*/
+    }
 }
 
 ParticleSystem::~ParticleSystem()
@@ -65,8 +64,8 @@ void ParticleSystem::update(double t)
         {
             // Registrar cada nueva partícula en el registro de fuerzas
             for (auto p : newParticles) {
-                _registry->add(p, gravityEarth);
-                //_registry->add(p, windForce); 
+                //_registry->add(p, gravityEarth);
+                _registry->add(p, windForce); 
             }
             _particles.splice(_particles.end(), newParticles);
         }

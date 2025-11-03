@@ -135,14 +135,14 @@ void initPhysics(bool interactive)
 	// SISTEMA DE PARTICULAS: FUEGO
 
 	// 1. Particula modelo
-	double energiaR = 1 / 2 * 0.1 * 250 * 250;
+	double energiaR = 1 / 2 * 0.1 * 50 * 50;
 
 	//energia simulada
 	double energiaS = energiaR;
 	double masaS = 0.1 * pow((250 / 25), 2); //masa simulada
-	Particula* pAux = new Particula(Vector3(35, 40, 35), Vector3(0, 5, 0), 0.92, 0.1);
+	Particula* pAux = new Particula(Vector3(35, 40, 35), Vector3(0, 1, 0), 0.98, 0.1);
 	pAux->setColor(Vector4(1.0f, 0.2f, 0.0f, 1.0f));
-	pAux->setTimeVida(0.15);
+	pAux->setTimeVida(1.0);
 
 	// 2. Sistema de particulas
 	_partSys = new ParticleSystem(pAux, gPhysics);
