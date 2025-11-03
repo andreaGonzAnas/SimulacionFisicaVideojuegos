@@ -8,17 +8,17 @@ GaussianGen::GaussianGen()
 {
 }
 
-GaussianGen::GaussianGen(int nPart, double prob, Particula* p, PxPhysics* gPhysic) : ParticleGen(), _d(0.0, 1.0), _modelP(p)
+GaussianGen::GaussianGen(int nPart, double prob, Particula* p, PxPhysics* gPhysic) : ParticleGen(), _d(0.0, 1.0)
 {
 	//setear desviaciones
 	desP = Vector3(0, 0, 0);
-	desVel = Vector3(10, 10, 10);
+	desVel = Vector3(0.5, 0.5, 0.5);
 	desDur = 1;
 	setParticulas(nPart);
 	setProbGen(prob);
 
 	desColor = Vector4(0.2, 0.2, 0.1, 1.0);
-
+	_modelP = p;
 
 	gPhysics = gPhysic;
 }
@@ -35,7 +35,7 @@ std::list<Particula*> GaussianGen::generateP()
 	std::list<Particula*> auxList;
 
 	// Crear geometría y material una sola vez
-	static PxSphereGeometry gSphere(0.5f);
+	static PxSphereGeometry gSphere(1.5f);
 	static PxMaterial* gMaterial = gPhysics->createMaterial(0.5f, 0.5f, 0.6f);
 	static physx::PxShape* esferaShape = CreateShape(gSphere, gMaterial);
 
@@ -45,23 +45,34 @@ std::list<Particula*> GaussianGen::generateP()
 		//comprobar probabilidad para crear o no particulas
 		double r = _u(_mt); // numero aleatorio entre 0 y 1
 
-		if (r < getProbGen())
+		if (r < getProbGen() || nParticulas == 1)
 		{
 			//clonar modelP
 			Particula* clonedP = new Particula(_modelP);
 
 			// Variación gaussiana de atributos
-			Vector3 newPos = _modelP->getPos() + _d(_mt) * desP;
-			///Vector3 newVel = _modelP->getVel() + _d(_mt) * desVel;
+			//Vector3 newPos = _modelP->getPos() + _d(_mt) * desP;
+			Vector3 newPos = _modelP->getPos();
+
 			double newDuration = _modelP->getTimeVida() + _d(_mt) * desDur;
 
 			// --- Velocidad radial ---
-			Vector3 dirVel(_d(_mt), _d(_mt), _d(_mt));   // vector aleatorio 3D
-			if (dirVel.magnitude() > 0.0)
-				dirVel = dirVel.getNormalized();            // normalizar para dirección
-			double speed = 40; // magnitud aleatoria
+			Vector3 dirVel;
+
+			if (nParticulas == 1) {
+				// Asegurar dirección estable hacia arriba
+				dirVel = Vector3(0, 1, 0);
+			}
+			else {
+				// Direcciones aleatorias para la explosión
+				dirVel = Vector3(_d(_mt), _d(_mt), _d(_mt));
+				if (dirVel.magnitude() > 0.0)
+					dirVel = dirVel.getNormalized();
+			}
+
+			double speed = (nParticulas == 1) ? 10.0 : 50.0;
 			Vector3 newVel = dirVel * speed;
-			clonedP->setVel(newVel);
+			//std::cout << "Velocidad particulas" << newVel.x << " " << newVel.y << " " << newVel.z << " " << '\n';
 
 			// Inicializar prePos para Verlet
 			clonedP->setPos(newPos);
@@ -78,6 +89,8 @@ std::list<Particula*> GaussianGen::generateP()
 			clonedP->setRenderItem(new RenderItem(esferaShape, clonedP->getTransform(), Vector4(r, g, b, a)));
 
 			auxList.push_back(clonedP);
+
+
 		}
 	}
 	return auxList;

@@ -23,6 +23,7 @@ protected:
 	Vector4 desColor;
 
 	PxPhysics* gPhysics;
+	Particula* _modelP;
 
 public:
 	ParticleGen();
@@ -44,5 +45,7 @@ public:
 
 	int getParticulas() { return nParticulas; }
 	void setParticulas(int n) { nParticulas = n; }
+
+	void setModelP(Particula* p) { _modelP = p; }
 };
 

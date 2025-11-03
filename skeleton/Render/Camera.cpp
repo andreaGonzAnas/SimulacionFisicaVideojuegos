@@ -32,6 +32,8 @@
 #include "Camera.h"
 #include <ctype.h>
 #include "foundation/PxMat33.h"
+#include <iostream>
+
 
 using namespace physx;
 
@@ -48,10 +50,35 @@ Camera::Camera(const PxVec3& eye, const PxVec3& dir)
 
 void Camera::handleMouse(int button, int state, int x, int y)
 {
+	/*
 	PX_UNUSED(state);
 	PX_UNUSED(button);
 	mMouseX = x;
+	mMouseY = y;*/
+
+	//probar para MENU
+	PX_UNUSED(state);
+	PX_UNUSED(button);
+
+	// Guardamos las coordenadas
+	mMouseX = x;
 	mMouseY = y;
+
+	// Ejemplo de área UI (botón)
+	const int buttonX = 0;
+	const int buttonY = 0;
+	const int buttonWidth = 5000;
+	const int buttonHeight = 1000;
+
+	// Verificamos si el click está dentro del área
+	if (button == 0 && state == 0) // botón izquierdo presionado
+	{
+		if (x >= buttonX && x <= buttonX + buttonWidth &&
+			y >= buttonY && y <= buttonY + buttonHeight)
+		{
+			std::cout << "Botón UI clickeado!" << '\n';
+		}
+	}
 }
 
 bool Camera::handleKey(unsigned char key, int x, int y, float speed)

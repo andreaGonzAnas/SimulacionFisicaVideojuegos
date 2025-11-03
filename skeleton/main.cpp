@@ -10,6 +10,7 @@
 #include "Vector3D.h"
 #include "Particula.h"
 #include "ParticleSystem.h"
+#include "FireParticleSystem.h"
 
 
 #include <iostream>
@@ -41,6 +42,7 @@ Particula* p;
 
 std::vector<Particula*> _bullets;
 ParticleSystem* _partSys;
+FireParticleSystem* _fireSys;
 
 void createProyectil(Vector4 color, double size, double masaR, double velR, double velS)
 {
@@ -142,7 +144,21 @@ void initPhysics(bool interactive)
 	pAux->setColor(Vector4(1.0f, 0.5f, 0.0f, 1.0f));
 
 	// 2. Sistema de particulas
-	_partSys = new ParticleSystem(pAux, gPhysics);
+	//_partSys = new ParticleSystem(pAux, gPhysics);
+
+	// SISTEMA DE PARTICULAS 2
+
+	// 1. Particula modelo
+	energiaR = 1 / 2 * 17 * 250 * 250;
+
+	//energia simulada
+	energiaS = energiaR;
+	masaS = 17 * pow((250 / 25), 2); //masa simulada
+	pAux = new Particula(Vector3(0, 15, 0), Vector3(0, 0.5, 0), 0.98, masaS);
+	pAux->setColor(Vector4(1.0f, 0.5f, 0.0f, 1.0f));
+
+	// 2. Sistema de particulas
+	_fireSys = new FireParticleSystem(pAux, gPhysics);
 }
 
 // Function to configure what happens in each step of physics
@@ -158,7 +174,8 @@ void stepPhysics(bool interactive, double t)
 	}
 
 	//sistema particulas
-	_partSys->update(t);
+	//_partSys->update(t);
+	_fireSys->update(t);
 
 	PX_UNUSED(interactive);
 

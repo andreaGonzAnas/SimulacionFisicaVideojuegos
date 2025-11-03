@@ -7,9 +7,9 @@
 class PxShape;
 class ParticleForceRegistry;
 class GravityForceGenerator;
-class WindForceGenerator;
 
-class ParticleSystem
+#pragma once
+class FireParticleSystem
 {
 private:
 	std::list<Particula*> _particles;
@@ -21,15 +21,19 @@ private:
 	ParticleForceRegistry* _registry;
 
 	GravityForceGenerator* gravityEarth;
-	WindForceGenerator* windForce;
+
+	double contExplosion;
+	bool active;
+
+	int generation = 1;       // 0 = partícula inicial
+	bool exploded = false;    // evita que explote varias veces
 
 public:
-	//ParticleSystem();
-	ParticleSystem(Particula* p, PxPhysics*);
-	~ParticleSystem();
+	FireParticleSystem(Particula* p, PxPhysics*);
+	~FireParticleSystem();
 
 	void update(double t);
 
-	std::list<Particula*> getParticleList() {return _particles;}
+	std::list<Particula*> getParticleList() { return _particles; }
 };
 
