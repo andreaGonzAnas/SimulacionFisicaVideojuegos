@@ -10,7 +10,7 @@
 #include "Vector3D.h"
 #include "Particula.h"
 #include "ParticleSystem.h"
-#include "FireParticleSystem.h"
+#include "FireworksParticleSystem.h"
 
 
 #include <iostream>
@@ -42,7 +42,7 @@ Particula* p;
 
 std::vector<Particula*> _bullets;
 ParticleSystem* _partSys;
-FireParticleSystem* _fireSys;
+FireworksParticleSystem* _fireworkSys;
 
 void createProyectil(Vector4 color, double size, double masaR, double velR, double velS)
 {
@@ -132,21 +132,23 @@ void initPhysics(bool interactive)
 	RenderItem* rEsfera3 = new RenderItem(esferaShape, esferaTr3, Vector4(0.0f, 0.0f, 1.0f, 1.0f));
 	RegisterRenderItem(rEsfera3);
 
-	// SISTEMA DE PARTICULAS
+	// SISTEMA DE PARTICULAS: FUEGO
 
 	// 1. Particula modelo
-	double energiaR = 1 / 2 * 17 * 250 * 250;
+	double energiaR = 1 / 2 * 0.1 * 250 * 250;
 
 	//energia simulada
 	double energiaS = energiaR;
-	double masaS = 17 * pow((250 / 25), 2); //masa simulada
-	Particula* pAux = new Particula(Vector3(0, 50, 0), Vector3(0, 0.5, 0), 0.98, masaS);
-	pAux->setColor(Vector4(1.0f, 0.5f, 0.0f, 1.0f));
+	double masaS = 0.1 * pow((250 / 25), 2); //masa simulada
+	Particula* pAux = new Particula(Vector3(35, 40, 35), Vector3(0, 5, 0), 0.92, 0.1);
+	pAux->setColor(Vector4(1.0f, 0.2f, 0.0f, 1.0f));
+	pAux->setTimeVida(0.15);
 
 	// 2. Sistema de particulas
-	//_partSys = new ParticleSystem(pAux, gPhysics);
+	_partSys = new ParticleSystem(pAux, gPhysics);
 
-	// SISTEMA DE PARTICULAS 2
+	
+	// SISTEMA DE PARTICULAS 2: FUEGOS ARTIFICIALES
 
 	// 1. Particula modelo
 	energiaR = 1 / 2 * 17 * 250 * 250;
@@ -158,7 +160,7 @@ void initPhysics(bool interactive)
 	pAux->setColor(Vector4(1.0f, 0.5f, 0.0f, 1.0f));
 
 	// 2. Sistema de particulas
-	_fireSys = new FireParticleSystem(pAux, gPhysics);
+	_fireworkSys = new FireworksParticleSystem(pAux, gPhysics);
 }
 
 // Function to configure what happens in each step of physics
@@ -174,8 +176,8 @@ void stepPhysics(bool interactive, double t)
 	}
 
 	//sistema particulas
-	//_partSys->update(t);
-	_fireSys->update(t);
+	_partSys->update(t);
+	_fireworkSys->update(t);
 
 	PX_UNUSED(interactive);
 

@@ -1,4 +1,4 @@
-#include "FireParticleSystem.h"
+#include "FireworksParticleSystem.h"
 #include "ParticleSystem.h"
 #include "GaussianGen.h"
 #include "PxShape.h"
@@ -8,7 +8,7 @@
 
 #include <iostream>
 
-FireParticleSystem::FireParticleSystem(Particula* p, PxPhysics* gPhysics)
+FireworksParticleSystem::FireworksParticleSystem(Particula* p, PxPhysics* gPhysics)
 {
     contExplosion = 0.5;
     active = false;
@@ -40,10 +40,9 @@ FireParticleSystem::FireParticleSystem(Particula* p, PxPhysics* gPhysics)
     }
 }
 
-FireParticleSystem::~FireParticleSystem()
+FireworksParticleSystem::~FireworksParticleSystem()
 {
 }
-
 
 /*
 void FireParticleSystem::update(double t)
@@ -139,7 +138,7 @@ void FireParticleSystem::update(double t)
         });
 }*/
 
-void FireParticleSystem::update(double t)
+void FireworksParticleSystem::update(double t)
 {
     // Actualizar fuerzas
     _registry->updateForces(t);
@@ -157,25 +156,6 @@ void FireParticleSystem::update(double t)
             exploded = true;
             std::cout << "La explosión debe comenzar (Generación " << generation << ")\n";
             
-            /*
-            std::list<Particula*> nuevas;
-            for (auto parent : _particles)
-            {
-                _generators.front()->setModelP(parent);
-                _generators.front()->setParticulas(50);
-                auto newParticles = _generators.front()->generateP();
-
-                if (!newParticles.empty())
-                {
-                    for (auto p : newParticles)
-                    {
-                        _registry->add(p, gravityEarth);
-                    }
-
-                    // Agregar las nuevas partículas a la lista temporal
-                    nuevas.splice(nuevas.end(), newParticles);
-                }
-            }*/
         }
     }
     else

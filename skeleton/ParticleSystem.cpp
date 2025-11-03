@@ -1,5 +1,5 @@
 #include "ParticleSystem.h"
-#include "GaussianGen.h"
+#include "UniformalGen.h"
 #include "PxShape.h"
 #include "ParticleForceRegistry.h"
 #include "GravityForceGenerator.h"
@@ -17,7 +17,7 @@ ParticleSystem::ParticleSystem()
 ParticleSystem::ParticleSystem(Particula* p, PxPhysics* gPhysics): _particles()
 {
 	// crear generador
-	GaussianGen* gausGen = new GaussianGen(2, 0.5, p, gPhysics);
+    UniformalGen* gausGen = new UniformalGen(10, 0.5, p, gPhysics);
 	_generators.push_back(gausGen);
 
 	// generar partículas y moverlas a _particles
@@ -40,12 +40,13 @@ ParticleSystem::ParticleSystem(Particula* p, PxPhysics* gPhysics): _particles()
         _registry->add(p, gravityEarth);
     }
 
-    windForce = new WindForceGenerator(Vector3(50.0, 50.0, 0.0), 5.0, 1.0);
+    //windForce = new WindForceGenerator(Vector3(50.0, 50.0, 0.0), 5.0, 1.0);
 
     // Asignar a partículas
+    /*
     for (auto p : _particles) {
         _registry->add(p, windForce);
-    }
+    }*/
 }
 
 ParticleSystem::~ParticleSystem()
@@ -65,7 +66,7 @@ void ParticleSystem::update(double t)
             // Registrar cada nueva partícula en el registro de fuerzas
             for (auto p : newParticles) {
                 _registry->add(p, gravityEarth);
-                _registry->add(p, windForce); 
+                //_registry->add(p, windForce); 
             }
             _particles.splice(_particles.end(), newParticles);
         }

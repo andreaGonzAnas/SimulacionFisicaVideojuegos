@@ -9,7 +9,7 @@ class ParticleForceRegistry;
 class GravityForceGenerator;
 
 #pragma once
-class FireParticleSystem
+class FireworksParticleSystem
 {
 private:
 	std::list<Particula*> _particles;
@@ -29,8 +29,8 @@ private:
 	bool exploded = false;    // evita que explote varias veces
 
 public:
-	FireParticleSystem(Particula* p, PxPhysics*);
-	~FireParticleSystem();
+	FireworksParticleSystem(Particula* p, PxPhysics*);
+	~FireworksParticleSystem();
 
 	void update(double t);
 
