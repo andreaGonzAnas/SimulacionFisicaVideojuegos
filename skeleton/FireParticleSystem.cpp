@@ -9,7 +9,23 @@
 FireParticleSystem::FireParticleSystem(Particula* p, PxPhysics* gPhysics)
 {
     // crear generador
-    UniformalGen* gausGen = new UniformalGen(10, 0.5, p, gPhysics);
+    UniformalGen* gausGen = new UniformalGen(30, 0.5, p, gPhysics);
+    
+    // Ajustar las desviaciones del fuego (esto antes estaba dentro de UniformalGen)
+    gausGen->setModelP(p);
+    gausGen->setParticulas(10);
+    gausGen->setProbGen(0.8);
+
+    // pequeñas variaciones de posición al generar
+    gausGen->setInitialPos(Vector3(0.5, 0.0, 0.5));
+
+    // desviación de velocidad -> turbulencia lateral y ascenso
+    gausGen->setVel(Vector3(2.5, 8.0, 2.5));
+
+    // duración con leve variación
+    gausGen->setDuration(1.0);
+
+
     _generators.push_back(gausGen);
 
     // generar partículas y moverlas a _particles

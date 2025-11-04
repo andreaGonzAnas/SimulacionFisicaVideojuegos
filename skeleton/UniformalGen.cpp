@@ -2,23 +2,25 @@
 #include <algorithm>
 #include "PxShape.h"
 #include <iostream>
+#include <algorithm>
 
 using namespace physx;
 
 UniformalGen::UniformalGen(int nPart, double prob, Particula* p, PxPhysics* gPhysic) : ParticleGen()
 {
 	// --- CONFIGURACIoN DE EFECTO FUEGO ---
+	_mt = std::mt19937(std::random_device{}());
 	_u = std::uniform_real_distribution<double>(-1.0, 1.0);
 
 	// Las particulas salen de un punto o peque zona
-	desP = Vector3(0.05, 0.02, 0.05); // leve dispersion horizontal
+	desP = Vector3(1.5, 0.02, 1.5); // leve dispersion horizontal
 
 	// Direccion base: hacia arriba (Y positiva)
 	// Variacion aleatoria: leve en X/Z, fuerte en Y
-	desVel = Vector3(1.0, 2.0, 1.0);
+	desVel = Vector3(0.3, 0.1, 0.3);
 
 	// Vida corta: las llamas duran poco
-	desDur = 0; // segundos aprox
+	desDur = 0.2; // segundos aprox
 
 	// Colores calidos: entre rojo, naranja y amarillo
 	// (se usaron como desviaciones al generar el color)
@@ -40,47 +42,49 @@ std::list<Particula*> UniformalGen::generateP()
 {
 	std::list<Particula*> auxList;
 
-	// Crear geometría y material
 	static PxSphereGeometry gSphere(0.2f);
 	static PxMaterial* gMaterial = gPhysics->createMaterial(0.5f, 0.5f, 0.6f);
 	static physx::PxShape* esferaShape = CreateShape(gSphere, gMaterial);
 
 	for (int i = 0; i < nParticulas; i++)
 	{
-		//comprobar probabilidad para crear o no particulas
-		double prob = _u(_mt) * 0.5 + 0.5;
-
-		if (prob < getProbGen())
+		if (_u(_mt) * 0.5 + 0.5 < getProbGen())
 		{
-			//clonar modelP
 			Particula* clonedP = new Particula(_modelP);
 
-			Vector3 randomOffset(_u(_mt), fabs(_u(_mt)), _u(_mt));
-			Vector3 newPos = _modelP->getPos() + Vector3(randomOffset.x * desP.x,
-				randomOffset.y * desP.y,
-				randomOffset.z * desP.z);
-			double newDuration = _modelP->getTimeVida() + fabs(_u(_mt)) * desDur;
+			// pequeñas variaciones respecto a la partícula modelo
+			Vector3 randomOffset(
+				_u(_mt) * desP.x,
+				fabs(_u(_mt)) * desP.y,
+				_u(_mt) * desP.z
+			);
 
-			double upSpeed = 5.0 + fabs(_u(_mt)) * desVel.y;
-			double lateralX = _u(_mt) * desVel.x * 0.5;
-			double lateralZ = _u(_mt) * desVel.z * 0.5;
+			Vector3 newPos = _modelP->getPos() + randomOffset;
 
-			Vector3 newVel = Vector3(lateralX, upSpeed, lateralZ);
-			clonedP->setVel(newVel);
+			Vector3 newVel = _modelP->getVel() + Vector3(
+				_modelP->getVel().x * desVel.x,
+				_modelP->getVel().y * desVel.y,
+				_modelP->getVel().z * desVel.z
+			);
+
+			double newDuration = std::max<double>(0.0, _modelP->getTimeVida() + _u(_mt) * desDur);
 
 			clonedP->setPos(newPos);
+			clonedP->setVel(newVel);
 			clonedP->setTimeVida(newDuration);
 
-			float r = std::clamp(0.9f + static_cast<float>(_u(_mt)) * 0.1f, 0.0f, 1.0f);
-			float g = std::clamp(0.1f + static_cast<float>(_u(_mt)) * 0.2f, 0.0f, 1.0f);
-			float b = std::clamp(0.02f + static_cast<float>(_u(_mt)) * 0.03f, 0.0f, 1.0f);
-			float a = 1.0f;
+			Vector4 baseC = _modelP->getColor();
+			Vector4 newC = Vector4(
+				std::clamp(baseC.x + static_cast<float>(_u(_mt)) * desColor.x, 0.0f, 1.0f),
+				std::clamp(baseC.y + static_cast<float>(_u(_mt)) * desColor.y, 0.0f, 1.0f),
+				std::clamp(baseC.z + static_cast<float>(_u(_mt)) * desColor.z, 0.0f, 1.0f),
+				baseC.w
+			);
 
-			clonedP->setRenderItem(new RenderItem(esferaShape, clonedP->getTransform(), Vector4(r, g, b, a)));
+			clonedP->setRenderItem(new RenderItem(esferaShape, clonedP->getTransform(), newC));
 			auxList.push_back(clonedP);
 		}
 	}
 
-	
 	return auxList;
 }

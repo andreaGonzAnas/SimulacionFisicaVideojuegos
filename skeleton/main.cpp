@@ -142,9 +142,9 @@ void initPhysics(bool interactive)
 	//energia simulada
 	double energiaS = energiaR;
 	double masaS = 0.1 * pow((250 / 25), 2); //masa simulada
-	Particula* pAux = new Particula(Vector3(35, 40, 35), Vector3(0, 1, 0), 0.98, 0.1);
-	pAux->setColor(Vector4(1.0f, 0.2f, 0.0f, 1.0f));
-	pAux->setTimeVida(1.0);
+	Particula* pAux = new Particula(Vector3(35, 40, 35), Vector3(0, 2, 0), 0.98, 0.1);
+	pAux->setColor(Vector4(1.0f, 0.3f, 0.05f, 1.0f));
+	pAux->setTimeVida(0.3);
 
 	// 2. Sistema de particulas
 	_firePartSystem = new FireParticleSystem(pAux, gPhysics);
