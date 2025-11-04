@@ -40,7 +40,7 @@ ParticleSystem::ParticleSystem(Particula* p, PxPhysics* gPhysics): _particles()
     //    _registry->add(p, gravityEarth);
    // }
 
-    windForce = new WindForceGenerator(Vector3(0.0, 6.0, 0.0), 0.04, 0.002);
+    windForce = new WindForceGenerator(Vector3(6.0, 6.0, 0.0), 0.04, 0);
 
     // Asignar a partículas
     for (auto p : _particles) {

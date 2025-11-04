@@ -69,6 +69,7 @@ void createProyectil(Vector4 color, double size, double masaR, double velR, doub
 	pAux->setRenderItem(renderItem);
 
 
+
 	_bullets.push_back(pAux);
 }
 
