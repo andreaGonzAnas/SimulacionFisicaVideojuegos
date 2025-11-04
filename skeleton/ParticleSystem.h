@@ -12,7 +12,7 @@ class WhirlwindForceGenerator;
 
 class ParticleSystem
 {
-private:
+protected:
 	std::list<Particula*> _particles;
 	std::list<ParticleGen*> _generators;
 	//particula modelo
@@ -27,10 +27,10 @@ private:
 
 public:
 	//ParticleSystem();
-	ParticleSystem(Particula* p, PxPhysics*);
+	ParticleSystem();
 	~ParticleSystem();
 
-	void update(double t);
+	virtual void update(double t) {};
 
 	std::list<Particula*> getParticleList() {return _particles;}
 

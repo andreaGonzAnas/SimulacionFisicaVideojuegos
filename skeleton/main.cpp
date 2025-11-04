@@ -11,6 +11,7 @@
 #include "Particula.h"
 #include "ParticleSystem.h"
 #include "FireworksParticleSystem.h"
+#include "FireParticleSystem.h"
 
 
 #include <iostream>
@@ -41,8 +42,8 @@ ContactReportCallback gContactReportCallback;
 Particula* p;
 
 std::vector<Particula*> _bullets;
-ParticleSystem* _partSys;
-FireworksParticleSystem* _fireworkSys;
+FireParticleSystem* _firePartSystem;
+FireworksParticleSystem* _fireworkPartSys;
 
 void createProyectil(Vector4 color, double size, double masaR, double velR, double velS)
 {
@@ -146,7 +147,7 @@ void initPhysics(bool interactive)
 	pAux->setTimeVida(1.0);
 
 	// 2. Sistema de particulas
-	_partSys = new ParticleSystem(pAux, gPhysics);
+	_firePartSystem = new FireParticleSystem(pAux, gPhysics);
 
 	
 	// SISTEMA DE PARTICULAS 2: FUEGOS ARTIFICIALES
@@ -161,7 +162,7 @@ void initPhysics(bool interactive)
 	pAux->setColor(Vector4(1.0f, 0.5f, 0.0f, 1.0f));
 
 	// 2. Sistema de particulas
-	_fireworkSys = new FireworksParticleSystem(pAux, gPhysics);
+	_fireworkPartSys = new FireworksParticleSystem(pAux, gPhysics);
 }
 
 // Function to configure what happens in each step of physics
@@ -177,8 +178,8 @@ void stepPhysics(bool interactive, double t)
 	}
 
 	//sistema particulas
-	_partSys->update(t);
-	_fireworkSys->update(t);
+	_firePartSystem->update(t);
+	_fireworkPartSys->update(t);
 
 	PX_UNUSED(interactive);
 
@@ -246,21 +247,21 @@ void keyPress(unsigned char key, const PxTransform& camera)
 		//desactivar la gravedad de todos los sistemas
 		
 		//hacer un for con todos los sistemas?
-		_partSys->setActiveGravity();
+		_firePartSystem->setActiveGravity();
 
 		break;
 	}
 	case '6':
 	{
 		//viento
-		_partSys->setActiveWind();
+		_firePartSystem->setActiveWind();
 
 		break;
 	}
 	case '7':
 	{
 		//torbellino
-		_partSys->setActiveWhirlWind();
+		_firePartSystem->setActiveWhirlWind();
 
 		break;
 	}

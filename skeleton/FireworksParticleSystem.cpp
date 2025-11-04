@@ -44,106 +44,11 @@ FireworksParticleSystem::~FireworksParticleSystem()
 {
 }
 
-/*
-void FireParticleSystem::update(double t)
-{
-    // Actualizar fuerzas
-    _registry->updateForces(t);
-
-    // Reducir contador de duracion de la explosión
-    /*
-    if (active)
-    {
-        contExplosion -= t;
-
-        if (contExplosion <= 0.0)
-        {
-            contExplosion = 0.0;
-            active = false;
-            std::cout << "La explosión terminó — ya no se generan nuevas partículas\n";
-        }
-    }
-
-    if (!exploded)
-    {
-        contExplosion -= t;
-
-        if (contExplosion <= 0.0)
-        {
-            contExplosion = 0.0;
-            exploded = true;
-            std::cout << "La explosion debe comenzar";
-        }
-    }
-    else
-    {
-        //generar x particulas segun el nivel de generacion
-        if (generation == 1)
-        {
-            //generar 10
-            _generators.front()->setParticulas(10);
-            auto newParticles = _generators.front()->generateP();
-            if (!newParticles.empty()) {
-                for (auto p : newParticles) {
-                    _registry->add(p, gravityEarth);
-                }
-                _particles.splice(_particles.end(), newParticles);
-            }
-            generation++;
-        }
-        else if (generation == 2)
-        {
-            //generar 10
-            _generators.front()->setParticulas(10);
-            auto newParticles = _generators.front()->generateP();
-            if (!newParticles.empty()) {
-                for (auto p : newParticles) {
-                    _registry->add(p, gravityEarth);
-                }
-                _particles.splice(_particles.end(), newParticles);
-            }
-            generation++;
-        }
-    }
-
-    
-    /*
-    // Generar nuevas particulas SOLO si sigue activa
-    if (active && !_generators.empty()) {
-        auto newParticles = _generators.front()->generateP();
-        if (!newParticles.empty()) {
-            for (auto p : newParticles) {
-                _registry->add(p, gravityEarth);
-            }
-            _particles.splice(_particles.end(), newParticles);
-        }
-    }
-
-    // Actualizar particulas existentes
-    for (auto p : _particles) {
-        p->integrate(t);
-    }
-
-    // Eliminar particulas muertas
-    _particles.remove_if([](Particula* p) {
-        if (p->getTimeVida() <= 0.0) {
-            if (p->getRenderItem()) {
-                DeregisterRenderItem(p->getRenderItem());
-                delete p->getRenderItem();
-            }
-            delete p;
-            return true;
-        }
-        return false;
-        });
-}*/
 
 void FireworksParticleSystem::update(double t)
 {
     // Actualizar fuerzas
     _registry->updateForces(t);
-
-
 
     // Control del tiempo de la explosión
     if (!exploded)

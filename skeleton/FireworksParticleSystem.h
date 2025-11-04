@@ -1,27 +1,11 @@
 #pragma once
 
-#include <list>
-#include "Particula.h"
-#include "ParticleGen.h"
-
-class PxShape;
-class ParticleForceRegistry;
-class GravityForceGenerator;
+#include "ParticleSystem.h"
 
 #pragma once
-class FireworksParticleSystem
+class FireworksParticleSystem: public ParticleSystem
 {
 private:
-	std::list<Particula*> _particles;
-	std::list<ParticleGen*> _generators;
-	//particula modelo
-	Particula* _modelP;
-
-	//registro de fuerzas
-	ParticleForceRegistry* _registry;
-
-	GravityForceGenerator* gravityEarth;
-
 	double contExplosion;
 	bool active;
 
@@ -32,8 +16,6 @@ public:
 	FireworksParticleSystem(Particula* p, PxPhysics*);
 	~FireworksParticleSystem();
 
-	void update(double t);
-
-	std::list<Particula*> getParticleList() { return _particles; }
+	void update(double t) override;
 };
 

@@ -1,4 +1,4 @@
-#include "ParticleSystem.h"
+#include "FireParticleSystem.h"
 #include "UniformalGen.h"
 #include "PxShape.h"
 #include "ParticleForceRegistry.h"
@@ -6,28 +6,18 @@
 #include "WindForceGenerator.h"
 #include "WhirlwindForceGenerator.h"
 
-#include <iostream>
-
-
-/*
-ParticleSystem::ParticleSystem()
+FireParticleSystem::FireParticleSystem(Particula* p, PxPhysics* gPhysics)
 {
-	
-}*/
-
-ParticleSystem::ParticleSystem(): _particles()
-{
-	/*
     // crear generador
     UniformalGen* gausGen = new UniformalGen(10, 0.5, p, gPhysics);
-	_generators.push_back(gausGen);
+    _generators.push_back(gausGen);
 
-	// generar partículas y moverlas a _particles
-	if (!_generators.empty()) {
-		auto newParticles = _generators.front()->generateP();
-		if (!newParticles.empty())
-			_particles.splice(_particles.end(), newParticles);
-	}
+    // generar partículas y moverlas a _particles
+    if (!_generators.empty()) {
+        auto newParticles = _generators.front()->generateP();
+        if (!newParticles.empty())
+            _particles.splice(_particles.end(), newParticles);
+    }
 
     //crear registro fuerzas
     _registry = new ParticleForceRegistry();
@@ -60,20 +50,18 @@ ParticleSystem::ParticleSystem(): _particles()
 
     //como no quiero gravedad o viento... 
     gravityEarth->setActive(false);
-    windForce->setActive(false);*/
+    windForce->setActive(false);
 }
 
-ParticleSystem::~ParticleSystem()
+FireParticleSystem::~FireParticleSystem()
 {
 }
 
-/*
-void ParticleSystem::update(double t)
+void FireParticleSystem::update(double t)
 {
-    
     //actualizar fuerzas
     _registry->updateForces(t);
-    
+
     // Generar nuevas partículas cada frame
     if (!_generators.empty()) {
         auto newParticles = _generators.front()->generateP();
@@ -82,12 +70,12 @@ void ParticleSystem::update(double t)
             // Registrar cada nueva partícula en el registro de fuerzas
             for (auto p : newParticles) {
                 _registry->add(p, gravityEarth);
-                _registry->add(p, windForce); 
+                _registry->add(p, windForce);
                 _registry->add(p, whirlWindForce);
             }
             _particles.splice(_particles.end(), newParticles);
         }
-            
+
     }
 
     // Actualizar todas las existentes
@@ -108,19 +96,4 @@ void ParticleSystem::update(double t)
         return false;
         });
 
-
-}*/
-
-void ParticleSystem::setActiveGravity() {
-    if (gravityEarth != nullptr) gravityEarth->setActive(!gravityEarth->isActive());
 }
-
-void ParticleSystem::setActiveWind() {
-    if (windForce != nullptr) windForce->setActive(!windForce->isActive());
-}
-
-void ParticleSystem::setActiveWhirlWind() {
-    if (whirlWindForce != nullptr) whirlWindForce->setActive(!whirlWindForce->isActive());
-}
-
-
