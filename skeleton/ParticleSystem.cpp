@@ -31,12 +31,23 @@ ParticleSystem::ParticleSystem(Particula* p, PxPhysics* gPhysics): _particles()
     //crear registro fuerzas
     _registry = new ParticleForceRegistry();
 
-    //windForce = new WindForceGenerator(Vector3(6.0, 6.0, 0.0), 0.04, 0);
+    //añadir fuerza gravitatoria
+    // Crear dos generadores de gravedad diferentes
+    gravityEarth = new GravityForceGenerator();
 
-    //// Asignar a partículas
-    //for (auto p : _particles) {
-    //    _registry->add(p, windForce);
-    //}
+    // Registrar fuerzas
+    for (auto p : _particles)
+    {
+        _registry->add(p, gravityEarth);
+    }
+
+    //viento
+    windForce = new WindForceGenerator(Vector3(6.0, 6.0, 0.0), 0.08, 0);
+
+    // Asignar a partículas
+    for (auto p : _particles) {
+        _registry->add(p, windForce);
+    }
 
     //Fuerza explosion
     whirlWindForce = new WhirlwindForceGenerator(Vector3(35, 35, 35), 2, 1, 2);
@@ -47,8 +58,8 @@ ParticleSystem::ParticleSystem(Particula* p, PxPhysics* gPhysics): _particles()
     }
 
     //como no quiero gravedad o viento... 
-    gravityEarth = nullptr;
-    windForce = nullptr;
+    gravityEarth->setActive(false);
+    windForce->setActive(false);
 }
 
 ParticleSystem::~ParticleSystem()
@@ -67,8 +78,8 @@ void ParticleSystem::update(double t)
         {
             // Registrar cada nueva partícula en el registro de fuerzas
             for (auto p : newParticles) {
-                //_registry->add(p, gravityEarth);
-                //_registry->add(p, windForce); 
+                _registry->add(p, gravityEarth);
+                _registry->add(p, windForce); 
                 _registry->add(p, whirlWindForce);
             }
             _particles.splice(_particles.end(), newParticles);
