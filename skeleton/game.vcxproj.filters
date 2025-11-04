@@ -20,7 +20,8 @@
     <ClCompile Include="GravityForceGenerator.cpp" />
     <ClCompile Include="ParticleForceRegistry.cpp" />
     <ClCompile Include="WindForceGenerator.cpp" />
-    <ClCompile Include="FireParticleSystem.cpp" />
+    <ClCompile Include="FireworksParticleSystem.cpp" />
+    <ClCompile Include="WhirlwindForceGenerator.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="core.hpp" />
@@ -42,7 +43,8 @@
     <ClInclude Include="GravityForceGenerator.h" />
     <ClInclude Include="ParticleForceRegistry.h" />
     <ClInclude Include="WindForceGenerator.h" />
-    <ClInclude Include="FireParticleSystem.h" />
+    <ClInclude Include="FireworksParticleSystem.h" />
+    <ClInclude Include="WhirlwindForceGenerator.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Render">

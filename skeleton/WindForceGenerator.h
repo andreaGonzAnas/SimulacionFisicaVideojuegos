@@ -8,8 +8,7 @@ private:
 
     //fuerza fuerte
     Vector3 windVel;
-    double coef; //coeficiente de rozamiento?
-    double k1; //??
+    double k1;
     double k2;
 
 public:

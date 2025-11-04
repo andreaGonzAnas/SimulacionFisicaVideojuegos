@@ -80,5 +80,19 @@ public:
         forceToParticles.clear();
         particleToForces.clear();
     }
+
+    void ParticleForceRegistry::remove(Particula* p)
+    {
+        auto it = particleToForces.find(p);
+        if (it == particleToForces.end()) return;
+
+        for (auto* fg : it->second)
+        {
+            auto& particles = forceToParticles[fg];
+            particles.erase(std::remove(particles.begin(), particles.end(), p), particles.end());
+        }
+
+        particleToForces.erase(it);
+    }
 };
 

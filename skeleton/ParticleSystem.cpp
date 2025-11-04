@@ -4,6 +4,7 @@
 #include "ParticleForceRegistry.h"
 #include "GravityForceGenerator.h"
 #include "WindForceGenerator.h"
+#include "WhirlwindForceGenerator.h"
 
 #include <iostream>
 
@@ -30,21 +31,19 @@ ParticleSystem::ParticleSystem(Particula* p, PxPhysics* gPhysics): _particles()
     //crear registro fuerzas
     _registry = new ParticleForceRegistry();
 
-    //añadir fuerza gravitatoria
-    // Crear dos generadores de gravedad diferentes
-    //gravityEarth = new GravityForceGenerator();
+    //windForce = new WindForceGenerator(Vector3(6.0, 6.0, 0.0), 0.04, 0);
 
-    // Registrar fuerzas
-    //for (auto p : _particles)
-    //{
-    //    _registry->add(p, gravityEarth);
-   // }
+    //// Asignar a partículas
+    //for (auto p : _particles) {
+    //    _registry->add(p, windForce);
+    //}
 
-    windForce = new WindForceGenerator(Vector3(6.0, 6.0, 0.0), 0.04, 0);
+    //Fuerza explosion
+    explosionForce = new WhirlwindForceGenerator(Vector3(35, 35, 35), 2, 1, 2);
 
     // Asignar a partículas
     for (auto p : _particles) {
-        _registry->add(p, windForce);
+        _registry->add(p, explosionForce);
     }
 }
 
@@ -65,7 +64,8 @@ void ParticleSystem::update(double t)
             // Registrar cada nueva partícula en el registro de fuerzas
             for (auto p : newParticles) {
                 //_registry->add(p, gravityEarth);
-                _registry->add(p, windForce); 
+                //_registry->add(p, windForce); 
+                _registry->add(p, explosionForce);
             }
             _particles.splice(_particles.end(), newParticles);
         }
@@ -77,19 +77,18 @@ void ParticleSystem::update(double t)
         p->integrate(t);
     }
 
-    _particles.remove_if([](Particula* p) {
+    _particles.remove_if([this](Particula* p) {
         if (p->getTimeVida() <= 0.0) {
-            // eliminar render item si existe
             if (p->getRenderItem()) {
-                DeregisterRenderItem(p->getRenderItem()); // función de tu motor
+                DeregisterRenderItem(p->getRenderItem());
                 delete p->getRenderItem();
             }
-
-            delete p; // eliminar partícula
+            _registry->remove(p);
+            delete p;
             return true;
         }
         return false;
-    });
+        });
 
 
 }

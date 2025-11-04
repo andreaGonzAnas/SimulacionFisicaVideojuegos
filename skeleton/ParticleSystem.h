@@ -8,6 +8,7 @@ class PxShape;
 class ParticleForceRegistry;
 class GravityForceGenerator;
 class WindForceGenerator;
+class WhirlwindForceGenerator;
 
 class ParticleSystem
 {
@@ -22,6 +23,7 @@ private:
 
 	GravityForceGenerator* gravityEarth;
 	WindForceGenerator* windForce;
+	WhirlwindForceGenerator* explosionForce;
 
 public:
 	//ParticleSystem();
