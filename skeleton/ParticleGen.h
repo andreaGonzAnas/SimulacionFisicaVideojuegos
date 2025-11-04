@@ -45,6 +45,8 @@ public:
 
 	int getParticulas() { return nParticulas; }
 	void setParticulas(int n) { nParticulas = n; }
+	
+	void setDesColor(Vector4 color) { desColor = color; }
 
 	void setModelP(Particula* p) { _modelP = p; }
 };

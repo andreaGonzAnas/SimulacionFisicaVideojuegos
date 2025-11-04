@@ -61,16 +61,18 @@ std::list<Particula*> UniformalGen::generateP()
 
 			Vector3 newPos = _modelP->getPos() + randomOffset;
 
-			Vector3 newVel = _modelP->getVel() + Vector3(
-				_modelP->getVel().x * desVel.x,
-				_modelP->getVel().y * desVel.y,
-				_modelP->getVel().z * desVel.z
-			);
+			Vector3 velOffset;
+			double angle = ((double)rand() / RAND_MAX) * 2.0 * 3.14159265359;
+			double radius = ((double)rand() / RAND_MAX) * desVel.x; // asumiendo X=Z máximo
+			velOffset.x = cos(angle) * radius;
+			velOffset.z = sin(angle) * radius;
+			velOffset.y = _modelP->getVel().y + ((double)rand() / RAND_MAX) * 1.0; // variación vertical
+
+			clonedP->setVel(_modelP->getVel() + velOffset);
 
 			double newDuration = std::max<double>(0.0, _modelP->getTimeVida() + _u(_mt) * desDur);
 
 			clonedP->setPos(newPos);
-			clonedP->setVel(newVel);
 			clonedP->setTimeVida(newDuration);
 
 			Vector4 baseC = _modelP->getColor();

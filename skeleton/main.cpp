@@ -12,6 +12,7 @@
 #include "ParticleSystem.h"
 #include "FireworksParticleSystem.h"
 #include "FireParticleSystem.h"
+#include "ConfettiParticleSystem.h"
 
 
 #include <iostream>
@@ -44,6 +45,7 @@ Particula* p;
 std::vector<Particula*> _bullets;
 FireParticleSystem* _firePartSystem;
 FireworksParticleSystem* _fireworkPartSys;
+ConfettiParticleSystem* _confettiPartSys;
 
 void createProyectil(Vector4 color, double size, double masaR, double velR, double velS)
 {
@@ -158,11 +160,26 @@ void initPhysics(bool interactive)
 	//energia simulada
 	energiaS = energiaR;
 	masaS = 17 * pow((250 / 25), 2); //masa simulada
-	pAux = new Particula(Vector3(0, 15, 0), Vector3(0, 0.5, 0), 0.98, masaS);
+	pAux = new Particula(Vector3(0, 15, 0), Vector3(0, 12, 0), 0.98, masaS);
 	pAux->setColor(Vector4(1.0f, 0.5f, 0.0f, 1.0f));
 
 	// 2. Sistema de particulas
 	_fireworkPartSys = new FireworksParticleSystem(pAux, gPhysics);
+
+	// SISTEMA DE PARTICULAS 3: CONFETTI
+
+	// 1. Particula modelo
+	energiaR = 1 / 2 * 0.1 * 50 * 50;
+
+	//energia simulada
+	energiaS = energiaR;
+	masaS = 0.1 * pow((250 / 25), 2); //masa simulada
+	pAux = new Particula(Vector3(35, 40, 50), Vector3(0, 8, -8), 0.98, 0.1);
+	pAux->setColor(Vector4(0.0f, 1.0f, 0.5f, 1.0f));
+	pAux->setTimeVida(1.0);
+
+	// 2. Sistema de particulas
+	_confettiPartSys = new ConfettiParticleSystem(pAux, gPhysics);
 }
 
 // Function to configure what happens in each step of physics
@@ -180,6 +197,7 @@ void stepPhysics(bool interactive, double t)
 	//sistema particulas
 	_firePartSystem->update(t);
 	_fireworkPartSys->update(t);
+	_confettiPartSys->update(t);
 
 	PX_UNUSED(interactive);
 

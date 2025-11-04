@@ -23,6 +23,7 @@
     <ClCompile Include="FireworksParticleSystem.cpp" />
     <ClCompile Include="WhirlwindForceGenerator.cpp" />
     <ClCompile Include="FireParticleSystem.cpp" />
+    <ClCompile Include="ConfettiParticleSystem.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="core.hpp" />
@@ -47,6 +48,7 @@
     <ClInclude Include="FireworksParticleSystem.h" />
     <ClInclude Include="WhirlwindForceGenerator.h" />
     <ClInclude Include="FireParticleSystem.h" />
+    <ClInclude Include="ConfettiParticleSystem.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Render">
