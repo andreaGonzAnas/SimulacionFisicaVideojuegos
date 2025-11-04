@@ -154,8 +154,6 @@ void FireworksParticleSystem::update(double t)
         {
             contExplosion = 0.0;
             exploded = true;
-            std::cout << "La explosión debe comenzar (Generación " << generation << ")\n";
-            
         }
     }
     else
@@ -192,8 +190,6 @@ void FireworksParticleSystem::update(double t)
             if (!nuevas.empty())
             {
                 _particles.splice(_particles.end(), nuevas);
-                std::cout << "Generación " << generation
-                    << " creada con " << numParticles << " partículas por partícula base\n";
             }
 
             // Preparar siguiente generación
@@ -206,7 +202,6 @@ void FireworksParticleSystem::update(double t)
         {
             exploded = true;
             contExplosion = 0.0;
-            std::cout << "Fin de las generaciones\n";
         }
     }
 

@@ -241,6 +241,29 @@ void keyPress(unsigned char key, const PxTransform& camera)
 		createProyectil(Vector4(1.0f, 0.0f, 0.0f, 1.0f), 0.5, 2, 300000000, 1100);
 		break;
 	}
+	case '5':
+	{
+		//desactivar la gravedad de todos los sistemas
+		
+		//hacer un for con todos los sistemas?
+		_partSys->setActiveGravity();
+
+		break;
+	}
+	case '6':
+	{
+		//viento
+		_partSys->setActiveWind();
+
+		break;
+	}
+	case '7':
+	{
+		//torbellino
+		_partSys->setActiveWhirlWind();
+
+		break;
+	}
 	case ' ':
 	{
 		break;

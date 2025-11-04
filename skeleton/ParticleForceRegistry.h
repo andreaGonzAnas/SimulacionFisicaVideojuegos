@@ -69,9 +69,13 @@ public:
     void updateForces(double t) {
         for (auto& pair : forceToParticles) {
             ForceGenerator* fg = pair.first;
-            for (auto* p : pair.second) {
-                fg->update(p, t);
+            if (fg->isActive())
+            {
+                for (auto* p : pair.second) {
+                    fg->update(p, t);
+                }
             }
+            
         }
     }
 

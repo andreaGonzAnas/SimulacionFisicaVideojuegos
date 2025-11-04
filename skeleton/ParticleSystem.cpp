@@ -39,12 +39,16 @@ ParticleSystem::ParticleSystem(Particula* p, PxPhysics* gPhysics): _particles()
     //}
 
     //Fuerza explosion
-    explosionForce = new WhirlwindForceGenerator(Vector3(35, 35, 35), 2, 1, 2);
+    whirlWindForce = new WhirlwindForceGenerator(Vector3(35, 35, 35), 2, 1, 2);
 
     // Asignar a partículas
     for (auto p : _particles) {
-        _registry->add(p, explosionForce);
+        _registry->add(p, whirlWindForce);
     }
+
+    //como no quiero gravedad o viento... 
+    gravityEarth = nullptr;
+    windForce = nullptr;
 }
 
 ParticleSystem::~ParticleSystem()
@@ -65,7 +69,7 @@ void ParticleSystem::update(double t)
             for (auto p : newParticles) {
                 //_registry->add(p, gravityEarth);
                 //_registry->add(p, windForce); 
-                _registry->add(p, explosionForce);
+                _registry->add(p, whirlWindForce);
             }
             _particles.splice(_particles.end(), newParticles);
         }
@@ -92,4 +96,17 @@ void ParticleSystem::update(double t)
 
 
 }
+
+void ParticleSystem::setActiveGravity() {
+    if (gravityEarth != nullptr) gravityEarth->setActive(!gravityEarth->isActive());
+}
+
+void ParticleSystem::setActiveWind() {
+    if (windForce != nullptr) windForce->setActive(!windForce->isActive());
+}
+
+void ParticleSystem::setActiveWhirlWind() {
+    if (whirlWindForce != nullptr) whirlWindForce->setActive(!whirlWindForce->isActive());
+}
+
 

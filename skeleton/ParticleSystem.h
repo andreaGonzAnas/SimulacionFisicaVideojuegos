@@ -23,7 +23,7 @@ private:
 
 	GravityForceGenerator* gravityEarth;
 	WindForceGenerator* windForce;
-	WhirlwindForceGenerator* explosionForce;
+	WhirlwindForceGenerator* whirlWindForce;
 
 public:
 	//ParticleSystem();
@@ -33,5 +33,9 @@ public:
 	void update(double t);
 
 	std::list<Particula*> getParticleList() {return _particles;}
+
+	void ParticleSystem::setActiveGravity();
+	void ParticleSystem::setActiveWind();
+	void ParticleSystem::setActiveWhirlWind();
 };
 
