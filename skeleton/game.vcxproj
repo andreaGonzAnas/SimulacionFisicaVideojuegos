@@ -259,6 +259,7 @@
     <ClCompile Include="FireParticleSystem.cpp" />
     <ClCompile Include="Proyectil.cpp" />
     <ClCompile Include="ProyectilSystem.cpp" />
+    <ClCompile Include="Scene.cpp" />
     <ClCompile Include="WhirlwindForceGenerator.cpp" />
     <ClCompile Include="FireworksParticleSystem.cpp" />
     <ClCompile Include="ForceGenerator.cpp" />
@@ -283,6 +284,7 @@
     <ClInclude Include="FireParticleSystem.h" />
     <ClInclude Include="Proyectil.h" />
     <ClInclude Include="ProyectilSystem.h" />
+    <ClInclude Include="Scene.h" />
     <ClInclude Include="WhirlwindForceGenerator.h" />
     <ClInclude Include="FireworksParticleSystem.h" />
     <ClInclude Include="ForceGenerator.h" />

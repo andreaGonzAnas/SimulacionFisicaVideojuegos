@@ -26,6 +26,7 @@
     <ClCompile Include="ConfettiParticleSystem.cpp" />
     <ClCompile Include="Proyectil.cpp" />
     <ClCompile Include="ProyectilSystem.cpp" />
+    <ClCompile Include="Scene.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="core.hpp" />
@@ -53,6 +54,7 @@
     <ClInclude Include="ConfettiParticleSystem.h" />
     <ClInclude Include="Proyectil.h" />
     <ClInclude Include="ProyectilSystem.h" />
+    <ClInclude Include="Scene.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Render">
