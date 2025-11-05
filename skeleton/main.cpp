@@ -13,6 +13,7 @@
 #include "FireworksParticleSystem.h"
 #include "FireParticleSystem.h"
 #include "ConfettiParticleSystem.h"
+#include "ProyectilSystem.h"
 #include "Proyectil.h"
 #include "GravityForceGenerator.h"
 #include "WindForceGenerator.h"
@@ -53,16 +54,12 @@ std::vector<Proyectil*> _bullets;
 FireParticleSystem* _firePartSystem;
 FireworksParticleSystem* _fireworkPartSys;
 ConfettiParticleSystem* _confettiPartSys;
+ProyectilSystem* _proyectilSys;
 
 //FUERZAS
-GravityForceGenerator* gravityEarth;
 bool _gravityOn = true;
-
 bool _windOn = true;
 bool _windWhirlOn = true;
-
-//WindForceGenerator* windForce;
-//WhirlwindForceGenerator* whirlWindForce;
 
 
 ParticleForceRegistry* _registry; //registro de los proyectiles
@@ -92,11 +89,14 @@ void createProyectil(Vector4 color, double size, double masaR, double velR, doub
 	RenderItem* renderItem = new RenderItem(esferaShape, pAux->getTr(), color);
 	pAux->setRenderItem(renderItem);*/
 
+	/*
 	Proyectil* p = new Proyectil(color, size, masaR, velR, velS, esferaShape);
 
 	_registry->add(p->getParticle(), gravityEarth);
 
-	_bullets.push_back(p);
+	_bullets.push_back(p);*/
+
+	_proyectilSys->createProyectil(color, size, masaR, velR, velS, esferaShape);
 }
 
 // Initialize physics engine
@@ -163,7 +163,7 @@ void initPhysics(bool interactive)
 	// CREAR FUERZAS AQUÍ
 
 	// Fuerza de gravedad
-	gravityEarth = new GravityForceGenerator();
+	//gravityEarth = new GravityForceGenerator();
 
 
 
@@ -213,8 +213,9 @@ void initPhysics(bool interactive)
 	// 2. Sistema de particulas
 	_confettiPartSys = new ConfettiParticleSystem(pAux, gPhysics);
 
-	//GENERADOR GRAVEDAD
-	_registry = new ParticleForceRegistry();
+	// SISTEMA PROYECTILES
+	_proyectilSys = new ProyectilSystem();
+
 	
 
 
@@ -227,18 +228,19 @@ void initPhysics(bool interactive)
 void stepPhysics(bool interactive, double t)
 {
 	//balas
-	_registry->updateForces(t);
-
+	//_registry->updateForces(t);
+	/*
 	if (!_bullets.empty())
 	{
 		for (auto b : _bullets)
 			b->getParticle()->integrate(t);
-	}
+	}*/
 
 	//sistema particulas
 	_firePartSystem->update(t);
 	_fireworkPartSys->update(t);
 	_confettiPartSys->update(t);
+	_proyectilSys->update(t);
 
 	PX_UNUSED(interactive);
 
@@ -309,6 +311,7 @@ void keyPress(unsigned char key, const PxTransform& camera)
 		_firePartSystem->setActiveGravity(_gravityOn); //fuego
 		_confettiPartSys->setActiveGravity(_gravityOn);
 		_fireworkPartSys->setActiveGravity(_gravityOn);
+		_proyectilSys->setActiveGravity(_gravityOn);
 		break;
 	}
 	case '6':
@@ -318,6 +321,7 @@ void keyPress(unsigned char key, const PxTransform& camera)
 		_firePartSystem->setActiveWind(_windOn);
 		_confettiPartSys->setActiveWind(_windOn);
 		_fireworkPartSys->setActiveWind(_windOn);
+		_proyectilSys->setActiveWind(_windOn);
 		break;
 	}
 	case '7':
@@ -327,6 +331,7 @@ void keyPress(unsigned char key, const PxTransform& camera)
 		_firePartSystem->setActiveWhirlWind(_windWhirlOn);
 		_confettiPartSys->setActiveWhirlWind(_windWhirlOn);
 		_fireworkPartSys->setActiveWhirlWind(_windWhirlOn);
+		_proyectilSys->setActiveWhirlWind(_windWhirlOn);
 		break;
 	}
 	case '8':

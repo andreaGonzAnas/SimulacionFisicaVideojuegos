@@ -25,6 +25,7 @@
     <ClCompile Include="FireParticleSystem.cpp" />
     <ClCompile Include="ConfettiParticleSystem.cpp" />
     <ClCompile Include="Proyectil.cpp" />
+    <ClCompile Include="ProyectilSystem.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="core.hpp" />
@@ -51,6 +52,7 @@
     <ClInclude Include="FireParticleSystem.h" />
     <ClInclude Include="ConfettiParticleSystem.h" />
     <ClInclude Include="Proyectil.h" />
+    <ClInclude Include="ProyectilSystem.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Render">
