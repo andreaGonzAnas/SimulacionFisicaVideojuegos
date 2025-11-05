@@ -25,9 +25,11 @@ protected:
 	PxPhysics* gPhysics;
 	Particula* _modelP;
 
+	bool active = true;
+
 public:
 	ParticleGen();
-	//virtual ~ParticleGen();
+	virtual ~ParticleGen() {};
 	virtual std::list<Particula*> generateP() = 0;
 
 	//getters y setters
@@ -49,5 +51,8 @@ public:
 	void setDesColor(Vector4 color) { desColor = color; }
 
 	void setModelP(Particula* p) { _modelP = p; }
+
+	void setActive(bool a) { active = a; }
+	bool isActive() const { return active; }
 };
 

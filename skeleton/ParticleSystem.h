@@ -37,5 +37,8 @@ public:
 	void ParticleSystem::setActiveGravity();
 	void ParticleSystem::setActiveWind();
 	void ParticleSystem::setActiveWhirlWind();
+
+	void ParticleSystem::setActiveUniformal();
+	void ParticleSystem::setActiveGaussian();
 };
 

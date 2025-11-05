@@ -123,4 +123,22 @@ void ParticleSystem::setActiveWhirlWind() {
     if (whirlWindForce != nullptr) whirlWindForce->setActive(!whirlWindForce->isActive());
 }
 
+void ParticleSystem::setActiveUniformal()
+{
+    for (auto a : _generators)
+    {
+        //verificar si son de la clase uniformal
+        a->setActive(!a->isActive());
+    }
+}
+
+void ParticleSystem::setActiveGaussian()
+{
+    for (auto a : _generators)
+    {
+        //verificar si son de la clase uniformal
+        a->setActive(!a->isActive());
+    }
+}
+
 

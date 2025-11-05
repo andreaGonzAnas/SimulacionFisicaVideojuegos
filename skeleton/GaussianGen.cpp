@@ -34,6 +34,8 @@ std::list<Particula*> GaussianGen::generateP()
 	
 	std::list<Particula*> auxList;
 
+	if (!active) return auxList;
+
 	// Crear geometría y material una sola vez
 	static PxSphereGeometry gSphere(1.5f);
 	static PxMaterial* gMaterial = gPhysics->createMaterial(0.5f, 0.5f, 0.6f);

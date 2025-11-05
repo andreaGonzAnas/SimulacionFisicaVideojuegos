@@ -283,6 +283,21 @@ void keyPress(unsigned char key, const PxTransform& camera)
 
 		break;
 	}
+	case '8':
+	{
+		//quitar generar uniformal
+		_confettiPartSys->setActiveUniformal();
+		_firePartSystem->setActiveUniformal();
+
+		break;
+	}
+	case '9':
+	{
+		//quitar generar uniformal
+		_fireworkPartSys->setActiveUniformal();
+
+		break;
+	}
 	case ' ':
 	{
 		break;

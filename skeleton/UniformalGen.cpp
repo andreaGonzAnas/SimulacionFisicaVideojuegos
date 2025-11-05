@@ -42,6 +42,8 @@ std::list<Particula*> UniformalGen::generateP()
 {
 	std::list<Particula*> auxList;
 
+	if (!active) return auxList;
+
 	static PxSphereGeometry gSphere(0.2f);
 	static PxMaterial* gMaterial = gPhysics->createMaterial(0.5f, 0.5f, 0.6f);
 	static physx::PxShape* esferaShape = CreateShape(gSphere, gMaterial);
