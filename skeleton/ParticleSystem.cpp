@@ -65,6 +65,16 @@ ParticleSystem::ParticleSystem(): _particles()
 
 ParticleSystem::~ParticleSystem()
 {
+    //eliminar todos los renderItems de las particulas creadas
+    for (auto p : _particles)
+    {
+        if (p->getRenderItem()) {
+            DeregisterRenderItem(p->getRenderItem());
+            delete p->getRenderItem();
+        }
+        _registry->remove(p);
+        delete p;
+    }
 }
 
 /*

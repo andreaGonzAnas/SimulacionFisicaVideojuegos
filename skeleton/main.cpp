@@ -317,7 +317,7 @@ void keyPress(unsigned char key, const PxTransform& camera)
 	}
 	case '2':
 	{
-		_sceneManager->setScene(_scene0);
+		_sceneManager->setScene(new Scene0(gPhysics));
 		break;
 	}
 	case '3':
@@ -380,7 +380,7 @@ void keyPress(unsigned char key, const PxTransform& camera)
 	case '0':
 	{
 		//cambiar escena
-		_sceneManager->setScene(_scene1);
+		_sceneManager->setScene(new Scene1(gPhysics));
 
 		break;
 	}

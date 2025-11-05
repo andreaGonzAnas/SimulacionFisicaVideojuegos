@@ -1,8 +1,12 @@
 #pragma once
 #include "Scene.h"
+#include "Particula.h"
+#include <vector>
 
 class Scene0 : public Scene
 {
+private:
+	std::vector<RenderItem*> _parts;
 public:
 
 	// Constructora y destructora
