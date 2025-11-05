@@ -1,20 +1,8 @@
 #pragma once
 #include "Scene.h"
 
-class FireParticleSystem;
-class FireworksParticleSystem;
-class ConfettiParticleSystem;
-class ProyectilSystem;
-
 class Scene0 : public Scene
 {
-private:
-	//SISTEMAS
-	FireParticleSystem* _firePartSystem;
-	FireworksParticleSystem* _fireworkPartSys;
-	ConfettiParticleSystem* _confettiPartSys;
-	ProyectilSystem* _proyectilSys;
-
 public:
 
 	// Constructora y destructora

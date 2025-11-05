@@ -3,7 +3,7 @@
 #include "RenderUtils.hpp"
 #include "Vector3D.h"
 
-Scene0::Scene0(PxPhysics* physics): Scene(physics), _firePartSystem(nullptr), _confettiPartSys(nullptr), _fireworkPartSys(nullptr), _proyectilSys(nullptr)
+Scene0::Scene0(PxPhysics* physics): Scene(physics)
 {
 }
 
@@ -52,6 +52,7 @@ void Scene0::init()
 	PxTransform* esferaTr3 = new PxTransform(PxVec3(ejeZ.getX(), ejeZ.getY(), ejeZ.getZ()));
 	RenderItem* rEsfera3 = new RenderItem(esferaShape, esferaTr3, Vector4(0.0f, 0.0f, 1.0f, 1.0f));
 	RegisterRenderItem(rEsfera3);
+
 }
 
 void Scene0::update(double t)

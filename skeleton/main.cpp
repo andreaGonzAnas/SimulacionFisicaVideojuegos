@@ -21,6 +21,7 @@
 #include "ParticleForceRegistry.h"
 #include "SceneManager.h"
 #include "Scene0.h"
+#include "Scene1.h"
 
 
 #include <iostream>
@@ -136,10 +137,11 @@ void initPhysics(bool interactive)
 	_sceneManager = new SceneManager();
 
 	//Inicializar escena
-	Scene0* _scene = new Scene0(gPhysics);
+	Scene0* _scene0 = new Scene0(gPhysics);
+	Scene1* _scene1 = new Scene1(gPhysics);
 
 	//Setear escena actual
-	_sceneManager->setScene(_scene);
+	_sceneManager->setScene(_scene1);
 
 	/*
 	//ESFERA:
