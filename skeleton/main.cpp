@@ -19,6 +19,8 @@
 #include "WindForceGenerator.h"
 #include "WhirlwindForceGenerator.h"
 #include "ParticleForceRegistry.h"
+#include "SceneManager.h"
+#include "Scene0.h"
 
 
 #include <iostream>
@@ -63,6 +65,10 @@ bool _windWhirlOn = true;
 
 
 ParticleForceRegistry* _registry; //registro de los proyectiles
+
+//SceneManager
+SceneManager* _sceneManager;
+
 
 void createProyectil(Vector4 color, double size, double masaR, double velR, double velS)
 {
@@ -124,6 +130,18 @@ void initPhysics(bool interactive)
 	sceneDesc.simulationEventCallback = &gContactReportCallback;
 	gScene = gPhysics->createScene(sceneDesc);
 
+	//-------------------------------------------------------------
+
+	//Inicializar SceneManager +++++++++++++++++++++++++++++++++++++
+	_sceneManager = new SceneManager();
+
+	//Inicializar escena
+	Scene0* _scene = new Scene0(gPhysics);
+
+	//Setear escena actual
+	_sceneManager->setScene(_scene);
+
+	/*
 	//ESFERA:
 	
 	//1. Crear geometria
@@ -216,7 +234,7 @@ void initPhysics(bool interactive)
 	// SISTEMA PROYECTILES
 	_proyectilSys = new ProyectilSystem();
 
-	
+	*/
 
 
 
@@ -227,6 +245,10 @@ void initPhysics(bool interactive)
 // t: time passed since last call in milliseconds
 void stepPhysics(bool interactive, double t)
 {
+	//Update de la escena
+	_sceneManager->update(t);
+
+
 	//balas
 	//_registry->updateForces(t);
 	/*
@@ -237,10 +259,11 @@ void stepPhysics(bool interactive, double t)
 	}*/
 
 	//sistema particulas
+	/*
 	_firePartSystem->update(t);
 	_fireworkPartSys->update(t);
 	_confettiPartSys->update(t);
-	_proyectilSys->update(t);
+	_proyectilSys->update(t);*/
 
 	PX_UNUSED(interactive);
 

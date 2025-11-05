@@ -27,6 +27,8 @@
     <ClCompile Include="Proyectil.cpp" />
     <ClCompile Include="ProyectilSystem.cpp" />
     <ClCompile Include="Scene.cpp" />
+    <ClCompile Include="SceneManager.cpp" />
+    <ClCompile Include="Scene0.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="core.hpp" />
@@ -55,6 +57,8 @@
     <ClInclude Include="Proyectil.h" />
     <ClInclude Include="ProyectilSystem.h" />
     <ClInclude Include="Scene.h" />
+    <ClInclude Include="SceneManager.h" />
+    <ClInclude Include="Scene0.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Render">
