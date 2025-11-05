@@ -15,6 +15,8 @@
 #include "ConfettiParticleSystem.h"
 #include "Proyectil.h"
 #include "GravityForceGenerator.h"
+#include "WindForceGenerator.h"
+#include "WhirlwindForceGenerator.h"
 #include "ParticleForceRegistry.h"
 
 
@@ -46,11 +48,24 @@ ContactReportCallback gContactReportCallback;
 Particula* p;
 
 std::vector<Proyectil*> _bullets;
+
+//SISTEMAS
 FireParticleSystem* _firePartSystem;
 FireworksParticleSystem* _fireworkPartSys;
 ConfettiParticleSystem* _confettiPartSys;
+
+//FUERZAS
 GravityForceGenerator* gravityEarth;
-ParticleForceRegistry* _registry;
+bool _gravityOn = true;
+
+bool _windOn = true;
+bool _windWhirlOn = true;
+
+//WindForceGenerator* windForce;
+//WhirlwindForceGenerator* whirlWindForce;
+
+
+ParticleForceRegistry* _registry; //registro de los proyectiles
 
 void createProyectil(Vector4 color, double size, double masaR, double velR, double velS)
 {
@@ -144,6 +159,15 @@ void initPhysics(bool interactive)
 	RenderItem* rEsfera3 = new RenderItem(esferaShape, esferaTr3, Vector4(0.0f, 0.0f, 1.0f, 1.0f));
 	RegisterRenderItem(rEsfera3);
 
+
+	// CREAR FUERZAS AQUÍ
+
+	// Fuerza de gravedad
+	gravityEarth = new GravityForceGenerator();
+
+
+
+
 	// SISTEMA DE PARTICULAS: FUEGO
 
 	// 1. Particula modelo
@@ -191,7 +215,7 @@ void initPhysics(bool interactive)
 
 	//GENERADOR GRAVEDAD
 	_registry = new ParticleForceRegistry();
-	gravityEarth = new GravityForceGenerator();
+	
 
 
 
@@ -279,25 +303,30 @@ void keyPress(unsigned char key, const PxTransform& camera)
 	}
 	case '5':
 	{
+		_gravityOn = !_gravityOn;
+		std::cout << "Gravedad activada: " << _gravityOn << '\n';
 		//desactivar la gravedad de todos los sistemas
-		
-		//hacer un for con todos los sistemas?
-		_firePartSystem->setActiveGravity();
-
+		_firePartSystem->setActiveGravity(_gravityOn); //fuego
+		_confettiPartSys->setActiveGravity(_gravityOn);
+		_fireworkPartSys->setActiveGravity(_gravityOn);
 		break;
 	}
 	case '6':
 	{
+		_windOn = !_windOn;
 		//viento
-		_firePartSystem->setActiveWind();
-
+		_firePartSystem->setActiveWind(_windOn);
+		_confettiPartSys->setActiveWind(_windOn);
+		_fireworkPartSys->setActiveWind(_windOn);
 		break;
 	}
 	case '7':
 	{
+		_windWhirlOn = !_windWhirlOn;
 		//torbellino
-		_firePartSystem->setActiveWhirlWind();
-
+		_firePartSystem->setActiveWhirlWind(_windWhirlOn);
+		_confettiPartSys->setActiveWhirlWind(_windWhirlOn);
+		_fireworkPartSys->setActiveWhirlWind(_windWhirlOn);
 		break;
 	}
 	case '8':

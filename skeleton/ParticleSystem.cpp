@@ -111,16 +111,16 @@ void ParticleSystem::update(double t)
 
 }*/
 
-void ParticleSystem::setActiveGravity() {
-    if (gravityEarth != nullptr) gravityEarth->setActive(!gravityEarth->isActive());
+void ParticleSystem::setActiveGravity(bool a) {
+    if (gravityEarth != nullptr) gravityEarth->setActive(a);
 }
 
-void ParticleSystem::setActiveWind() {
-    if (windForce != nullptr) windForce->setActive(!windForce->isActive());
+void ParticleSystem::setActiveWind(bool a) {
+    if (windForce != nullptr) windForce->setActive(a);
 }
 
-void ParticleSystem::setActiveWhirlWind() {
-    if (whirlWindForce != nullptr) whirlWindForce->setActive(!whirlWindForce->isActive());
+void ParticleSystem::setActiveWhirlWind(bool a) {
+    if (whirlWindForce != nullptr) whirlWindForce->setActive(a);
 }
 
 void ParticleSystem::setActiveUniformal()

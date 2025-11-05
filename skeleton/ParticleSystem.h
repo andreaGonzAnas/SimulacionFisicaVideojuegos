@@ -34,9 +34,9 @@ public:
 
 	std::list<Particula*> getParticleList() {return _particles;}
 
-	void ParticleSystem::setActiveGravity();
-	void ParticleSystem::setActiveWind();
-	void ParticleSystem::setActiveWhirlWind();
+	void ParticleSystem::setActiveGravity(bool);
+	void ParticleSystem::setActiveWind(bool);
+	void ParticleSystem::setActiveWhirlWind(bool);
 
 	void ParticleSystem::setActiveUniformal();
 	void ParticleSystem::setActiveGaussian();

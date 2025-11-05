@@ -38,6 +38,10 @@ FireworksParticleSystem::FireworksParticleSystem(Particula* p, PxPhysics* gPhysi
     {
         _registry->add(p, gravityEarth);
     }
+
+    //inicializar a null los que no queremos
+    windForce = nullptr;
+    whirlWindForce = nullptr;
 }
 
 FireworksParticleSystem::~FireworksParticleSystem()
