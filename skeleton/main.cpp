@@ -13,6 +13,7 @@
 #include "FireworksParticleSystem.h"
 #include "FireParticleSystem.h"
 #include "ConfettiParticleSystem.h"
+#include "Proyectil.h"
 
 
 #include <iostream>
@@ -42,7 +43,7 @@ ContactReportCallback gContactReportCallback;
 
 Particula* p;
 
-std::vector<Particula*> _bullets;
+std::vector<Proyectil*> _bullets;
 FireParticleSystem* _firePartSystem;
 FireworksParticleSystem* _fireworkPartSys;
 ConfettiParticleSystem* _confettiPartSys;
@@ -54,6 +55,7 @@ void createProyectil(Vector4 color, double size, double masaR, double velR, doub
 	gSphere.radius = size;
 	physx::PxShape* esferaShape = CreateShape(gSphere, gMaterial);
 
+	/*
 	//PARA PROYECTIL
 	double energiaR = 1 / 2 * masaR * velR * velR;
 
@@ -69,11 +71,11 @@ void createProyectil(Vector4 color, double size, double masaR, double velR, doub
 
 	Particula* pAux = new Particula(pos, vel, 0.98, masaS);
 	RenderItem* renderItem = new RenderItem(esferaShape, pAux->getTr(), color);
-	pAux->setRenderItem(renderItem);
+	pAux->setRenderItem(renderItem);*/
 
+	Proyectil* p = new Proyectil(color, size, masaR, velR, velS, esferaShape);
 
-
-	_bullets.push_back(pAux);
+	_bullets.push_back(p);
 }
 
 // Initialize physics engine
@@ -191,7 +193,7 @@ void stepPhysics(bool interactive, double t)
 	if (!_bullets.empty())
 	{
 		for (auto b : _bullets)
-			b->integrate(t);
+			b->getParticle()->integrate(t);
 	}
 
 	//sistema particulas
