@@ -10,9 +10,7 @@ public:
 	ForceGenerator() {};
 	virtual void update(Particula* particle, double t) = 0;
 
-	void setActive(bool a) { 
-		std::cout << "Active: " << active << '\n';
-		active = a; }
+	void setActive(bool a) { active = a; }
 	bool isActive() const { return active; }
 };
 

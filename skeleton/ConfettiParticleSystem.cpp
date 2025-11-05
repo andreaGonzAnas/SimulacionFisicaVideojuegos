@@ -45,7 +45,6 @@ ConfettiParticleSystem::ConfettiParticleSystem(Particula* p, PxPhysics* gPhysics
     _registry = new ParticleForceRegistry();
     gravityEarth = new GravityForceGenerator();
 
-    std::cout << "Activo gravedad: " << gravityEarth->isActive() << '\n';
     // Registrar fuerza de gravedad a todas las partículas
     for (auto p : _particles) {
         _registry->add(p, gravityEarth);

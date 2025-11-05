@@ -74,8 +74,7 @@ std::list<Particula*> GaussianGen::generateP()
 
 			double speed = (nParticulas == 1) ? 10.0 : 50.0;
 			Vector3 newVel = dirVel * speed;
-			//std::cout << "Velocidad particulas" << newVel.x << " " << newVel.y << " " << newVel.z << " " << '\n';
-
+			
 			// Inicializar prePos para Verlet
 			clonedP->setPos(newPos);
 			clonedP->setVel(newVel);

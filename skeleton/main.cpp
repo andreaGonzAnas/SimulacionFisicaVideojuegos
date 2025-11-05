@@ -306,7 +306,6 @@ void keyPress(unsigned char key, const PxTransform& camera)
 	case '5':
 	{
 		_gravityOn = !_gravityOn;
-		std::cout << "Gravedad activada: " << _gravityOn << '\n';
 		//desactivar la gravedad de todos los sistemas
 		_firePartSystem->setActiveGravity(_gravityOn); //fuego
 		_confettiPartSys->setActiveGravity(_gravityOn);
