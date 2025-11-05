@@ -69,6 +69,8 @@ ParticleForceRegistry* _registry; //registro de los proyectiles
 
 //SceneManager
 SceneManager* _sceneManager;
+Scene0* _scene0;
+Scene1* _scene1;
 
 
 void createProyectil(Vector4 color, double size, double masaR, double velR, double velS)
@@ -137,11 +139,11 @@ void initPhysics(bool interactive)
 	_sceneManager = new SceneManager();
 
 	//Inicializar escena
-	Scene0* _scene0 = new Scene0(gPhysics);
-	Scene1* _scene1 = new Scene1(gPhysics);
+	_scene0 = new Scene0(gPhysics);
+	_scene1 = new Scene1(gPhysics);
 
 	//Setear escena actual
-	_sceneManager->setScene(_scene1);
+	_sceneManager->setScene(_scene0);
 
 	/*
 	//ESFERA:
@@ -308,12 +310,14 @@ void keyPress(unsigned char key, const PxTransform& camera)
 	{
 		//disparar bola de cañon
 		createProyectil(Vector4(0.490f, 0.404f, 0.349f, 1.0f), 0.8, 17, 250, 25);
+
+		//disparar tanque
+		createProyectil(Vector4(0.392f, 0.514f, 0.459f, 1.0f), 1.3, 25, 1800, 100);
 		break;
 	}
 	case '2':
 	{
-		//disparar tanque
-		createProyectil(Vector4(0.392f, 0.514f, 0.459f, 1.0f), 1.3, 25, 1800, 100);
+		_sceneManager->setScene(_scene0);
 		break;
 	}
 	case '3':
@@ -369,7 +373,14 @@ void keyPress(unsigned char key, const PxTransform& camera)
 	case '9':
 	{
 		//quitar generar uniformal
-		_fireworkPartSys->setActiveUniformal();
+		_fireworkPartSys->setActiveGaussian();
+
+		break;
+	}
+	case '0':
+	{
+		//cambiar escena
+		_sceneManager->setScene(_scene1);
 
 		break;
 	}
