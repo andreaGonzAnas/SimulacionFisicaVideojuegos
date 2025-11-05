@@ -14,6 +14,8 @@
 #include "FireParticleSystem.h"
 #include "ConfettiParticleSystem.h"
 #include "Proyectil.h"
+#include "GravityForceGenerator.h"
+#include "ParticleForceRegistry.h"
 
 
 #include <iostream>
@@ -47,6 +49,8 @@ std::vector<Proyectil*> _bullets;
 FireParticleSystem* _firePartSystem;
 FireworksParticleSystem* _fireworkPartSys;
 ConfettiParticleSystem* _confettiPartSys;
+GravityForceGenerator* gravityEarth;
+ParticleForceRegistry* _registry;
 
 void createProyectil(Vector4 color, double size, double masaR, double velR, double velS)
 {
@@ -74,6 +78,8 @@ void createProyectil(Vector4 color, double size, double masaR, double velR, doub
 	pAux->setRenderItem(renderItem);*/
 
 	Proyectil* p = new Proyectil(color, size, masaR, velR, velS, esferaShape);
+
+	_registry->add(p->getParticle(), gravityEarth);
 
 	_bullets.push_back(p);
 }
@@ -182,6 +188,13 @@ void initPhysics(bool interactive)
 
 	// 2. Sistema de particulas
 	_confettiPartSys = new ConfettiParticleSystem(pAux, gPhysics);
+
+	//GENERADOR GRAVEDAD
+	_registry = new ParticleForceRegistry();
+	gravityEarth = new GravityForceGenerator();
+
+
+
 }
 
 // Function to configure what happens in each step of physics
@@ -190,6 +203,8 @@ void initPhysics(bool interactive)
 void stepPhysics(bool interactive, double t)
 {
 	//balas
+	_registry->updateForces(t);
+
 	if (!_bullets.empty())
 	{
 		for (auto b : _bullets)
