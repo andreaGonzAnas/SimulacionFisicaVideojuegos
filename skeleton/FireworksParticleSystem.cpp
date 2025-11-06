@@ -45,6 +45,15 @@ FireworksParticleSystem::FireworksParticleSystem(Particula* p, PxPhysics* gPhysi
 
 FireworksParticleSystem::~FireworksParticleSystem()
 {
+    for (auto p : _particles)
+    {
+        if (p->getRenderItem()) {
+            DeregisterRenderItem(p->getRenderItem());
+            delete p->getRenderItem();
+        }
+        delete p;
+    }
+    _particles.clear();
 }
 
 
@@ -115,6 +124,7 @@ void FireworksParticleSystem::update(double t)
             {
                 exploded = true;
                 contExplosion = 0.0;
+                end = true;
             }
         }
         

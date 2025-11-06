@@ -13,7 +13,7 @@ private:
 	// SISTEMAS
 	ProyectilSystem* _proyectilSys;
 	std::vector<FireParticleSystem*> _firesInScene; //para hacer el circulo
-	std::vector<FireworksParticleSystem*> _fireworks;
+	FireworksParticleSystem* _firework;
 	std::vector<ConfettiParticleSystem*> _confettis;
 
 	bool _hasPassedFire;
@@ -31,5 +31,7 @@ public:
 	bool handleKey(unsigned char key, const PxTransform& camera);
 
 	void startCelebration();
+
+	void createNewFirework();
 };
 

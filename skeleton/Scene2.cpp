@@ -86,18 +86,17 @@ void Scene2::init()
     {
         PxVec3 pos = posiciones[i];
 
-        // Energías (si quieres mantener tu cálculo original)
         double energiaR = 0.5 * 0.1 * 50 * 50;
         double energiaS = energiaR;
         double masaS = 0.1 * pow((250 / 25), 2);
 
-        // Crear partícula base
+        // particula base
         Particula* pAux = new Particula(Vector3(pos.x, pos.y - 5.0, pos.z),
             Vector3(0, 8, -8), 0.98, 0.1);
         pAux->setColor(Vector4(0.0f, 1.0f, 0.5f, 1.0f));
         pAux->setTimeVida(1.0);
 
-        // Crear sistema de confetti
+        // confetti
         ConfettiParticleSystem* _confettiPartSys = new ConfettiParticleSystem(pAux, gPhysics);
         _confettis.push_back(_confettiPartSys);
     }
@@ -107,7 +106,9 @@ void Scene2::init()
     {
         a->setActive(false);
     }
-
+    
+    _firework = nullptr;
+    
 
 }
 
@@ -159,8 +160,24 @@ void Scene2::update(double t)
         {
             a->update(t);
         }
+
+        if (_firework != nullptr)
+        {
+            if (_firework->getEnd())
+            {
+                createNewFirework();
+            }
+            else
+            {
+                _firework->update(t);
+            }
+        }
+        else if(_hasPassedFire)
+        {
+            createNewFirework();
+        }
     }
-    
+
 }
 
 void Scene2::clear()
@@ -206,5 +223,24 @@ void Scene2::startCelebration()
     }
 
     //Activar fuegos artificiales
+    //_firework->setActive(true);
+}
 
+void Scene2::createNewFirework()
+{
+    Camera* cam = GetCamera();
+    PxVec3 camPos = cam->getTransform().p;
+
+    double energiaR = 1 / 2 * 17 * 250 * 250;
+    double energiaS = energiaR;
+    double masaS = 17 * pow((250 / 25), 2); //masa simulada
+
+    Particula* pAux = new Particula(Vector3(camPos.x, camPos.y - 20.0f, camPos.z + 100.0f), Vector3(0, 20, 0), 0.98, masaS);
+    pAux->setColor(Vector4(0.0f, 1.0f, 0.5f, 1.0f));
+
+    // 2. Sistema de particulas
+    FireworksParticleSystem* _fireworkPartSys = new FireworksParticleSystem(pAux, gPhysics);
+    if(_firework != nullptr) delete _firework;
+    _firework = _fireworkPartSys;
+    
 }
