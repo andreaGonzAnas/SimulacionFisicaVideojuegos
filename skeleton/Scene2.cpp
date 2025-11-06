@@ -210,7 +210,7 @@ bool Scene2::handleKey(unsigned char key, const PxTransform& camera)
 {
     switch (key)
     {
-        case 'c': // cañon
+        case 'c': // humano no valido
         {
             //Geometria
             PxMaterial* gMaterial = gPhysics->createMaterial(0.5f, 0.5f, 0.6f);
@@ -220,9 +220,25 @@ bool Scene2::handleKey(unsigned char key, const PxTransform& camera)
 
             // Masa y velocidad real propias de un human cannonball
             // masa = 70 kg
-            // vel = 33 m/s
+            // vel = 40 m/s
 
-            _proyectilSys->createProyectil(Vector4(0.490f, 0.404f, 0.349f, 1.0f), 70, 33, 40, esferaShape);
+            _proyectilSys->createProyectil(Vector4(0.490f, 0.404f, 0.349f, 1.0f), 60, 42, 30, esferaShape);
+
+            break;
+        }
+        case 't': // humano valido
+        {
+            //Geometria
+            PxMaterial* gMaterial = gPhysics->createMaterial(0.5f, 0.5f, 0.6f);
+            PxSphereGeometry gSphere = PxSphereGeometry();
+            gSphere.radius = 0.8;
+            physx::PxShape* esferaShape = CreateShape(gSphere, gMaterial);
+
+            // Masa y velocidad real propias de un human cannonball
+            // masa = 80 kg
+            // vel = 25 m/s
+
+            _proyectilSys->createProyectil(Vector4(0.0f, 0.404f, 0.349f, 1.0f), 85, 22, 60, esferaShape);
 
             break;
         }
