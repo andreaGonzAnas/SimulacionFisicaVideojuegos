@@ -26,6 +26,8 @@ private:
 	bool _windOn = true;
 	bool _windWhirlOn = false;
 
+	int puntuacion = 0;
+
 public:
 	Scene2(PxPhysics* physics);
 	~Scene2();

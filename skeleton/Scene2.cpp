@@ -9,6 +9,8 @@
 #include "FireworksParticleSystem.h"
 #include "ConfettiParticleSystem.h"
 
+extern std::string display_score;
+
 Scene2::Scene2(PxPhysics* physics): Scene(physics), _hasPassedFire(false)
 {
 
@@ -148,8 +150,6 @@ void Scene2::update(double t)
             // Dentro del cilindro si está dentro del radio y altura
             if (distXZ <= radio && pos.y >= alturaMin && pos.y <= alturaMax)
             {
-                std::cout << "El proyectil ha pasado por el círculo de fuego!" << '\n';
-                
                 // Activar confetti y fuegos artificiales
                 startCelebration();
 
@@ -316,7 +316,8 @@ bool Scene2::handleKey(unsigned char key, const PxTransform& camera)
 
 void Scene2::startCelebration()
 {
-    std::cout << "Activar celebracion" << '\n';
+    puntuacion += 100;
+    display_score = "PUNTUACION: " + std::to_string(puntuacion);
 
     //Activar confetti
     for (auto a : _confettis)
