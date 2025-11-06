@@ -105,57 +105,67 @@ void Scene2::update(double t)
     // ---- PROYECTIL ----
     _proyectilSys->update(t);
 
-    if (!_proyectilSys->getParticleList().empty() && !_hasPassedFire)
+    if (!_proyectilSys->getParticleList().empty())
     {
         // comprobar que si ha pasado el circulo de fuego
         for (auto p : _proyectilSys->getParticleList())
         {
             Vector3 pos = p->getPos();
 
-            // Datos del círculo de fuego
-            PxVec3 centro(35, 40, 35);
-            float radio = 8.0f;
-            float alturaMin = 37.0f; // margen inferior
-            float alturaMax = 43.0f; // margen superior
-
-            // Comprobar si el proyectil pasa por el interior del círculo (en planta XZ)
-            float dx = pos.x - centro.x;
-            float dz = pos.z - centro.z;
-            float distXZ = sqrt(dx * dx + dz * dz);
-
-            // Dentro del cilindro si está dentro del radio y altura
-            if (distXZ <= radio && pos.y >= alturaMin && pos.y <= alturaMax)
+            for (auto& circle : _fireCircles)
             {
-                // Activar confetti y fuegos artificiales
-                startCelebration();
+                if (circle.passed) continue;
 
-                _hasPassedFire = true;
+                float dx = pos.x - circle.centro.x;
+                float dz = pos.z - circle.centro.z;
+                float distXZ = sqrt(dx * dx + dz * dz);
+
+                if (distXZ <= circle.radio && pos.y >= circle.alturaMin && pos.y <= circle.alturaMax)
+                {
+                    circle.passed = true;
+                    puntuacion += 100;
+                    display_score = "PUNTUACION: " + std::to_string(puntuacion);
+                }
             }
         }
     }
-    else
+
+    // ---- COMPROBAR SI TODOS LOS CÍRCULOS HAN SIDO ATRAVESADOS ----
+    if (!_hasPassedFire)
     {
-        //Actualizar confetti y fuegos artificiales
-        for (auto a : _confettis)
+        bool allPassed = true;
+        for (auto& circle : _fireCircles)
         {
-            a->update(t);
+            if (!circle.passed) { allPassed = false; break; }
         }
 
-        if (_firework != nullptr)
+        if (allPassed)
         {
-            if (_firework->getEnd())
-            {
-                createNewFirework();
-            }
-            else
-            {
-                _firework->update(t);
-            }
+            startCelebration();
+            _hasPassedFire = true;
         }
-        else if(_hasPassedFire)
+    }
+
+    // ---- ACTUALIZAR CONFETTI Y FUEGOS ARTIFICIALES ----
+    for (auto a : _confettis)
+    {
+        a->update(t);
+    }
+
+    if (_firework != nullptr)
+    {
+        if (_firework->getEnd())
         {
             createNewFirework();
         }
+        else
+        {
+            _firework->update(t);
+        }
+    }
+    else if (_hasPassedFire)
+    {
+        createNewFirework();
     }
 
 }
@@ -292,9 +302,6 @@ bool Scene2::handleKey(unsigned char key, const PxTransform& camera)
 
 void Scene2::startCelebration()
 {
-    puntuacion += 100;
-    display_score = "PUNTUACION: " + std::to_string(puntuacion);
-
     //Activar confetti
     for (auto a : _confettis)
     {
@@ -305,7 +312,6 @@ void Scene2::startCelebration()
     for (auto a : _firesInScene)
     {
         a->setActiveWind(false);
-        a->setActiveWhirlWind(true);
     }
 }
 
@@ -369,6 +375,14 @@ void Scene2::createWalls()
 void Scene2::createFireCircles()
 {
     // FUEGO CENTRAL
+    _fireCircles.push_back({
+        PxVec3(35, 40, 35),  // centro
+        8.0f,                // radio
+        37.0f,               // alturaMin
+        43.0f,               // alturaMax
+        false                // passed
+        });
+    
     PxVec3 centro(35, 40, 35); // Centro
     int numFuegos = 16;
     float radio = 8.0f;
@@ -392,6 +406,15 @@ void Scene2::createFireCircles()
         _firesInScene.push_back(_firePartSystem);
     }
 
+    // Círculo izquierdo
+    _fireCircles.push_back({
+        PxVec3(centro.x - 25.0f, centro.y - 10.0f, centro.z),  // centro
+        5.0f,                // radio más pequeño
+        25.0f,               // alturaMin
+        35.0f,               // alturaMax
+        false
+        });
+
     // IZQ
     float radioPeq = 5.0f;
     PxVec3 centroIzq(centro.x - 25.0f, centro.y - 10.0f, centro.z);
@@ -413,6 +436,15 @@ void Scene2::createFireCircles()
         _firesInScene.push_back(_firePartSystem);
     }
 
+    // Círculo derecho
+    _fireCircles.push_back({
+        PxVec3(centro.x + 25.0f, centro.y - 10.0f, centro.z),  // centro
+        5.0f,                // radio más pequeño
+        25.0f,               // alturaMin
+        35.0f,               // alturaMax
+        false
+        });
+
     // DER
     PxVec3 centroDer(centro.x + 25.0f, centro.y - 10.0f, centro.z);
 
@@ -432,4 +464,7 @@ void Scene2::createFireCircles()
         _firePartSystem->setActiveWind(true);
         _firesInScene.push_back(_firePartSystem);
     }
+     
+
+    
 }

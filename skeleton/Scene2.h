@@ -8,6 +8,15 @@ class FireworksParticleSystem;
 class ConfettiParticleSystem;
 class RenderItem;
 
+struct FireCircle
+{
+	PxVec3 centro;    // posición del centro
+	float radio;      // radio del círculo
+	float alturaMin;  // límite inferior
+	float alturaMax;  // límite superior
+	bool passed;      // si ya fue atravesado
+};
+
 class Scene2 : public Scene
 {
 private:
@@ -17,6 +26,7 @@ private:
 	FireworksParticleSystem* _firework;
 	std::vector<ConfettiParticleSystem*> _confettis;
 	std::vector<RenderItem*> _scenary;
+	std::vector<FireCircle> _fireCircles;
 
 	bool _hasPassedFire;
 	physx::PxVec3 _initPosCamera;
