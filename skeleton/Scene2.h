@@ -19,6 +19,11 @@ private:
 	bool _hasPassedFire;
 	physx::PxVec3 _initPosCamera;
 	physx::PxVec3 _initDirCamera;
+
+	bool _gravityOn = true;
+	bool _windOn = true;
+	bool _windWhirlOn = true;
+
 public:
 	Scene2(PxPhysics* physics);
 	~Scene2();

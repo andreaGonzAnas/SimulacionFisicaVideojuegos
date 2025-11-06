@@ -183,8 +183,27 @@ void Scene2::update(double t)
 void Scene2::clear()
 {
     //Eliminar todos los objetos creados
+    for (auto*& a : _firesInScene)
+    {
+        delete a;
+        a = nullptr;
+    }
+    _firesInScene.clear();
+
+    for (auto*& a : _confettis)
+    {
+        delete a;
+        a = nullptr;
+    }
+    _confettis.clear();
+
+    delete _firework; _firework = nullptr;
+    delete _proyectilSys; _proyectilSys = nullptr;
 
     //Volver camara a la posicion inicial
+    Camera* cam = GetCamera();
+    cam->setTransform(_initPosCamera);
+    cam->setDir(_initDirCamera);
 }
 
 bool Scene2::handleKey(unsigned char key, const PxTransform& camera)
@@ -207,6 +226,62 @@ bool Scene2::handleKey(unsigned char key, const PxTransform& camera)
 
             break;
         }
+        case 'g':
+        {
+            _gravityOn = !_gravityOn;
+            
+            //desactivar la gravedad de todos los sistemas
+            
+            for (auto a : _firesInScene)
+            {
+                a->setActiveGravity(_gravityOn);
+            }
+            
+            for (auto a : _confettis)
+            {
+                a->setActiveGravity(_gravityOn);
+            }
+
+            _firework->setActiveGravity(_gravityOn);
+            _proyectilSys->setActiveGravity(_gravityOn);
+            break;
+        }
+        case 'h':
+        {
+            _windOn = !_windOn;
+            //viento
+            
+            for (auto a : _firesInScene)
+            {
+                a->setActiveWind(_windOn);
+            }
+
+            for (auto a : _confettis)
+            {
+                a->setActiveWind(_windOn);
+            }
+
+            _firework->setActiveWind(_windOn);
+            _proyectilSys->setActiveWind(_windOn);
+            break;
+        }
+        case 'o':
+        {
+            _windWhirlOn = !_windWhirlOn;
+            //torbellino
+            for (auto a : _firesInScene)
+            {
+                a->setActiveWhirlWind(_windWhirlOn);
+            }
+
+            for (auto a : _confettis)
+            {
+                a->setActiveWhirlWind(_windWhirlOn);
+            }
+            _firework->setActiveWhirlWind(_windWhirlOn);
+            _proyectilSys->setActiveWhirlWind(_windWhirlOn);
+            break;
+        }
         default: return false;
     }
 	return true;
@@ -222,8 +297,12 @@ void Scene2::startCelebration()
         a->setActive(true);
     }
 
-    //Activar fuegos artificiales
-    //_firework->setActive(true);
+    //Desactivar viento en fuego
+    for (auto a : _firesInScene)
+    {
+        a->setActiveWind(false);
+        a->setActiveWhirlWind(true);
+    }
 }
 
 void Scene2::createNewFirework()
