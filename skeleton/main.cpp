@@ -156,6 +156,13 @@ void keyPress(unsigned char key, const PxTransform& camera)
 
 			break;
 		}
+		case '2':
+		{
+			//cambiar escena
+			_sceneManager->setScene(new Scene2(gPhysics));
+
+			break;
+		}
 		case ' ':
 		{
 			break;

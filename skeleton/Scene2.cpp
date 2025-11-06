@@ -21,6 +21,9 @@ Scene2::~Scene2()
 
 void Scene2::init()
 {
+    // ---- PAREDES ----
+    createWalls();
+
 	//---- CIRCULO FUEGOS -----
     int numFuegos = 16;   // Número de fuegos en el círculo
     float radio = 8.0f; // Radio del círculo
@@ -201,6 +204,12 @@ void Scene2::clear()
     delete _firework; _firework = nullptr;
     delete _proyectilSys; _proyectilSys = nullptr;
 
+    // Escenario
+    for (auto a : _scenary)
+    {
+        DeregisterRenderItem(a);
+    }
+
     //Volver camara a la posicion inicial
     Camera* cam = GetCamera();
     cam->setTransform(_initPosCamera);
@@ -212,7 +221,7 @@ bool Scene2::handleKey(unsigned char key, const PxTransform& camera)
 {
     switch (key)
     {
-        case 'c': // humano no valido
+        case 'c': // humano1
         {
             //Geometria
             PxMaterial* gMaterial = gPhysics->createMaterial(0.5f, 0.5f, 0.6f);
@@ -224,11 +233,11 @@ bool Scene2::handleKey(unsigned char key, const PxTransform& camera)
             // masa = 70 kg
             // vel = 40 m/s
 
-            _proyectilSys->createProyectil(Vector4(0.490f, 0.404f, 0.349f, 1.0f), 60, 42, 30, esferaShape);
+            _proyectilSys->createProyectil(Vector4(0.0f, 0.404f, 0.249f, 1.0f), 60, 42, 30, esferaShape);
 
             break;
         }
-        case 't': // humano valido
+        case 't': // humano2
         {
             //Geometria
             PxMaterial* gMaterial = gPhysics->createMaterial(0.5f, 0.5f, 0.6f);
@@ -240,7 +249,7 @@ bool Scene2::handleKey(unsigned char key, const PxTransform& camera)
             // masa = 80 kg
             // vel = 25 m/s
 
-            _proyectilSys->createProyectil(Vector4(0.0f, 0.404f, 0.349f, 1.0f), 85, 22, 60, esferaShape);
+            _proyectilSys->createProyectil(Vector4(0.0f, 0.204f, 0.449f, 1.0f), 85, 22, 60, esferaShape);
 
             break;
         }
@@ -340,4 +349,26 @@ void Scene2::createNewFirework()
     if(_firework != nullptr) delete _firework;
     _firework = _fireworkPartSys;
     
+}
+
+void Scene2::createWalls()
+{
+    //Material
+    PxMaterial* gMaterial = gPhysics->createMaterial(0.5f, 0.5f, 0.6f);
+
+    // SUELO
+    PxBoxGeometry gBox = PxBoxGeometry(50.0f, 1.0f, 100.0f);
+    physx::PxShape* squareShape = CreateShape(gBox, gMaterial);
+    PxTransform* boxTr = new PxTransform(PxVec3(35, 10, 30));
+    RenderItem* rBox = new RenderItem(squareShape, boxTr, Vector4(0.8f, 0.30f, 0.11f, 1.0f));
+    RegisterRenderItem(rBox); //y registrar item a renderizar
+    _scenary.push_back(rBox);
+
+    // PALO
+    PxBoxGeometry gPalo = PxBoxGeometry(0.5f, 8.0f, 0.5f);
+    physx::PxShape* paloShape = CreateShape(gPalo, gMaterial);
+    PxTransform* paloTr = new PxTransform(PxVec3(35, 25, 35));
+    RenderItem* rPalo = new RenderItem(paloShape, paloTr, Vector4(0.15f, 0.02f, 0.002f, 1.0f));
+    RegisterRenderItem(rPalo); //y registrar item a renderizar
+    _scenary.push_back(rPalo);
 }

@@ -6,6 +6,7 @@ class ProyectilSystem;
 class FireParticleSystem;
 class FireworksParticleSystem;
 class ConfettiParticleSystem;
+class RenderItem;
 
 class Scene2 : public Scene
 {
@@ -15,6 +16,7 @@ private:
 	std::vector<FireParticleSystem*> _firesInScene; //para hacer el circulo
 	FireworksParticleSystem* _firework;
 	std::vector<ConfettiParticleSystem*> _confettis;
+	std::vector<RenderItem*> _scenary;
 
 	bool _hasPassedFire;
 	physx::PxVec3 _initPosCamera;
@@ -36,7 +38,7 @@ public:
 	bool handleKey(unsigned char key, const PxTransform& camera);
 
 	void startCelebration();
-
 	void createNewFirework();
+	void createWalls();
 };
 
