@@ -145,7 +145,7 @@ bool Scene0::handleKey(unsigned char key, const PxTransform& camera)
 			_proyectilSys->setActiveGravity(_gravityOn);
 			break;
 		}
-		case 'w':
+		case 'i':
 		{
 			_windOn = !_windOn;
 			//viento

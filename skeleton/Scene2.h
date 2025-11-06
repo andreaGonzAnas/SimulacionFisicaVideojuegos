@@ -22,7 +22,7 @@ private:
 
 	bool _gravityOn = true;
 	bool _windOn = true;
-	bool _windWhirlOn = true;
+	bool _windWhirlOn = false;
 
 public:
 	Scene2(PxPhysics* physics);

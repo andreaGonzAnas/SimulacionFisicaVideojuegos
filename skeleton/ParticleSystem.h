@@ -28,7 +28,6 @@ protected:
 	bool active = true;
 
 public:
-	//ParticleSystem();
 	ParticleSystem();
 	~ParticleSystem();
 

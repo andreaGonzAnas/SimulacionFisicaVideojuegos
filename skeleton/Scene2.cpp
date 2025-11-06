@@ -242,11 +242,11 @@ bool Scene2::handleKey(unsigned char key, const PxTransform& camera)
                 a->setActiveGravity(_gravityOn);
             }
 
-            _firework->setActiveGravity(_gravityOn);
+            if(_firework != nullptr) _firework->setActiveGravity(_gravityOn);
             _proyectilSys->setActiveGravity(_gravityOn);
             break;
         }
-        case 'h':
+        case 'i':
         {
             _windOn = !_windOn;
             //viento
@@ -261,7 +261,7 @@ bool Scene2::handleKey(unsigned char key, const PxTransform& camera)
                 a->setActiveWind(_windOn);
             }
 
-            _firework->setActiveWind(_windOn);
+            if (_firework != nullptr) _firework->setActiveWind(_windOn);
             _proyectilSys->setActiveWind(_windOn);
             break;
         }
@@ -278,7 +278,7 @@ bool Scene2::handleKey(unsigned char key, const PxTransform& camera)
             {
                 a->setActiveWhirlWind(_windWhirlOn);
             }
-            _firework->setActiveWhirlWind(_windWhirlOn);
+            if (_firework != nullptr) _firework->setActiveWhirlWind(_windWhirlOn);
             _proyectilSys->setActiveWhirlWind(_windWhirlOn);
             break;
         }
