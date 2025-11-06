@@ -34,6 +34,7 @@ std::string display_title = "¡DISPARA AL HOMBRE BALA!";
 std::string display_left = "PULSA C Y DISPARA A CALEB";
 std::string display_right = "PULSA T Y DISPARA A TIM";
 std::string display_score = "PUNTUACION: 0";
+bool isGame = false;
 
 using namespace physx;
 
@@ -96,7 +97,7 @@ void initPhysics(bool interactive)
 	_scene2 = new Scene2(gPhysics);
 
 	//Setear escena actual
-	_sceneManager->setScene(_scene2);
+	_sceneManager->setScene(_scene1);
 
 }
 

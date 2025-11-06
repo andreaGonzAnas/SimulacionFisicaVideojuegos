@@ -10,6 +10,7 @@
 #include "ConfettiParticleSystem.h"
 
 extern std::string display_score;
+extern bool isGame;
 
 Scene2::Scene2(PxPhysics* physics): Scene(physics), _hasPassedFire(false)
 {
@@ -23,6 +24,8 @@ Scene2::~Scene2()
 
 void Scene2::init()
 {
+    isGame = true;
+    
     // ---- PAREDES ----
     createWalls();
 
@@ -201,6 +204,7 @@ void Scene2::clear()
     cam->setTransform(_initPosCamera);
     cam->setDir(_initDirCamera);
     cam->setHumanCannonMode(false);
+    isGame = false;
 }
 
 bool Scene2::handleKey(unsigned char key, const PxTransform& camera)
