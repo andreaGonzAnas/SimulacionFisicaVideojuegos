@@ -1,14 +1,26 @@
 #pragma once
 #include "Scene.h"
-#include "Particula.h"
-#include <vector>
+
+class FireParticleSystem;
+class FireworksParticleSystem;
+class ConfettiParticleSystem;
+class ProyectilSystem;
 
 class Scene0 : public Scene
 {
 private:
-	std::vector<RenderItem*> _parts;
-public:
+	//SISTEMAS
+	FireParticleSystem* _firePartSystem;
+	FireworksParticleSystem* _fireworkPartSys;
+	ConfettiParticleSystem* _confettiPartSys;
+	ProyectilSystem* _proyectilSys;
 
+	//FUERZAS
+	bool _gravityOn = true;
+	bool _windOn = true;
+	bool _windWhirlOn = true;
+
+public:
 	// Constructora y destructora
 	Scene0(PxPhysics* physics);
 	~Scene0();

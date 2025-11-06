@@ -91,7 +91,7 @@ void initPhysics(bool interactive)
 	_scene1 = new Scene1(gPhysics);
 
 	//Setear escena actual
-	_sceneManager->setScene(_scene0);
+	_sceneManager->setScene(_scene1);
 
 }
 
@@ -140,14 +140,14 @@ void keyPress(unsigned char key, const PxTransform& camera)
 
 	switch(toupper(key))
 	{
-		case '1':
+		case '0':
 		{
 			//cambiar escena
 			_sceneManager->setScene(new Scene0(gPhysics));
 
 			break;
 		}
-		case '2':
+		case '1':
 		{
 			//cambiar escena
 			_sceneManager->setScene(new Scene1(gPhysics));
