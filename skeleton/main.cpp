@@ -22,6 +22,7 @@
 #include "SceneManager.h"
 #include "Scene0.h"
 #include "Scene1.h"
+#include "Scene2.h"
 
 
 #include <iostream>
@@ -52,8 +53,9 @@ ContactReportCallback gContactReportCallback;
 
 //SceneManager
 SceneManager* _sceneManager;
-Scene0* _scene0;
-Scene1* _scene1;
+Scene* _scene0;
+Scene* _scene1;
+Scene* _scene2;
 
 
 // Initialize physics engine
@@ -89,9 +91,10 @@ void initPhysics(bool interactive)
 	//Inicializar escena
 	_scene0 = new Scene0(gPhysics);
 	_scene1 = new Scene1(gPhysics);
+	_scene2 = new Scene2(gPhysics);
 
 	//Setear escena actual
-	_sceneManager->setScene(_scene1);
+	_sceneManager->setScene(_scene2);
 
 }
 

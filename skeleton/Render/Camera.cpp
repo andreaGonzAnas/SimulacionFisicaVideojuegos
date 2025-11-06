@@ -76,7 +76,7 @@ void Camera::handleMouse(int button, int state, int x, int y)
 		if (x >= buttonX && x <= buttonX + buttonWidth &&
 			y >= buttonY && y <= buttonY + buttonHeight)
 		{
-			std::cout << "Botón UI clickeado!" << '\n';
+			//std::cout << "Botón UI clickeado!" << '\n';
 		}
 	}
 }
