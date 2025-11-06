@@ -30,7 +30,9 @@
 #include <thread>
 #include <cmath> 
 
-//std::string display_text = "This is a test";
+std::string display_title = "¡DISPARA AL HOMBRE BALA!";
+std::string display_left = "PULSA C Y DISPARA A CALEB";
+std::string display_right = "PULSA T Y DISPARA A TIM";
 
 using namespace physx;
 
