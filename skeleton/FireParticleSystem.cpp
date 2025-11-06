@@ -78,20 +78,23 @@ void FireParticleSystem::update(double t)
     //actualizar fuerzas
     _registry->updateForces(t);
 
-    // Generar nuevas partículas cada frame
-    if (!_generators.empty()) {
-        auto newParticles = _generators.front()->generateP();
-        if (!newParticles.empty())
-        {
-            // Registrar cada nueva partícula en el registro de fuerzas
-            for (auto p : newParticles) {
-                _registry->add(p, gravityEarth);
-                _registry->add(p, windForce);
-                _registry->add(p, whirlWindForce);
+    if (active)
+    {
+        // Generar nuevas partículas cada frame
+        if (!_generators.empty()) {
+            auto newParticles = _generators.front()->generateP();
+            if (!newParticles.empty())
+            {
+                // Registrar cada nueva partícula en el registro de fuerzas
+                for (auto p : newParticles) {
+                    _registry->add(p, gravityEarth);
+                    _registry->add(p, windForce);
+                    _registry->add(p, whirlWindForce);
+                }
+                _particles.splice(_particles.end(), newParticles);
             }
-            _particles.splice(_particles.end(), newParticles);
-        }
 
+        }
     }
 
     // Actualizar todas las existentes

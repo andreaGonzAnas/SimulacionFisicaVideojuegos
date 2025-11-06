@@ -135,7 +135,7 @@ bool Scene1::handleKey(unsigned char key, const PxTransform& camera)
 			_proyectilSys->createProyectil(Vector4(1.0f, 0.0f, 0.0f, 1.0f), 2, 300000000, 1100, esferaShape);
 			break;
 		}
-		case '5':
+		case 'g':
 		{
 			_gravityOn = !_gravityOn;
 			//desactivar la gravedad de todos los sistemas
@@ -145,7 +145,7 @@ bool Scene1::handleKey(unsigned char key, const PxTransform& camera)
 			_proyectilSys->setActiveGravity(_gravityOn);
 			break;
 		}
-		case '6':
+		case 'w':
 		{
 			_windOn = !_windOn;
 			//viento
@@ -155,7 +155,7 @@ bool Scene1::handleKey(unsigned char key, const PxTransform& camera)
 			_proyectilSys->setActiveWind(_windOn);
 			break;
 		}
-		case '7':
+		case 'o':
 		{
 			_windWhirlOn = !_windWhirlOn;
 			//torbellino
@@ -165,19 +165,19 @@ bool Scene1::handleKey(unsigned char key, const PxTransform& camera)
 			_proyectilSys->setActiveWhirlWind(_windWhirlOn);
 			break;
 		}
-		case '8':
+		case '3': //confetti
 		{
-			//quitar generar uniformal
-			_confettiPartSys->setActiveUniformal();
-			_firePartSystem->setActiveUniformal();
-
+			_confettiPartSys->setActive(!_confettiPartSys->isActive());
 			break;
 		}
-		case '9':
+		case '4': //fuego
 		{
-			//quitar generar uniformal
-			_fireworkPartSys->setActiveGaussian();
-
+			_firePartSystem->setActive(!_firePartSystem->isActive());
+			break;
+		}
+		case '5': //fuego
+		{
+			_fireworkPartSys->setActive(!_fireworkPartSys->isActive());
 			break;
 		}
 		default: return false;

@@ -11,7 +11,6 @@
 FireworksParticleSystem::FireworksParticleSystem(Particula* p, PxPhysics* gPhysics)
 {
     contExplosion = 0.5;
-    active = false;
 
     exploded = false;
 
@@ -54,6 +53,7 @@ void FireworksParticleSystem::update(double t)
     // Actualizar fuerzas
     _registry->updateForces(t);
 
+    
     // Control del tiempo de la explosión
     if (!exploded)
     {
@@ -67,53 +67,59 @@ void FireworksParticleSystem::update(double t)
     }
     else
     {
-        const int numGenerations = 4;
-        const int particlesPerGen[numGenerations] = { 75, 7, 5, 3 };
-
-        if (generation < numGenerations)
+        if (active)
         {
-            int numParticles = particlesPerGen[generation];
+            const int numGenerations = 4;
+            const int particlesPerGen[numGenerations] = { 75, 7, 5, 3 };
 
-            // Para cada partícula actual, generamos hijas en su posición
-            std::list<Particula*> nuevas;
-
-            for (auto parent : _particles)
+            if (generation < numGenerations)
             {
-                _generators.front()->setModelP(parent);
-                _generators.front()->setParticulas(numParticles);
-                auto newParticles = _generators.front()->generateP();
+                int numParticles = particlesPerGen[generation];
 
-                if (!newParticles.empty())
+                // Para cada partícula actual, generamos hijas en su posición
+                std::list<Particula*> nuevas;
+
+                for (auto parent : _particles)
                 {
-                    for (auto p : newParticles)
+                    _generators.front()->setModelP(parent);
+                    _generators.front()->setParticulas(numParticles);
+                    std::list<Particula*> newParticles;
+
+                    newParticles = _generators.front()->generateP();
+
+                    if (!newParticles.empty())
                     {
-                        _registry->add(p, gravityEarth);
+                        for (auto p : newParticles)
+                        {
+                            _registry->add(p, gravityEarth);
+                        }
+
+                        // Agregar las nuevas partículas a la lista temporal
+                        nuevas.splice(nuevas.end(), newParticles);
                     }
-
-                    // Agregar las nuevas partículas a la lista temporal
-                    nuevas.splice(nuevas.end(), newParticles);
                 }
-            }
 
-            // Añadir todas las nuevas partículas al sistema
-            if (!nuevas.empty())
+                // Añadir todas las nuevas partículas al sistema
+                if (!nuevas.empty())
+                {
+                    _particles.splice(_particles.end(), nuevas);
+                }
+
+                // Preparar siguiente generación
+                generation++;
+                exploded = false;
+                contExplosion = 1.5; // tiempo hasta la próxima explosión
+
+            }
+            else
             {
-                _particles.splice(_particles.end(), nuevas);
+                exploded = true;
+                contExplosion = 0.0;
             }
-
-            // Preparar siguiente generación
-            generation++;
-            exploded = false;
-            contExplosion = 1.5; // tiempo hasta la próxima explosión
-            
         }
-        else
-        {
-            exploded = true;
-            contExplosion = 0.0;
-        }
+        
     }
-
+    
 
     // Actualizar las partículas existentes
     for (auto p : _particles)

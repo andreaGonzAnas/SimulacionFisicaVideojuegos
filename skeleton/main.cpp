@@ -49,40 +49,12 @@ PxDefaultCpuDispatcher*	gDispatcher = NULL;
 PxScene*				gScene      = NULL;
 ContactReportCallback gContactReportCallback;
 
-Particula* p;
-
-std::vector<Proyectil*> _bullets;
-
-//SISTEMAS
-FireParticleSystem* _firePartSystem;
-FireworksParticleSystem* _fireworkPartSys;
-ConfettiParticleSystem* _confettiPartSys;
-ProyectilSystem* _proyectilSys;
-
-//FUERZAS
-bool _gravityOn = true;
-bool _windOn = true;
-bool _windWhirlOn = true;
-
-
-ParticleForceRegistry* _registry; //registro de los proyectiles
 
 //SceneManager
 SceneManager* _sceneManager;
 Scene0* _scene0;
 Scene1* _scene1;
 
-
-void createProyectil(Vector4 color, double size, double masaR, double velR, double velS)
-{
-	//Geometria
-	PxSphereGeometry gSphere = PxSphereGeometry();
-	gSphere.radius = size;
-	physx::PxShape* esferaShape = CreateShape(gSphere, gMaterial);
-
-
-	_proyectilSys->createProyectil(color, masaR, velR, velS, esferaShape);
-}
 
 // Initialize physics engine
 void initPhysics(bool interactive)
@@ -121,103 +93,6 @@ void initPhysics(bool interactive)
 	//Setear escena actual
 	_sceneManager->setScene(_scene0);
 
-	/*
-	//ESFERA:
-	
-	//1. Crear geometria
-	PxSphereGeometry gSphere = PxSphereGeometry();
-	gSphere.radius = 1.5;
-
-	//2. Crear shape
-	physx::PxShape* esferaShape = CreateShape(gSphere, gMaterial);
-
-	//3. Crear item (con Transform)
-	PxTransform* esferaTr = new PxTransform(PxVec3(0, 0, 0));
-	RenderItem* rEsfera = new RenderItem(esferaShape, esferaTr, Vector4(1.0f, 1.0f, 1.0f, 1.0f));
-	RegisterRenderItem(rEsfera); //y registrar item a renderizar
-
-	//CREAR EJE:
-	//Vectores:
-	Vector3D ejeX = Vector3D(10, 0, 0);
-	Vector3D ejeY = Vector3D(0, 10, 0);
-	Vector3D ejeZ = Vector3D(0, 0, 10);
-
-	//1. Eje X
-	PxTransform* esferaTr1 = new PxTransform(PxVec3(ejeX.getX(), ejeX.getY(), ejeX.getZ()));
-	RenderItem* rEsfera1 = new RenderItem(esferaShape, esferaTr1, Vector4(1.0f, 0.0f, 0.0f, 1.0f));
-	RegisterRenderItem(rEsfera1);
-
-	//2. Eje Y
-	PxTransform* esferaTr2 = new PxTransform(PxVec3(ejeY.getX(), ejeY.getY(), ejeY.getZ()));
-	RenderItem* rEsfera2 = new RenderItem(esferaShape, esferaTr2, Vector4(0.0f, 1.0f, 0.0f, 1.0f));
-	RegisterRenderItem(rEsfera2);
-
-	//3. Eje Z
-	PxTransform* esferaTr3 = new PxTransform(PxVec3(ejeZ.getX(), ejeZ.getY(), ejeZ.getZ()));
-	RenderItem* rEsfera3 = new RenderItem(esferaShape, esferaTr3, Vector4(0.0f, 0.0f, 1.0f, 1.0f));
-	RegisterRenderItem(rEsfera3);
-
-
-	// CREAR FUERZAS AQUÍ
-
-	// Fuerza de gravedad
-	//gravityEarth = new GravityForceGenerator();
-
-
-
-
-	// SISTEMA DE PARTICULAS: FUEGO
-
-	// 1. Particula modelo
-	double energiaR = 1 / 2 * 0.1 * 50 * 50;
-
-	//energia simulada
-	double energiaS = energiaR;
-	double masaS = 0.1 * pow((250 / 25), 2); //masa simulada
-	Particula* pAux = new Particula(Vector3(35, 40, 35), Vector3(0, 2, 0), 0.98, 0.1);
-	pAux->setColor(Vector4(1.0f, 0.3f, 0.05f, 1.0f));
-	pAux->setTimeVida(0.3);
-
-	// 2. Sistema de particulas
-	_firePartSystem = new FireParticleSystem(pAux, gPhysics);
-
-	
-	// SISTEMA DE PARTICULAS 2: FUEGOS ARTIFICIALES
-
-	// 1. Particula modelo
-	energiaR = 1 / 2 * 17 * 250 * 250;
-
-	//energia simulada
-	energiaS = energiaR;
-	masaS = 17 * pow((250 / 25), 2); //masa simulada
-	pAux = new Particula(Vector3(0, 15, 0), Vector3(0, 12, 0), 0.98, masaS);
-	pAux->setColor(Vector4(1.0f, 0.5f, 0.0f, 1.0f));
-
-	// 2. Sistema de particulas
-	_fireworkPartSys = new FireworksParticleSystem(pAux, gPhysics);
-
-	// SISTEMA DE PARTICULAS 3: CONFETTI
-
-	// 1. Particula modelo
-	energiaR = 1 / 2 * 0.1 * 50 * 50;
-
-	//energia simulada
-	energiaS = energiaR;
-	masaS = 0.1 * pow((250 / 25), 2); //masa simulada
-	pAux = new Particula(Vector3(35, 40, 50), Vector3(0, 8, -8), 0.98, 0.1);
-	pAux->setColor(Vector4(0.0f, 1.0f, 0.5f, 1.0f));
-	pAux->setTimeVida(1.0);
-
-	// 2. Sistema de particulas
-	_confettiPartSys = new ConfettiParticleSystem(pAux, gPhysics);
-
-	// SISTEMA PROYECTILES
-	_proyectilSys = new ProyectilSystem();
-
-	*/
-
-
-
 }
 
 // Function to configure what happens in each step of physics
@@ -227,23 +102,6 @@ void stepPhysics(bool interactive, double t)
 {
 	//Update de la escena
 	_sceneManager->update(t);
-
-
-	//balas
-	//_registry->updateForces(t);
-	/*
-	if (!_bullets.empty())
-	{
-		for (auto b : _bullets)
-			b->getParticle()->integrate(t);
-	}*/
-
-	//sistema particulas
-	/*
-	_firePartSystem->update(t);
-	_fireworkPartSys->update(t);
-	_confettiPartSys->update(t);
-	_proyectilSys->update(t);*/
 
 	PX_UNUSED(interactive);
 

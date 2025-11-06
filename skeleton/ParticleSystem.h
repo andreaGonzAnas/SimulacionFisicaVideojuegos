@@ -25,6 +25,8 @@ protected:
 	WindForceGenerator* windForce;
 	WhirlwindForceGenerator* whirlWindForce;
 
+	bool active = true;
+
 public:
 	//ParticleSystem();
 	ParticleSystem();
@@ -38,7 +40,7 @@ public:
 	void ParticleSystem::setActiveWind(bool);
 	void ParticleSystem::setActiveWhirlWind(bool);
 
-	void ParticleSystem::setActiveUniformal();
-	void ParticleSystem::setActiveGaussian();
+	void ParticleSystem::setActive(bool a) { active = a; };
+	bool ParticleSystem::isActive() { return active; };
 };
 
