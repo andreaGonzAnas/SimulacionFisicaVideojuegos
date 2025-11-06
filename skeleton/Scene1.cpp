@@ -86,3 +86,101 @@ void Scene1::clear()
 	delete _fireworkPartSys; _fireworkPartSys = nullptr;
 	delete _proyectilSys; _proyectilSys = nullptr;
 }
+
+bool Scene1::handleKey(unsigned char key, const PxTransform& camera)
+{
+	PxMaterial* gMaterial = gPhysics->createMaterial(0.5f, 0.5f, 0.6f);
+
+	switch (key)
+	{
+		case 'c': // cañon
+		{
+			//Geometria
+			PxSphereGeometry gSphere = PxSphereGeometry();
+			gSphere.radius = 0.8;
+			physx::PxShape* esferaShape = CreateShape(gSphere, gMaterial);
+
+			_proyectilSys->createProyectil(Vector4(0.490f, 0.404f, 0.349f, 1.0f), 17, 250, 25, esferaShape);
+			break;
+		}
+		case 't': //tanque
+		{
+			//Geometria
+			PxSphereGeometry gSphere = PxSphereGeometry();
+			gSphere.radius = 1.3;
+			physx::PxShape* esferaShape = CreateShape(gSphere, gMaterial);
+
+			_proyectilSys->createProyectil(Vector4(0.392f, 0.514f, 0.459f, 1.0f), 25, 1800, 100, esferaShape);
+			break;
+		}
+		case 'p': //pistola
+		{
+			//Geometria
+			PxSphereGeometry gSphere = PxSphereGeometry();
+			gSphere.radius = 0.3;
+			physx::PxShape* esferaShape = CreateShape(gSphere, gMaterial);
+
+			//disparar pistola
+			_proyectilSys->createProyectil(Vector4(0.592f, 0.667f, 0.675f, 1.0f), 5, 330, 200, esferaShape);
+			break;
+		}
+		case 'l': //laser
+		{
+			//Geometria
+			PxSphereGeometry gSphere = PxSphereGeometry();
+			gSphere.radius = 0.5;
+			physx::PxShape* esferaShape = CreateShape(gSphere, gMaterial);
+
+			//disparar pistola laser
+			_proyectilSys->createProyectil(Vector4(1.0f, 0.0f, 0.0f, 1.0f), 2, 300000000, 1100, esferaShape);
+			break;
+		}
+		case '5':
+		{
+			_gravityOn = !_gravityOn;
+			//desactivar la gravedad de todos los sistemas
+			_firePartSystem->setActiveGravity(_gravityOn); //fuego
+			_confettiPartSys->setActiveGravity(_gravityOn);
+			_fireworkPartSys->setActiveGravity(_gravityOn);
+			_proyectilSys->setActiveGravity(_gravityOn);
+			break;
+		}
+		case '6':
+		{
+			_windOn = !_windOn;
+			//viento
+			_firePartSystem->setActiveWind(_windOn);
+			_confettiPartSys->setActiveWind(_windOn);
+			_fireworkPartSys->setActiveWind(_windOn);
+			_proyectilSys->setActiveWind(_windOn);
+			break;
+		}
+		case '7':
+		{
+			_windWhirlOn = !_windWhirlOn;
+			//torbellino
+			_firePartSystem->setActiveWhirlWind(_windWhirlOn);
+			_confettiPartSys->setActiveWhirlWind(_windWhirlOn);
+			_fireworkPartSys->setActiveWhirlWind(_windWhirlOn);
+			_proyectilSys->setActiveWhirlWind(_windWhirlOn);
+			break;
+		}
+		case '8':
+		{
+			//quitar generar uniformal
+			_confettiPartSys->setActiveUniformal();
+			_firePartSystem->setActiveUniformal();
+
+			break;
+		}
+		case '9':
+		{
+			//quitar generar uniformal
+			_fireworkPartSys->setActiveGaussian();
+
+			break;
+		}
+		default: return false;
+	}
+	return true;
+}

@@ -80,32 +80,8 @@ void createProyectil(Vector4 color, double size, double masaR, double velR, doub
 	gSphere.radius = size;
 	physx::PxShape* esferaShape = CreateShape(gSphere, gMaterial);
 
-	/*
-	//PARA PROYECTIL
-	double energiaR = 1 / 2 * masaR * velR * velR;
 
-	//energia simulada
-	double energiaS = energiaR;
-	//double velS = 25; // m/s velocidad simulada (la que quiero utilizar)
-
-	double masaS = masaR * pow((velR / velS), 2); //masa simulada
-
-	Vector3 pos = GetCamera()->getTransform().p; // pos inicial cañon = pos de la camara
-	Vector3 vel = GetCamera()->getDir() * velS; //velocidad inicial: la direccion es la de la camara * velocidad simulada
-
-
-	Particula* pAux = new Particula(pos, vel, 0.98, masaS);
-	RenderItem* renderItem = new RenderItem(esferaShape, pAux->getTr(), color);
-	pAux->setRenderItem(renderItem);*/
-
-	/*
-	Proyectil* p = new Proyectil(color, size, masaR, velR, velS, esferaShape);
-
-	_registry->add(p->getParticle(), gravityEarth);
-
-	_bullets.push_back(p);*/
-
-	_proyectilSys->createProyectil(color, size, masaR, velR, velS, esferaShape);
+	_proyectilSys->createProyectil(color, masaR, velR, velS, esferaShape);
 }
 
 // Initialize physics engine
@@ -306,6 +282,22 @@ void keyPress(unsigned char key, const PxTransform& camera)
 
 	switch(toupper(key))
 	{
+		case '1':
+		{
+			//cambiar escena
+			_sceneManager->setScene(new Scene0(gPhysics));
+
+			break;
+		}
+		case '2':
+		{
+			//cambiar escena
+			_sceneManager->setScene(new Scene1(gPhysics));
+
+			break;
+		}
+
+		/*
 	case '1':
 	{
 		//disparar bola de cañon
@@ -383,7 +375,7 @@ void keyPress(unsigned char key, const PxTransform& camera)
 		_sceneManager->setScene(new Scene1(gPhysics));
 
 		break;
-	}
+	}*/
 	case ' ':
 	{
 		break;

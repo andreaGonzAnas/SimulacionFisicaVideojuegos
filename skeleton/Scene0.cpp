@@ -73,3 +73,8 @@ void Scene0::clear()
 		
 	}
 }
+
+bool Scene0::handleKey(unsigned char key, const PxTransform& camera)
+{
+	return false;
+}

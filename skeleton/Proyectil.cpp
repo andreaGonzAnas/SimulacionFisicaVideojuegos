@@ -2,7 +2,7 @@
 #include "Particula.h"
 #include "PxShape.h"
 
-Proyectil::Proyectil(Vector4 color, double size, double masaR, double velR, double velS, physx::PxShape* esferaShape)
+Proyectil::Proyectil(Vector4 color, double masaR, double velR, double velS, physx::PxShape* esferaShape)
 {
 	//PARA PROYECTIL
 	double energiaR = 1 / 2 * masaR * velR * velR;

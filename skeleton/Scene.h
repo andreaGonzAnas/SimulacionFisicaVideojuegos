@@ -16,5 +16,8 @@ public:
     virtual void update(double t) = 0;
     virtual void clear() = 0;
 
+    // input
+    virtual bool handleKey(unsigned char key, const PxTransform& camera) = 0;
+
 };
 

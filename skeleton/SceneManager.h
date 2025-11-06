@@ -10,6 +10,8 @@ public:
 	SceneManager() : _currentScene(nullptr) {}
 	~SceneManager() { clearCurrentScene(); }
 
+    Scene* getCurrentScene() { return _currentScene; }
+
     //Setear escena actual
     void setScene(Scene* newScene)
     {

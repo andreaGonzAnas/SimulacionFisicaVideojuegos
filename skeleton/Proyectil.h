@@ -11,7 +11,7 @@ private:
 
 	Particula* p;
 public:
-	Proyectil(Vector4 color, double size, double masaR, double velR, double velS, physx::PxShape* esferaShape);
+	Proyectil(Vector4 color, double masaR, double velR, double velS, physx::PxShape* esferaShape);
 
 	Particula* getParticle() { return p; }
 

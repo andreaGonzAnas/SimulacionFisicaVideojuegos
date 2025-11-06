@@ -21,6 +21,11 @@ double PCFreq = 0.0;
 __int64 CounterStart = 0;
 __int64 CounterLast = 0;
 
+#include "SceneManager.h"
+
+extern SceneManager* _sceneManager;
+
+
 void StartCounter()
 {
 	LARGE_INTEGER li;
@@ -57,7 +62,7 @@ void keyboardCallback(unsigned char key, int x, int y)
 	if(key==27)
 		exit(0);
 
-	if(!sCamera->handleKey(key, x, y))
+	if(!sCamera->handleKey(key, x, y) && !_sceneManager->getCurrentScene()->handleKey(key, sCamera->getTransform()))
 		keyPress(key, sCamera->getTransform());
 }
 

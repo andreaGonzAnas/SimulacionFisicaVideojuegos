@@ -57,9 +57,9 @@ void ProyectilSystem::update(double t)
 
 }
 
-void ProyectilSystem::createProyectil(Vector4 color, double size, double masaR, double velR, double velS, physx::PxShape* esferaShape)
+void ProyectilSystem::createProyectil(Vector4 color, double masaR, double velR, double velS, physx::PxShape* esferaShape)
 {
-	Proyectil* p = new Proyectil(color, size, masaR, velR, velS, esferaShape);
+	Proyectil* p = new Proyectil(color, masaR, velR, velS, esferaShape);
     _registry->add(p->getParticle(), gravityEarth);
     _particles.push_back(p->getParticle());
 }
