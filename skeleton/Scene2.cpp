@@ -27,34 +27,10 @@ void Scene2::init()
     createWalls();
 
 	//---- CIRCULO FUEGOS -----
-    int numFuegos = 16;   // Número de fuegos en el círculo
-    float radio = 8.0f; // Radio del círculo
-    PxVec3 centro(35, 40, 35); // Centro del círculo
-
-    for (int i = 0; i < numFuegos; ++i)
-    {
-        // Ángulo actual en radianes
-        float ang = (2 * PxPi * i) / numFuegos;
-
-        // Posición en círculo (plano XY)
-        float x = centro.x + radio * cos(ang);
-        float y = centro.y + radio * sin(ang);
-        float z = centro.z; // z fijo
-
-        // Crear partícula modelo
-        Particula* pAux = new Particula(Vector3(x, y, z), Vector3(0, 2, 0), 0.98, 0.1);
-        pAux->setColor(Vector4(1.0f, 0.3f, 0.05f, 1.0f));
-        pAux->setTimeVida(0.3);
-
-        // Crear sistema de fuego
-        FireParticleSystem* _firePartSystem = new FireParticleSystem(pAux, gPhysics);
-        _firePartSystem->setActiveWhirlWind(false);
-        _firePartSystem->setActiveWind(true);
-
-        _firesInScene.push_back(_firePartSystem);
-    }
+    createFireCircles();
 
     // ---- CAMERA ----
+    PxVec3 centro(35, 40, 35);
     Camera* cam = GetCamera();
     _initPosCamera = cam->getEye();
     _initDirCamera = cam->getDir();
@@ -358,18 +334,102 @@ void Scene2::createWalls()
     PxMaterial* gMaterial = gPhysics->createMaterial(0.5f, 0.5f, 0.6f);
 
     // SUELO
-    PxBoxGeometry gBox = PxBoxGeometry(50.0f, 1.0f, 100.0f);
+    PxBoxGeometry gBox = PxBoxGeometry(80.0f, 1.0f, 100.0f);
     physx::PxShape* squareShape = CreateShape(gBox, gMaterial);
     PxTransform* boxTr = new PxTransform(PxVec3(35, 10, 30));
     RenderItem* rBox = new RenderItem(squareShape, boxTr, Vector4(0.8f, 0.30f, 0.11f, 1.0f));
     RegisterRenderItem(rBox); //y registrar item a renderizar
     _scenary.push_back(rBox);
 
-    // PALO
+    // PALO CENTRAL
     PxBoxGeometry gPalo = PxBoxGeometry(0.5f, 8.0f, 0.5f);
     physx::PxShape* paloShape = CreateShape(gPalo, gMaterial);
     PxTransform* paloTr = new PxTransform(PxVec3(35, 25, 35));
     RenderItem* rPalo = new RenderItem(paloShape, paloTr, Vector4(0.15f, 0.02f, 0.002f, 1.0f));
     RegisterRenderItem(rPalo); //y registrar item a renderizar
     _scenary.push_back(rPalo);
+
+    // PALO IZQUIERDO
+    PxBoxGeometry gPaloIzq = PxBoxGeometry(0.4f, 6.0f, 0.4f);
+    physx::PxShape* paloShapeIzq = CreateShape(gPaloIzq, gMaterial);
+    PxTransform* paloTrIzq = new PxTransform(PxVec3(10, 20, 35));
+    RenderItem* rPaloIzq = new RenderItem(paloShapeIzq, paloTrIzq, Vector4(0.12f, 0.02f, 0.002f, 1.0f));
+    RegisterRenderItem(rPaloIzq);
+    _scenary.push_back(rPaloIzq);
+
+    // PALO DERECHO
+    PxBoxGeometry gPaloDer = PxBoxGeometry(0.4f, 6.0f, 0.4f);
+    physx::PxShape* paloShapeDer = CreateShape(gPaloDer, gMaterial);
+    PxTransform* paloTrDer = new PxTransform(PxVec3(60, 20, 35));
+    RenderItem* rPaloDer = new RenderItem(paloShapeDer, paloTrDer, Vector4(0.12f, 0.02f, 0.002f, 1.0f));
+    RegisterRenderItem(rPaloDer);
+    _scenary.push_back(rPaloDer);
+}
+
+void Scene2::createFireCircles()
+{
+    // FUEGO CENTRAL
+    PxVec3 centro(35, 40, 35); // Centro
+    int numFuegos = 16;
+    float radio = 8.0f;
+
+    for (int i = 0; i < numFuegos; ++i)
+    {
+        float ang = (2 * PxPi * i) / numFuegos;
+
+        float x = centro.x + radio * cos(ang);
+        float y = centro.y + radio * sin(ang);
+        float z = centro.z; // z fijo
+
+        Particula* pAux = new Particula(Vector3(x, y, z), Vector3(0, 2, 0), 0.98, 0.1);
+        pAux->setColor(Vector4(1.0f, 0.3f, 0.05f, 1.0f));
+        pAux->setTimeVida(0.3);
+
+        FireParticleSystem* _firePartSystem = new FireParticleSystem(pAux, gPhysics);
+        _firePartSystem->setActiveWhirlWind(false);
+        _firePartSystem->setActiveWind(true);
+
+        _firesInScene.push_back(_firePartSystem);
+    }
+
+    // IZQ
+    float radioPeq = 5.0f;
+    PxVec3 centroIzq(centro.x - 25.0f, centro.y - 10.0f, centro.z);
+
+    for (int i = 0; i < numFuegos; ++i)
+    {
+        float ang = (2 * PxPi * i) / numFuegos;
+        float x = centroIzq.x + radioPeq * cos(ang);
+        float y = centroIzq.y + radioPeq * sin(ang);
+        float z = centroIzq.z;
+
+        Particula* pAux = new Particula(Vector3(x, y, z), Vector3(0, 2, 0), 0.98, 0.1);
+        pAux->setColor(Vector4(1.0f, 0.3f, 0.05f, 1.0f));
+        pAux->setTimeVida(0.3);
+
+        FireParticleSystem* _firePartSystem = new FireParticleSystem(pAux, gPhysics);
+        _firePartSystem->setActiveWhirlWind(false);
+        _firePartSystem->setActiveWind(true);
+        _firesInScene.push_back(_firePartSystem);
+    }
+
+    // DER
+    PxVec3 centroDer(centro.x + 25.0f, centro.y - 10.0f, centro.z);
+
+    for (int i = 0; i < numFuegos; ++i)
+    {
+        float ang = (2 * PxPi * i) / numFuegos;
+        float x = centroDer.x + radioPeq * cos(ang);
+        float y = centroDer.y + radioPeq * sin(ang);
+        float z = centroDer.z;
+
+        Particula* pAux = new Particula(Vector3(x, y, z), Vector3(0, 2, 0), 0.98, 0.1);
+        pAux->setColor(Vector4(1.0f, 0.3f, 0.05f, 1.0f));
+        pAux->setTimeVida(0.3);
+
+        FireParticleSystem* _firePartSystem = new FireParticleSystem(pAux, gPhysics);
+        _firePartSystem->setActiveWhirlWind(false);
+        _firePartSystem->setActiveWind(true);
+        _firesInScene.push_back(_firePartSystem);
+    }
 }

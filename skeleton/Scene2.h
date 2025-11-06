@@ -42,5 +42,6 @@ public:
 	void startCelebration();
 	void createNewFirework();
 	void createWalls();
+	void createFireCircles();
 };
 
