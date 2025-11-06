@@ -4,13 +4,21 @@
 
 class ProyectilSystem;
 class FireParticleSystem;
+class FireworksParticleSystem;
+class ConfettiParticleSystem;
 
 class Scene2 : public Scene
 {
 private:
+	// SISTEMAS
 	ProyectilSystem* _proyectilSys;
 	std::vector<FireParticleSystem*> _firesInScene; //para hacer el circulo
+	std::vector<FireworksParticleSystem*> _fireworks;
+	std::vector<ConfettiParticleSystem*> _confettis;
 
+	bool _hasPassedFire;
+	physx::PxVec3 _initPosCamera;
+	physx::PxVec3 _initDirCamera;
 public:
 	Scene2(PxPhysics* physics);
 	~Scene2();
@@ -21,5 +29,7 @@ public:
 	void clear() override;
 
 	bool handleKey(unsigned char key, const PxTransform& camera);
+
+	void startCelebration();
 };
 

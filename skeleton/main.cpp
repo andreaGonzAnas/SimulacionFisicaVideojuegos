@@ -30,8 +30,7 @@
 #include <thread>
 #include <cmath> 
 
-std::string display_text = "This is a test";
-
+//std::string display_text = "This is a test";
 
 using namespace physx;
 
@@ -157,93 +156,13 @@ void keyPress(unsigned char key, const PxTransform& camera)
 
 			break;
 		}
-
-		/*
-	case '1':
-	{
-		//disparar bola de cañon
-		createProyectil(Vector4(0.490f, 0.404f, 0.349f, 1.0f), 0.8, 17, 250, 25);
-
-		//disparar tanque
-		createProyectil(Vector4(0.392f, 0.514f, 0.459f, 1.0f), 1.3, 25, 1800, 100);
-		break;
-	}
-	case '2':
-	{
-		_sceneManager->setScene(new Scene0(gPhysics));
-		break;
-	}
-	case '3':
-	{
-		//disparar pistola
-		createProyectil(Vector4(0.592f, 0.667f, 0.675f, 1.0f), 0.3, 5, 330, 200);
-		break;
-	}
-	case '4':
-	{
-		//disparar pistola laser
-		createProyectil(Vector4(1.0f, 0.0f, 0.0f, 1.0f), 0.5, 2, 300000000, 1100);
-		break;
-	}
-	case '5':
-	{
-		_gravityOn = !_gravityOn;
-		//desactivar la gravedad de todos los sistemas
-		_firePartSystem->setActiveGravity(_gravityOn); //fuego
-		_confettiPartSys->setActiveGravity(_gravityOn);
-		_fireworkPartSys->setActiveGravity(_gravityOn);
-		_proyectilSys->setActiveGravity(_gravityOn);
-		break;
-	}
-	case '6':
-	{
-		_windOn = !_windOn;
-		//viento
-		_firePartSystem->setActiveWind(_windOn);
-		_confettiPartSys->setActiveWind(_windOn);
-		_fireworkPartSys->setActiveWind(_windOn);
-		_proyectilSys->setActiveWind(_windOn);
-		break;
-	}
-	case '7':
-	{
-		_windWhirlOn = !_windWhirlOn;
-		//torbellino
-		_firePartSystem->setActiveWhirlWind(_windWhirlOn);
-		_confettiPartSys->setActiveWhirlWind(_windWhirlOn);
-		_fireworkPartSys->setActiveWhirlWind(_windWhirlOn);
-		_proyectilSys->setActiveWhirlWind(_windWhirlOn);
-		break;
-	}
-	case '8':
-	{
-		//quitar generar uniformal
-		_confettiPartSys->setActiveUniformal();
-		_firePartSystem->setActiveUniformal();
-
-		break;
-	}
-	case '9':
-	{
-		//quitar generar uniformal
-		_fireworkPartSys->setActiveGaussian();
-
-		break;
-	}
-	case '0':
-	{
-		//cambiar escena
-		_sceneManager->setScene(new Scene1(gPhysics));
-
-		break;
-	}*/
-	case ' ':
-	{
-		break;
-	}
+		case ' ':
+		{
+			break;
+		}
 	
-	default:
-		break;
+		default:
+			break;
 	}
 }
 

@@ -134,6 +134,11 @@ PxTransform Camera::getTransform() const
 	return PxTransform(mEye, PxQuat(m));
 }
 
+void Camera::setTransform(PxVec3 t)
+{
+	mEye = t;
+}
+
 PxVec3 Camera::getEye() const
 { 
 	return mEye; 
@@ -142,6 +147,11 @@ PxVec3 Camera::getEye() const
 PxVec3 Camera::getDir() const
 { 
 	return mDir; 
+}
+
+void Camera::setDir(physx::PxVec3 t)
+{
+	mDir = t;
 }
 
 
