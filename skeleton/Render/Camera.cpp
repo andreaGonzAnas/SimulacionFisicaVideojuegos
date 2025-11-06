@@ -86,16 +86,62 @@ bool Camera::handleKey(unsigned char key, int x, int y, float speed)
 	PX_UNUSED(x);
 	PX_UNUSED(y);
 
-	PxVec3 viewY = mDir.cross(PxVec3(0,1,0)).getNormalized();
-	switch(toupper(key))
+	if (!humanCannonMode)
 	{
-	case 'W':	mEye += mDir*2.0f*speed;		break;
-	case 'S':	mEye -= mDir*2.0f*speed;		break;
-	case 'A':	mEye -= viewY*2.0f*speed;		break;
-	case 'D':	mEye += viewY*2.0f*speed;		break;
-	default:							return false;
+		PxVec3 viewY = mDir.cross(PxVec3(0, 1, 0)).getNormalized();
+		switch (toupper(key))
+		{
+		case 'W':	mEye += mDir * 2.0f * speed;		break;
+		case 'S':	mEye -= mDir * 2.0f * speed;		break;
+		case 'A':	mEye -= viewY * 2.0f * speed;		break;
+		case 'D':	mEye += viewY * 2.0f * speed;		break;
+		default:							return false;
+		}
+		return true;
 	}
-	return true;
+	else
+	{
+		const float rotSpeedDeg = 2.0f;
+		const float rotSpeedRad = PxPi * rotSpeedDeg / 180.0f;
+
+		PxVec3 up(0, 1, 0);
+		PxVec3 viewY = mDir.cross(up).getNormalized();
+
+		switch (toupper(key))
+		{
+		case 'W': // arriba
+		{
+			PxQuat qy(rotSpeedRad, viewY);
+			mDir = qy.rotate(mDir);
+			break;
+		}
+		case 'S': // abajo
+		{
+			PxQuat qy(-rotSpeedRad, viewY);
+			mDir = qy.rotate(mDir);
+			break;
+		}
+		case 'A': // izquierda
+		{
+			PxQuat qx(rotSpeedRad, up);
+			mDir = qx.rotate(mDir);
+			break;
+		}
+		case 'D': // derecha
+		{
+			PxQuat qx(-rotSpeedRad, up);
+			mDir = qx.rotate(mDir);
+			break;
+		}
+		default:
+			return false;
+		}
+
+		mDir.normalize();
+
+		return true;
+	}
+	
 }
 
 void Camera::handleAnalogMove(float x, float y)

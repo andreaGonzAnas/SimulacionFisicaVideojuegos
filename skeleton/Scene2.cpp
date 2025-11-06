@@ -49,12 +49,13 @@ void Scene2::init()
         _firesInScene.push_back(_firePartSystem);
     }
 
-    // ---- POSICION CAMARA ----
+    // ---- CAMERA ----
     Camera* cam = GetCamera();
     _initPosCamera = cam->getEye();
     _initDirCamera = cam->getDir();
     cam->setTransform(PxVec3(centro.x, centro.y - 10.0, centro.z - 45.0));
     cam->setDir(PxVec3(0.0, 0.0, 1));
+    cam->setHumanCannonMode(true);
 
 
     // ---- PROYECTIL ----
@@ -204,6 +205,7 @@ void Scene2::clear()
     Camera* cam = GetCamera();
     cam->setTransform(_initPosCamera);
     cam->setDir(_initDirCamera);
+    cam->setHumanCannonMode(false);
 }
 
 bool Scene2::handleKey(unsigned char key, const PxTransform& camera)

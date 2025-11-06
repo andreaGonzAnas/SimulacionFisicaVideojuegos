@@ -51,11 +51,16 @@ public:
 	physx::PxTransform	getTransform() const;
 	void				setTransform(physx::PxVec3 t);
 
+	bool getHumanCannonMode() { return humanCannonMode; }
+	void setHumanCannonMode(bool a) { humanCannonMode = a; }
+
 private:
 	physx::PxVec3	mEye;
 	physx::PxVec3	mDir;
 	int				mMouseX;
 	int				mMouseY;
+
+	bool humanCannonMode = false;
 };
 
 
