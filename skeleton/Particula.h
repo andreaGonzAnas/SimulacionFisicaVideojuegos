@@ -49,6 +49,7 @@ public:
 	void setPrePos(Vector3 pos);
 	void setPos(Vector3 pos);
 	void setColor(Vector4 color);
+	void setTime(double t);
 
 	//actualizar posicion de la particula
 	void integrate(double t);

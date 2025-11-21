@@ -150,17 +150,21 @@ void Particula::setColor(Vector4 c)
     color = c;
 }
 
+void Particula::setTime(double t)
+{
+    tVida = t;
+}
+
 void Particula::integrate(double t)
 {
     Vector3 actualPos = tr->p;
     
-    acceleration = forceAccum * (1.0 / masa);
+    acceleration = forceAccum / masa;
 
     if (tVida > 0.0 && masa > 0.0)
     {
         tVida -= t;
 
-        
         if (firstFrame) {
             // euler semi-implicito para el primer paso
             vel = (vel * pow(damping, t)) + acceleration * t;
@@ -175,7 +179,6 @@ void Particula::integrate(double t)
             prePos = actualPos;
             tr->p = newPos;
         }
-        
         
     }
 

@@ -2,6 +2,7 @@
 #include "PxShape.h"
 #include "RenderUtils.hpp"
 #include "Vector3D.h"
+#include "SpringParticleSystem.h"
 
 Scene1::Scene1(PxPhysics* physics): Scene(physics)
 {
@@ -57,10 +58,16 @@ void Scene1::init()
 	RegisterRenderItem(rEsfera3);
 	_parts.push_back(rEsfera3);
 
+
+	// SISTEMA DE MUELLE
+
+	_springSys = new SpringParticleSystem(gMaterial);
+
 }
 
 void Scene1::update(double t)
 {
+	_springSys->update(t);
 }
 
 void Scene1::clear()
@@ -69,6 +76,8 @@ void Scene1::clear()
 	{
 		DeregisterRenderItem(p);
 	}
+
+	delete _springSys; _springSys = nullptr;
 }
 
 bool Scene1::handleKey(unsigned char key, const PxTransform& camera)

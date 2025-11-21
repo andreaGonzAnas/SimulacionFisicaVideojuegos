@@ -3,10 +3,15 @@
 #include "Particula.h"
 #include <vector>
 
+class SpringParticleSystem;
+
 class Scene1 : public Scene
 {
 private:
 	std::vector<RenderItem*> _parts;
+
+	SpringParticleSystem* _springSys;
+
 public:
 
 	// Constructora y destructora
