@@ -19,15 +19,23 @@ BuoyancyParticleSystem::BuoyancyParticleSystem(PxMaterial* gMaterial)
 	pLiquid->setRenderItem(renderItem);
 
 	// Particula obj de flotacion
-	Particula* pFlot = new Particula({ 0.0,60.0,0.0 }, { 0.0, 0.0,0.0 }, 0.99, 20.0);
+	Particula* pFlot = new Particula({ 0.0,60.0,0.0 }, { 0.0, 0.0,0.0 }, 0.99, 5000.0f);
 	PxBoxGeometry gCubeFlot = PxBoxGeometry(2.0f, 2.0f, 2.0f);
 	physx::PxShape* cubeShapeFlot = CreateShape(gCubeFlot, gMaterial);
-	RenderItem* renderItemFlot = new RenderItem(cubeShapeFlot, pFlot->getTr(), Vector4(0.0f, 1.0f, 0.0f, 1.0f));
+	RenderItem* renderItemFlot = new RenderItem(cubeShapeFlot, pFlot->getTr(), Vector4(0.0f, 1.0f, 0.0f, 6400.0f));
 	pFlot->setRenderItem(renderItemFlot);
+	pFlot->setTimeVida(70000);
 
 	// FUERZA DE MUELLE
-	// h v d liquidP
-	BuoyancyForceGenerator* f = new BuoyancyForceGenerator(2.0f, 10.0f, 1000, pLiquid); // estatica (p2) + p.mov (p3)
+	float densidadAgua = 1000.0f;
+	float volumenCubo = 8.0f;    // 2x2x2
+	float alturaRealObjeto = 2.0f;
+
+	BuoyancyForceGenerator* f = new BuoyancyForceGenerator(
+		alturaRealObjeto, volumenCubo, densidadAgua, pLiquid
+	);
+	
+	
 	f->setActive(true);
 
 	//añadir al registro
