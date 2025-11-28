@@ -13,22 +13,32 @@ BuoyancyParticleSystem::BuoyancyParticleSystem(PxMaterial* gMaterial)
 
 	// Particula liquido
 	Particula* pLiquid = new Particula({ 0.0, 40.0,0.0 }, { 0.0, 0.0,0.0 }, 0, 0.0);
-	PxBoxGeometry gCube = PxBoxGeometry(10.0f, 2.0f, 10.0f);
+	PxBoxGeometry gCube = PxBoxGeometry(10.0f, 1.0f, 10.0f);
 	physx::PxShape* cubeShape = CreateShape(gCube, gMaterial);
 	RenderItem* renderItem = new RenderItem(cubeShape, pLiquid->getTr(), Vector4(0.0f, 0.0f, 1.0f, 1.0f));
 	pLiquid->setRenderItem(renderItem);
 
 	// Particula obj de flotacion
-	Particula* pFlot = new Particula({ 0.0,60.0,0.0 }, { 0.0, 0.0,0.0 }, 0.99, 5000.0f);
+	Particula* pFlot = new Particula({ 0.0,60.0,0.0 }, { 0.0, 0.0,0.0 }, 0.99, 500);
 	PxBoxGeometry gCubeFlot = PxBoxGeometry(2.0f, 2.0f, 2.0f);
 	physx::PxShape* cubeShapeFlot = CreateShape(gCubeFlot, gMaterial);
-	RenderItem* renderItemFlot = new RenderItem(cubeShapeFlot, pFlot->getTr(), Vector4(0.0f, 1.0f, 0.0f, 6400.0f));
+	RenderItem* renderItemFlot = new RenderItem(cubeShapeFlot, pFlot->getTr(), Vector4(0.0f, 1.0f, 0.0f, 1.0f));
 	pFlot->setRenderItem(renderItemFlot);
 	pFlot->setTimeVida(70000);
 
+	// GRAVEDAD
+	gravityEarth = new GravityForceGenerator();
+	gravityEarth->setActive(true);
+	_registry->add(pFlot, gravityEarth);
+
+	_particles.push_back(pLiquid);
+	_particles.push_back(pFlot);
+
+
+
 	// FUERZA DE MUELLE
 	float densidadAgua = 1000.0f;
-	float volumenCubo = 8.0f;    // 2x2x2
+	float volumenCubo = 1.0f;    // 2x2x2
 	float alturaRealObjeto = 2.0f;
 
 	BuoyancyForceGenerator* f = new BuoyancyForceGenerator(
@@ -41,12 +51,7 @@ BuoyancyParticleSystem::BuoyancyParticleSystem(PxMaterial* gMaterial)
 	//añadir al registro
 	_registry->add(pFlot, f);
 
-	gravityEarth = new GravityForceGenerator();
-	gravityEarth->setActive(true);
-	_registry->add(pFlot, gravityEarth);
-
-	_particles.push_back(pLiquid);
-	_particles.push_back(pFlot);
+	
 
 }
 
