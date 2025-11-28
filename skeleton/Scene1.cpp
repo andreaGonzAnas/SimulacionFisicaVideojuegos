@@ -3,6 +3,7 @@
 #include "RenderUtils.hpp"
 #include "Vector3D.h"
 #include "SpringParticleSystem.h"
+#include "BuoyancyParticleSystem.h"
 
 Scene1::Scene1(PxPhysics* physics): Scene(physics)
 {
@@ -60,14 +61,16 @@ void Scene1::init()
 
 
 	// SISTEMA DE MUELLE
+	//_springSys = new SpringParticleSystem(gMaterial);
 
-	_springSys = new SpringParticleSystem(gMaterial);
-
+	// SISTEMA DE FLOTACION
+	_flotationSys = new BuoyancyParticleSystem(gMaterial);
 }
 
 void Scene1::update(double t)
 {
-	_springSys->update(t);
+	//_springSys->update(t);
+	_flotationSys->update(t);
 }
 
 void Scene1::clear()
@@ -78,6 +81,7 @@ void Scene1::clear()
 	}
 
 	delete _springSys; _springSys = nullptr;
+	delete _flotationSys; _flotationSys = nullptr;
 }
 
 bool Scene1::handleKey(unsigned char key, const PxTransform& camera)

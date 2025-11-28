@@ -4,6 +4,7 @@
 #include <vector>
 
 class SpringParticleSystem;
+class BuoyancyParticleSystem;
 
 class Scene1 : public Scene
 {
@@ -11,7 +12,7 @@ private:
 	std::vector<RenderItem*> _parts;
 
 	SpringParticleSystem* _springSys;
-
+	BuoyancyParticleSystem* _flotationSys;
 public:
 
 	// Constructora y destructora
