@@ -19,5 +19,4 @@ void SpringForceGenerator::update(Particula* particle, double t)
 
     particle->addForce(force);
 
-    std::cout << "update spring" << '\n';
 }

@@ -33,7 +33,6 @@ SpringParticleSystem::SpringParticleSystem(PxMaterial* gMaterial)
 
 	SpringForceGenerator* f3 = new SpringForceGenerator(500, 1, p4);
 
-	
 	//añadir al registro
 	_registry->add(p3, f3);
 	_particles.push_back(p3);
@@ -43,8 +42,47 @@ SpringParticleSystem::SpringParticleSystem(PxMaterial* gMaterial)
 	gravityEarth = new GravityForceGenerator();
 
 	_registry->add(p3, gravityEarth);
-
 	f3->setActive(true);
+
+
+	// 2 particulas con muelle:
+	// 
+
+	// Particula 0 que se mueve
+	Particula* p0 = new Particula({ 20.0,20.0,0.0 }, { 0.0, 0.0,0.0 }, 0.99, 100);
+	gSphere = PxSphereGeometry();
+	gSphere.radius = 0.5;
+	esferaShape = CreateShape(gSphere, gMaterial);
+
+	RenderItem* renderItem0 = new RenderItem(esferaShape, p0->getTr(), Vector4(1.0f, 0.0f, 0.0f, 1.0f));
+	p0->setRenderItem(renderItem);
+	p0->setTimeVida(70000);
+
+	// Particula 1 que se mueve
+	Particula* p1 = new Particula({ 30.0,20.0,0.0 }, { 0.0, 0.0,0.0 }, 0.99, 100);
+	gSphere = PxSphereGeometry();
+	gSphere.radius = 0.5;
+	esferaShape = CreateShape(gSphere, gMaterial);
+
+	RenderItem* renderItem1 = new RenderItem(esferaShape, p1->getTr(), Vector4(1.0f, 0.0f, 0.0f, 1.0f));
+	p1->setRenderItem(renderItem);
+	p1->setTimeVida(70000);
+
+
+	SpringForceGenerator* f0 = new SpringForceGenerator(500, 1, p1);
+	SpringForceGenerator* f1 = new SpringForceGenerator(500, 1, p0);
+
+	//añadir al registro
+	_registry->add(p0, f0);
+	_registry->add(p1, f1);
+	_particles.push_back(p0);
+	_particles.push_back(p1);
+
+	//añadir gravedad
+	//gravityEarth = new GravityForceGenerator();
+	//_registry->add(p0, gravityEarth);
+	//_registry->add(p1, gravityEarth);
+	f0->setActive(true);
 }
 
 SpringParticleSystem::~SpringParticleSystem()
