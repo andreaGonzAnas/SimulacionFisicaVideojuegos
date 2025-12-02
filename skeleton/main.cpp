@@ -93,11 +93,15 @@ void initPhysics(bool interactive)
 
 	//Inicializar escena
 	_scene0 = new Scene0(gPhysics);
+	_scene0->set_gScene(gScene);
 	_scene1 = new Scene1(gPhysics);
+	_scene1->set_gScene(gScene);
 	_scene2 = new Scene2(gPhysics);
+	_scene2->set_gScene(gScene);
 
 	//Setear escena actual
 	_sceneManager->setScene(_scene1);
+	
 
 }
 

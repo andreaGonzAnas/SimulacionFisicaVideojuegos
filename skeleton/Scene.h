@@ -7,6 +7,7 @@ class Scene
 {
 protected:
     PxPhysics* gPhysics;
+    PxScene* _gScene;
 
 public:
     Scene(PxPhysics* physics) : gPhysics(physics) {}
@@ -18,6 +19,16 @@ public:
 
     // input
     virtual bool handleKey(unsigned char key, const PxTransform& camera) = 0;
+
+    PxScene* get_gScene()
+    {
+        return _gScene;
+    }
+
+    void set_gScene(PxScene* scene)
+    {
+        _gScene = scene;
+    }
 
 };
 
