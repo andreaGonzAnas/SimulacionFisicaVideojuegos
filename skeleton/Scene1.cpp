@@ -124,23 +124,28 @@ bool Scene1::handleKey(unsigned char key, const PxTransform& camera)
 		case 'k':
 		{
 			// aumentar constante muelle
-			_springSys->setK(100);
+			_springSys->setK(10);
+			break;
 		}
 		case 'l':
 		{
 			// disminuir constante muelle
-			_springSys->setK(-100);
+			_springSys->setK(-10);
+			break;
 		}
 		case 'm':
 		{
 			// aumentar masa flotacion
 			_flotationSys->setMasa(100);
+			break;
 		}
 		case 'v':
 		{
 			// modificar masa flotacion
 			_flotationSys->setVolume(100);
+			break;
 		}
+		default: return false;
 	}
 
 

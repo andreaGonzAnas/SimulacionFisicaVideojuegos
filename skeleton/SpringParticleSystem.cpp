@@ -42,8 +42,8 @@ SpringParticleSystem::SpringParticleSystem(PxMaterial* gMaterial)
 	
 	
 	// FUERZA DE MUELLE
-	SpringForceGenerator* f3 = new SpringForceGenerator(0, 1, p2); // estatica (p2) + p.mov (p3)
-	SpringForceGenerator* f4 = new SpringForceGenerator(0, 1, p3); // p.mov (p3) + p.mov (p4)
+	SpringForceGenerator* f3 = new SpringForceGenerator(50, 1, p2); // estatica (p2) + p.mov (p3)
+	SpringForceGenerator* f4 = new SpringForceGenerator(50, 1, p3); // p.mov (p3) + p.mov (p4)
 	f3->setActive(true);
 	f4->setActive(true);
 	_vFuerzas.push_back(f3);
@@ -85,8 +85,8 @@ SpringParticleSystem::SpringParticleSystem(PxMaterial* gMaterial)
 	p1->setTimeVida(70000);
 
 	// FUERZA DE MUELLE
-	SpringForceGenerator* f0 = new SpringForceGenerator(0, 1, p1);
-	SpringForceGenerator* f1 = new SpringForceGenerator(0, 1, p0);
+	SpringForceGenerator* f0 = new SpringForceGenerator(50, 1, p1);
+	SpringForceGenerator* f1 = new SpringForceGenerator(50, 1, p0);
 	f0->setActive(true);
 	f1->setActive(true);
 	_vFuerzas.push_back(f0);
@@ -113,14 +113,7 @@ void SpringParticleSystem::update(double t)
 	for (auto p : _particles)
 	{
 		p->integrate(t);
-
-		/*
-		std::cout << "Pos: " << p->getPos().x << ", "
-			<< p->getPos().y << ", "
-			<< p->getPos().z << std::endl;*/
 	}
-
-	//no eliminar particula
 }
 
 void SpringParticleSystem::setK(double cant)
@@ -129,6 +122,5 @@ void SpringParticleSystem::setK(double cant)
 	for (auto& f : _vFuerzas)
 	{
 		f->setK(f->getK() + cant);
-		std::cout << "Constante k: " << f->getK() << '\n';
 	}
 }
