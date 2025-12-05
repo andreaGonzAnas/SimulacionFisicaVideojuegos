@@ -63,7 +63,7 @@ void Scene1::init()
 
 
 	// SISTEMA DE MUELLE
-	//_springSys = new SpringParticleSystem(gMaterial);
+	_springSys = new SpringParticleSystem(gMaterial);
 
 	// SISTEMA DE FLOTACION
 	_flotationSys = new BuoyancyParticleSystem(gMaterial);
@@ -97,7 +97,7 @@ void Scene1::init()
 
 void Scene1::update(double t)
 {
-	//_springSys->update(t);
+	_springSys->update(t);
 	_flotationSys->update(t);
 }
 
