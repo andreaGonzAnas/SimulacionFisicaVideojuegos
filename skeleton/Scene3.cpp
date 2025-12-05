@@ -3,6 +3,8 @@
 #include "RenderUtils.hpp"
 #include "Vector3D.h"
 
+#include <PxPhysicsAPI.h>
+
 Scene3::Scene3(PxPhysics* physics): Scene(physics)
 {
 }
@@ -56,6 +58,32 @@ void Scene3::init()
 	RenderItem* rEsfera3 = new RenderItem(esferaShape, esferaTr3, Vector4(0.0f, 0.0f, 1.0f, 1.0f));
 	RegisterRenderItem(rEsfera3);
 	_parts.push_back(rEsfera3);
+
+	// SUELO
+	PxRigidStatic* Suelo = gPhysics->createRigidStatic(PxTransform({ 50, 0, -80 }));
+	physx::PxShape* shapeSuelo = CreateShape(PxBoxGeometry(100, 0.1, 100));
+	Suelo->attachShape(*shapeSuelo);
+	_gScene->addActor(*Suelo);
+
+	// Pintar suelo
+	RenderItem* item;
+	item = new RenderItem(shapeSuelo, Suelo, { 0.8, 0.8,0.8,1 });
+
+	// Anadir un actor dinamico
+	PxRigidDynamic* new_solid;
+	new_solid = gPhysics->createRigidDynamic(PxTransform({ 50,200,-80 }));
+	new_solid->setLinearVelocity({ 0,5,0 });
+	new_solid->setAngularVelocity({ 0,0,0 });
+	physx::PxShape* shape_ad = CreateShape(PxBoxGeometry(5, 5, 5));
+	new_solid->attachShape(*shape_ad);
+
+	PxRigidBodyExt::updateMassAndInertia(*new_solid, 0.15);
+	_gScene->addActor(*new_solid);
+
+	// Pintar actor dinamico
+	RenderItem* dynamic_item;
+	dynamic_item = new RenderItem(shape_ad, new_solid, { 0.8, 0.8,0.8,1 });
+
 }
 
 void Scene3::update(double t)
