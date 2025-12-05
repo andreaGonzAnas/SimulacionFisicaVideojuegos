@@ -114,5 +114,35 @@ void Scene1::clear()
 
 bool Scene1::handleKey(unsigned char key, const PxTransform& camera)
 {
-	return false;
+	switch (key)
+	{
+		case 'f':
+		{
+			// meter fuerza a la particula del muelle
+
+		}
+		case 'k':
+		{
+			// aumentar constante muelle
+			_springSys->setK(100);
+		}
+		case 'l':
+		{
+			// disminuir constante muelle
+			_springSys->setK(-100);
+		}
+		case 'm':
+		{
+			// aumentar masa flotacion
+			_flotationSys->setMasa(100);
+		}
+		case 'v':
+		{
+			// modificar masa flotacion
+			_flotationSys->setVolume(100);
+		}
+	}
+
+
+	return true;
 }

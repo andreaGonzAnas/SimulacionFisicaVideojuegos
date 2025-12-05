@@ -42,10 +42,12 @@ SpringParticleSystem::SpringParticleSystem(PxMaterial* gMaterial)
 	
 	
 	// FUERZA DE MUELLE
-	SpringForceGenerator* f3 = new SpringForceGenerator(500, 1, p2); // estatica (p2) + p.mov (p3)
-	SpringForceGenerator* f4 = new SpringForceGenerator(500, 1, p3); // p.mov (p3) + p.mov (p4)
+	SpringForceGenerator* f3 = new SpringForceGenerator(0, 1, p2); // estatica (p2) + p.mov (p3)
+	SpringForceGenerator* f4 = new SpringForceGenerator(0, 1, p3); // p.mov (p3) + p.mov (p4)
 	f3->setActive(true);
 	f4->setActive(true);
+	_vFuerzas.push_back(f3);
+	_vFuerzas.push_back(f4);
 
 	//añadir al registro
 	_registry->add(p3, f3);
@@ -83,10 +85,12 @@ SpringParticleSystem::SpringParticleSystem(PxMaterial* gMaterial)
 	p1->setTimeVida(70000);
 
 	// FUERZA DE MUELLE
-	SpringForceGenerator* f0 = new SpringForceGenerator(500, 1, p1);
-	SpringForceGenerator* f1 = new SpringForceGenerator(500, 1, p0);
+	SpringForceGenerator* f0 = new SpringForceGenerator(0, 1, p1);
+	SpringForceGenerator* f1 = new SpringForceGenerator(0, 1, p0);
 	f0->setActive(true);
 	f1->setActive(true);
+	_vFuerzas.push_back(f0);
+	_vFuerzas.push_back(f1);
 
 	//añadir al registro
 	_registry->add(p0, f0);
@@ -117,4 +121,14 @@ void SpringParticleSystem::update(double t)
 	}
 
 	//no eliminar particula
+}
+
+void SpringParticleSystem::setK(double cant)
+{
+	// cambiar el k de todos los sistemas de muelles
+	for (auto& f : _vFuerzas)
+	{
+		f->setK(f->getK() + cant);
+		std::cout << "Constante k: " << f->getK() << '\n';
+	}
 }

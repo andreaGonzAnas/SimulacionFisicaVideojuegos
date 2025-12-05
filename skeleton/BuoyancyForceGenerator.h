@@ -15,5 +15,8 @@ public:
 	virtual ~BuoyancyForceGenerator() {}
 
 	void update(Particula* particle, double t) override;
+
+	void setVolume(float volume) { _volume = volume; }
+	float getVolume() { return _volume; }
 };
 
