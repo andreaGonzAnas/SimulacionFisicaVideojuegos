@@ -23,6 +23,7 @@
 #include "Scene0.h"
 #include "Scene1.h"
 #include "Scene2.h"
+#include "Scene3.h"
 
 
 #include <iostream>
@@ -59,6 +60,7 @@ SceneManager* _sceneManager;
 Scene* _scene0;
 Scene* _scene1;
 Scene* _scene2;
+Scene* _scene3;
 
 
 // Initialize physics engine
@@ -94,13 +96,18 @@ void initPhysics(bool interactive)
 	//Inicializar escena
 	_scene0 = new Scene0(gPhysics);
 	_scene0->set_gScene(gScene);
+
 	_scene1 = new Scene1(gPhysics);
 	_scene1->set_gScene(gScene);
+
 	_scene2 = new Scene2(gPhysics);
 	_scene2->set_gScene(gScene);
 
+	_scene3 = new Scene3(gPhysics);
+	_scene3->set_gScene(gScene);
+
 	//Setear escena actual
-	_sceneManager->setScene(_scene1);
+	_sceneManager->setScene(_scene3);
 	
 
 }
@@ -168,6 +175,13 @@ void keyPress(unsigned char key, const PxTransform& camera)
 		{
 			//cambiar escena
 			_sceneManager->setScene(new Scene2(gPhysics));
+
+			break;
+		}
+		case '3':
+		{
+			//cambiar escena
+			_sceneManager->setScene(new Scene3(gPhysics));
 
 			break;
 		}

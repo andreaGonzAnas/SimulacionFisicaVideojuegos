@@ -26,8 +26,8 @@ SpringParticleSystem::SpringParticleSystem(PxMaterial* gMaterial)
 	gSphere.radius = 0.5;
 	esferaShape = CreateShape(gSphere, gMaterial);
 
-	RenderItem* renderItem = new RenderItem(esferaShape, p3->getTr(), Vector4(1.0f, 1.0f, 0.0f, 1.0f));
-	p3->setRenderItem(renderItem);
+	RenderItem* renderItem3 = new RenderItem(esferaShape, p3->getTr(), Vector4(1.0f, 1.0f, 0.0f, 1.0f));
+	p3->setRenderItem(renderItem3);
 	p3->setTimeVida(70000);
 
 	// Particula 4 que se mueve
@@ -52,6 +52,7 @@ SpringParticleSystem::SpringParticleSystem(PxMaterial* gMaterial)
 	//añadir al registro
 	_registry->add(p3, f3);
 	_registry->add(p4, f4);
+	_particles.push_back(p2);
 	_particles.push_back(p3);
 	_particles.push_back(p4);
 
@@ -71,7 +72,7 @@ SpringParticleSystem::SpringParticleSystem(PxMaterial* gMaterial)
 	esferaShape = CreateShape(gSphere, gMaterial);
 
 	RenderItem* renderItem0 = new RenderItem(esferaShape, p0->getTr(), Vector4(1.0f, 0.0f, 0.0f, 1.0f));
-	p0->setRenderItem(renderItem);
+	p0->setRenderItem(renderItem0);
 	p0->setTimeVida(70000);
 
 	// Particula 1 que se mueve
@@ -102,6 +103,21 @@ SpringParticleSystem::SpringParticleSystem(PxMaterial* gMaterial)
 
 SpringParticleSystem::~SpringParticleSystem()
 {
+	for (auto f : _vFuerzas)
+		delete f;
+	_vFuerzas.clear();
+
+	for (auto p : _particles)
+	{
+		if (p->getRenderItem()) {
+			DeregisterRenderItem(p->getRenderItem());
+			delete p->getRenderItem();
+		}
+		delete p;
+	}
+	_particles.clear();
+
+	p3 = nullptr;
 }
 
 void SpringParticleSystem::update(double t)

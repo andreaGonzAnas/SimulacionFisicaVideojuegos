@@ -266,6 +266,7 @@
     <ClCompile Include="Scene1.cpp" />
     <ClCompile Include="Scene0.cpp" />
     <ClCompile Include="Scene2.cpp" />
+    <ClCompile Include="Scene3.cpp" />
     <ClCompile Include="SceneManager.cpp" />
     <ClCompile Include="SpringForceGenerator.cpp" />
     <ClCompile Include="SpringParticleSystem.cpp" />
@@ -300,6 +301,7 @@
     <ClInclude Include="Scene1.h" />
     <ClInclude Include="Scene0.h" />
     <ClInclude Include="Scene2.h" />
+    <ClInclude Include="Scene3.h" />
     <ClInclude Include="SceneManager.h" />
     <ClInclude Include="SpringForceGenerator.h" />
     <ClInclude Include="SpringParticleSystem.h" />

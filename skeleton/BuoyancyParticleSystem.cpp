@@ -56,6 +56,15 @@ BuoyancyParticleSystem::BuoyancyParticleSystem(PxMaterial* gMaterial)
 
 BuoyancyParticleSystem::~BuoyancyParticleSystem()
 {
+	for (auto p : _particles)
+	{
+		if (p->getRenderItem()) {
+			DeregisterRenderItem(p->getRenderItem());
+			delete p->getRenderItem();
+		}
+		delete p;
+	}
+	_particles.clear();
 }
 
 void BuoyancyParticleSystem::update(double t)

@@ -36,6 +36,7 @@
     <ClCompile Include="SpringParticleSystem.cpp" />
     <ClCompile Include="BuoyancyForceGenerator.cpp" />
     <ClCompile Include="BuoyancyParticleSystem.cpp" />
+    <ClCompile Include="Scene3.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="core.hpp" />
@@ -73,6 +74,7 @@
     <ClInclude Include="SpringParticleSystem.h" />
     <ClInclude Include="BuoyancyForceGenerator.h" />
     <ClInclude Include="BuoyancyParticleSystem.h" />
+    <ClInclude Include="Scene3.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Render">
