@@ -259,9 +259,12 @@
     <ClCompile Include="BuoyancyParticleSystem.cpp" />
     <ClCompile Include="callbacks.cpp" />
     <ClCompile Include="ConfettiParticleSystem.cpp" />
+    <ClCompile Include="ExplosionRigidBodySystem.cpp" />
     <ClCompile Include="FireParticleSystem.cpp" />
     <ClCompile Include="Proyectil.cpp" />
     <ClCompile Include="ProyectilSystem.cpp" />
+    <ClCompile Include="RigidBodyGen.cpp" />
+    <ClCompile Include="RigidBodySystem.cpp" />
     <ClCompile Include="Scene.cpp" />
     <ClCompile Include="Scene1.cpp" />
     <ClCompile Include="Scene0.cpp" />
@@ -270,6 +273,7 @@
     <ClCompile Include="SceneManager.cpp" />
     <ClCompile Include="SpringForceGenerator.cpp" />
     <ClCompile Include="SpringParticleSystem.cpp" />
+    <ClCompile Include="UniformalRigidBodyGen.cpp" />
     <ClCompile Include="WhirlwindForceGenerator.cpp" />
     <ClCompile Include="FireworksParticleSystem.cpp" />
     <ClCompile Include="ForceGenerator.cpp" />
@@ -294,9 +298,12 @@
     <ClInclude Include="callbacks.hpp" />
     <ClInclude Include="ConfettiParticleSystem.h" />
     <ClInclude Include="core.hpp" />
+    <ClInclude Include="ExplosionRigidBodySystem.h" />
     <ClInclude Include="FireParticleSystem.h" />
     <ClInclude Include="Proyectil.h" />
     <ClInclude Include="ProyectilSystem.h" />
+    <ClInclude Include="RigidBodyGen.h" />
+    <ClInclude Include="RigidBodySystem.h" />
     <ClInclude Include="Scene.h" />
     <ClInclude Include="Scene1.h" />
     <ClInclude Include="Scene0.h" />
@@ -305,6 +312,7 @@
     <ClInclude Include="SceneManager.h" />
     <ClInclude Include="SpringForceGenerator.h" />
     <ClInclude Include="SpringParticleSystem.h" />
+    <ClInclude Include="UniformalRigidBodyGen.h" />
     <ClInclude Include="WhirlwindForceGenerator.h" />
     <ClInclude Include="FireworksParticleSystem.h" />
     <ClInclude Include="ForceGenerator.h" />

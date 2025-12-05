@@ -37,6 +37,10 @@
     <ClCompile Include="BuoyancyForceGenerator.cpp" />
     <ClCompile Include="BuoyancyParticleSystem.cpp" />
     <ClCompile Include="Scene3.cpp" />
+    <ClCompile Include="RigidBodySystem.cpp" />
+    <ClCompile Include="ExplosionRigidBodySystem.cpp" />
+    <ClCompile Include="RigidBodyGen.cpp" />
+    <ClCompile Include="UniformalRigidBodyGen.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="core.hpp" />
@@ -75,6 +79,10 @@
     <ClInclude Include="BuoyancyForceGenerator.h" />
     <ClInclude Include="BuoyancyParticleSystem.h" />
     <ClInclude Include="Scene3.h" />
+    <ClInclude Include="RigidBodySystem.h" />
+    <ClInclude Include="ExplosionRigidBodySystem.h" />
+    <ClInclude Include="RigidBodyGen.h" />
+    <ClInclude Include="UniformalRigidBodyGen.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Render">
