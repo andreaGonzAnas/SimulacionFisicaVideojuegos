@@ -3,15 +3,20 @@
 #include "PxPhysicsAPI.h"
 
 class ParticleForceRegistry;
+class RigidBodyGen;
+class GravityForceGenerator;
 
 class RigidBodySystem
 {
 protected:
-	std::list<PxRigidDynamic*> _particles;
+	std::list<PxRigidDynamic*> _rigidBodies;
 	PxRigidDynamic* _modelP; //rigid body modelo
 
 	//registro de fuerzas
 	ParticleForceRegistry* _registry;
+	std::list<RigidBodyGen*> _generators;
+
+	GravityForceGenerator* gravityEarth;
 
 	bool active = true;
 
