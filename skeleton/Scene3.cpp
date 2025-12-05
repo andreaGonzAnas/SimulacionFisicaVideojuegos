@@ -88,14 +88,20 @@ void Scene3::init()
 
 void Scene3::update(double t)
 {
+
 }
 
 void Scene3::clear()
 {
+	// Eliminar eje de coordenadas
 	for (auto p : _parts)
 	{
 		DeregisterRenderItem(p);
 	}
+
+	// Eliminar rigid bodies
+
+
 }
 
 bool Scene3::handleKey(unsigned char key, const PxTransform& camera)

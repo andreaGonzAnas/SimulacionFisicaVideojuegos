@@ -1,5 +1,6 @@
 #pragma once
 #include "ParticleSystem.h"
+
 class ConfettiParticleSystem : public ParticleSystem
 {
 private:
