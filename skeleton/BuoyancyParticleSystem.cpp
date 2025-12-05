@@ -12,14 +12,14 @@ BuoyancyParticleSystem::BuoyancyParticleSystem(PxMaterial* gMaterial)
 	// --- CREACION PARTICULAS ---
 
 	// Particula liquido
-	Particula* pLiquid = new Particula({ 0.0, 40.0,0.0 }, { 0.0, 0.0,0.0 }, 0, 0.0);
+	Particula* pLiquid = new Particula({ 0.0, 39.0,0.0 }, { 0.0, 0.0,0.0 }, 0, 0.0);
 	PxBoxGeometry gCube = PxBoxGeometry(10.0f, 1.0f, 10.0f);
 	physx::PxShape* cubeShape = CreateShape(gCube, gMaterial);
 	RenderItem* renderItem = new RenderItem(cubeShape, pLiquid->getTr(), Vector4(0.0f, 0.0f, 1.0f, 1.0f));
 	pLiquid->setRenderItem(renderItem);
 
 	// Particula obj de flotacion
-	Particula* pFlot = new Particula({ 0.0,60.0,0.0 }, { 0.0, 0.0,0.0 }, 0.99, 500);
+	Particula* pFlot = new Particula({ 0.0,45.0,0.0 }, { 0.0, 1.0,0.0 }, 0.98, 500);
 	PxBoxGeometry gCubeFlot = PxBoxGeometry(2.0f, 2.0f, 2.0f);
 	physx::PxShape* cubeShapeFlot = CreateShape(gCubeFlot, gMaterial);
 	RenderItem* renderItemFlot = new RenderItem(cubeShapeFlot, pFlot->getTr(), Vector4(0.0f, 1.0f, 0.0f, 1.0f));
@@ -35,11 +35,10 @@ BuoyancyParticleSystem::BuoyancyParticleSystem(PxMaterial* gMaterial)
 	_particles.push_back(pFlot);
 
 
-
 	// FUERZA DE MUELLE
 	float densidadAgua = 1000.0f;
 	float volumenCubo = 1.0f;    // 2x2x2
-	float alturaRealObjeto = 2.0f;
+	float alturaRealObjeto = 0.3f;
 
 	BuoyancyForceGenerator* f = new BuoyancyForceGenerator(
 		alturaRealObjeto, volumenCubo, densidadAgua, pLiquid

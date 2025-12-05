@@ -66,9 +66,9 @@ void Scene1::init()
 	//_springSys = new SpringParticleSystem(gMaterial);
 
 	// SISTEMA DE FLOTACION
-	//_flotationSys = new BuoyancyParticleSystem(gMaterial);
+	_flotationSys = new BuoyancyParticleSystem(gMaterial);
 
-
+	/*
 	// SUELO
 	PxRigidStatic* Suelo = gPhysics->createRigidStatic(PxTransform({ 50, 0, -80 }));
 	physx::PxShape* shapeSuelo = CreateShape(PxBoxGeometry(100, 0.1, 100));
@@ -92,13 +92,13 @@ void Scene1::init()
 
 	// Pintar actor dinamico
 	RenderItem* dynamic_item;
-	dynamic_item = new RenderItem(shape_ad, new_solid, { 0.8, 0.8,0.8,1 });
+	dynamic_item = new RenderItem(shape_ad, new_solid, { 0.8, 0.8,0.8,1 });*/
 }
 
 void Scene1::update(double t)
 {
 	//_springSys->update(t);
-	//_flotationSys->update(t);
+	_flotationSys->update(t);
 }
 
 void Scene1::clear()
