@@ -119,7 +119,7 @@ bool Scene1::handleKey(unsigned char key, const PxTransform& camera)
 		case 'f':
 		{
 			// meter fuerza a la particula del muelle
-
+			_springSys->addForce();
 		}
 		case 'k':
 		{

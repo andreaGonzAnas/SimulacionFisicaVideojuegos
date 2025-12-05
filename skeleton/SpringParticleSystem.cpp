@@ -21,7 +21,7 @@ SpringParticleSystem::SpringParticleSystem(PxMaterial* gMaterial)
 	p2->setRenderItem(renderItem2);
 
 	// Particula 3 que se mueve
-	Particula* p3 = new Particula({ 0.0,20.0,0.0 }, { 0.0, 5.0,0.0 }, 0.99, 100);
+	p3 = new Particula({ 0.0,20.0,0.0 }, { 0.0, 5.0,0.0 }, 0.99, 100);
 	gSphere = PxSphereGeometry();
 	gSphere.radius = 0.5;
 	esferaShape = CreateShape(gSphere, gMaterial);
@@ -30,7 +30,7 @@ SpringParticleSystem::SpringParticleSystem(PxMaterial* gMaterial)
 	p3->setRenderItem(renderItem);
 	p3->setTimeVida(70000);
 
-	// Particula 2 que se mueve
+	// Particula 4 que se mueve
 	Particula* p4 = new Particula({ 5.0,20.0,0.0 }, { 0.0, 5.0,0.0 }, 0.99, 100);
 	gSphere = PxSphereGeometry();
 	gSphere.radius = 0.5;
@@ -106,6 +106,13 @@ SpringParticleSystem::~SpringParticleSystem()
 
 void SpringParticleSystem::update(double t)
 {
+	// Aplicar fuerza temporal si sigue activa
+	if (pushTime > 0.0 && !_particles.empty())
+	{
+		p3->addForce(pushForce);
+		pushTime -= t;  // restar tiempo
+	}
+
 	//actualizar fuerzas
 	_registry->updateForces(t);
 
@@ -123,4 +130,10 @@ void SpringParticleSystem::setK(double cant)
 	{
 		f->setK(f->getK() + cant);
 	}
+}
+
+void SpringParticleSystem::addForce()
+{
+	pushForce = { 500.0f, 500.0f, 0.0f };
+	pushTime = 0.25;
 }
