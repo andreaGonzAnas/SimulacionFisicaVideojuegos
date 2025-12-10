@@ -1,5 +1,6 @@
 #include "UniformalRigidBodyGen.h"
 #include "DynamicObj.h"
+#include <algorithm>
 
 UniformalRigidBodyGen::UniformalRigidBodyGen(int nPart, double prob, PxRigidDynamic* p, PxPhysics* gPhysic)
 {
@@ -13,6 +14,10 @@ UniformalRigidBodyGen::UniformalRigidBodyGen(int nPart, double prob, PxRigidDyna
 	_modelRigidBody = p;
 	gPhysics = gPhysic;
 
+    desColor = Vector4(0.8f, 0.0f, 0.9f, 1.0f); // base morado brillante
+
+
+
 }
 
 UniformalRigidBodyGen::~UniformalRigidBodyGen()
@@ -21,40 +26,54 @@ UniformalRigidBodyGen::~UniformalRigidBodyGen()
 
 std::list<DynamicObj*> UniformalRigidBodyGen::generateP()
 {
-	std::list<DynamicObj*> auxList;
+    std::list<DynamicObj*> auxList;
 
-	if (!active) return auxList;
+    if (!active) return auxList;
 
-	physx::PxShape* shape_ad = CreateShape(PxBoxGeometry(5, 5, 5));
+    // Crear forma básica
+    PxShape* shape_ad = CreateShape(PxBoxGeometry(5, 5, 5));
 
-	for (int i = 0; i < nRigidBodies; i++)
-	{
-		if (_u(_mt) * 0.5 + 0.5 < getProbGen())
-		{
-			// Crear objeto dinamico
-			DynamicObj* _dynamicObj = new DynamicObj({ 0,5,0 }, { 0,0,0 }, shape_ad, { 50,200,-80 }, 0.15, 5.0, gPhysics);
-			
-			/*
-			//crear rigid body dinamico
-			PxRigidDynamic* new_solid;
-			new_solid = gPhysics->createRigidDynamic(PxTransform({ 50,200,-80 }));
-			new_solid->setLinearVelocity({ 0,5,0 });
-			new_solid->setAngularVelocity({ 0,0,0 });
-			new_solid->attachShape(*shape_ad);
+    for (int i = 0; i < nRigidBodies; i++)
+    {
+        // Probabilidad de generar
+        if (_u(_mt) < getProbGen())
+        {
+            // Posición inicial: base de la fuente con desviación aleatoria en X/Z
+            float offsetX = float((_u(_mt) - 0.5) * 10.0); // ±5 unidades
+            float offsetZ = float((_u(_mt) - 0.5) * 10.0); // ±5 unidades
+            PxVec3 pos = PxVec3(50.0f + offsetX, 200.0f, -80.0f + offsetZ);
 
-			PxRigidBodyExt::updateMassAndInertia(*new_solid, 0.15);
-			//_gScene->addActor(*new_solid); // hacer esto fuera
+            // Velocidad inicial: hacia abajo (Y negativa), con ligera dispersión en X/Z
+            float velX = float((_u(_mt) - 0.5) * 2.0);   // ±1 unidades/s
+            float velY = -10.0f;                         // fuerza hacia abajo
+            float velZ = float((_u(_mt) - 0.5) * 2.0);   // ±1 unidades/s
+            PxVec3 linVel = PxVec3(velX, velY, velZ);
 
-			// Pintar actor dinamico
-			RenderItem* dynamic_item;
-			dynamic_item = new RenderItem(shape_ad, new_solid, { 0.8, 0.8,0.8,1 });
-			*/
+            // Color con ligera variación
+            Vector4 baseC = desColor;
+            Vector4 newC = Vector4(
+                std::clamp<float>(baseC.x + static_cast<float>(_u(_mt)) * desColor.x, 0.0f, 1.0f),
+                std::clamp<float>(baseC.y + static_cast<float>(_u(_mt)) * desColor.y, 0.0f, 1.0f),
+                std::clamp<float>(baseC.z + static_cast<float>(_u(_mt)) * desColor.z, 0.0f, 1.0f),
+                baseC.w
+            );
 
-			//clonedP->setRenderItem(new RenderItem(esferaShape, clonedP->getTransform(), newC));
-			auxList.push_back(_dynamicObj);
 
-		}
-	}
+            // Crear DynamicObj y asignar RenderItem con color
+            DynamicObj* obj = new DynamicObj(
+                linVel,                         // velocidad inicial
+                PxVec3(0.0f),                   // sin rotación inicial
+                shape_ad,                        // forma
+                pos,                             // posición inicial
+                0.15f,                           // densidad
+                5.0,                             // tiempo de vida
+                gPhysics,
+                newC
+            );
+            auxList.push_back(obj);
+        }
+    }
 
-	return auxList;
+    return auxList;
 }
+

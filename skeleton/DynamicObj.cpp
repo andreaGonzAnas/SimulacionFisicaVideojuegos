@@ -3,7 +3,7 @@
 using namespace physx;
 
 
-DynamicObj::DynamicObj(const physx::PxVec3& linVel, const physx::PxVec3& angVel, physx::PxShape* shape, const physx::PxVec3& position, physx::PxReal density, double time, PxPhysics* gPhysic): tVida(time), _gPhysic(gPhysic)
+DynamicObj::DynamicObj(const physx::PxVec3& linVel, const physx::PxVec3& angVel, physx::PxShape* shape, const physx::PxVec3& position, physx::PxReal density, double time, PxPhysics* gPhysic, Vector4 color): tVida(time), _gPhysic(gPhysic)
 {
 	//physx::PxShape* shape_ad = CreateShape(PxBoxGeometry(5, 5, 5));
 
@@ -17,7 +17,7 @@ DynamicObj::DynamicObj(const physx::PxVec3& linVel, const physx::PxVec3& angVel,
 	PxRigidBodyExt::updateMassAndInertia(*new_solid, density);
 
 	// Pintar actor dinamico
-	_renderItem = new RenderItem(shape, new_solid, { 0.8, 0.8,0.8,1 });
+	_renderItem = new RenderItem(shape, new_solid, color);
 
 	_rigidDynamic = new_solid;
 }

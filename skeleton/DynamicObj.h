@@ -12,10 +12,14 @@ private:
 
 public:
 	DynamicObj(const physx::PxVec3& linVel, const physx::PxVec3& angVel, physx::PxShape*, const physx::PxVec3& position, 
-		physx::PxReal density, double time, physx::PxPhysics* gPhysic);
+		physx::PxReal density, double time, physx::PxPhysics* gPhysic, Vector4 color);
 	~DynamicObj();
 	void update(double t);
 	physx::PxRigidDynamic* getRigidDynamic() { return _rigidDynamic; }
 	double getTimeVida() { return tVida;}
+	RenderItem* getRenderItem() { return _renderItem; }
+	void setRenderItem(RenderItem* r) {
+		_renderItem = r;
+		RegisterRenderItem(_renderItem);}
 };
 
