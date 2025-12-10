@@ -35,7 +35,7 @@ ExplosionRigidBodySystem::ExplosionRigidBodySystem(PxRigidDynamic* p, PxPhysics*
     gravityEarth = new GravityForceGenerator();
 
     // Añadir viento tambien
-    windForce = new WindForceGenerator(Vector3(15.0, 0.0, 0.0), 0.5, 0.8);
+    windForce = new WindForceGenerator(Vector3(10.0, 0.0, 0.0), 0.5, 0.8);
 
     // Registrar fuerza de gravedad a todas las partículas
     for (auto p : _rigidBodies) {

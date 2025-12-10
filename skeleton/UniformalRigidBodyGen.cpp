@@ -5,7 +5,7 @@
 UniformalRigidBodyGen::UniformalRigidBodyGen(int nPart, double prob, PxRigidDynamic* p, PxPhysics* gPhysic)
 {
 	_mt = std::mt19937(std::random_device{}());
-	_u = std::uniform_real_distribution<double>(-1.0, 1.0);
+	_u = std::uniform_real_distribution<double>(0.0, 1.0);
 
 	// Configuracion general
 	setParticulas(nPart);
@@ -30,9 +30,7 @@ std::list<DynamicObj*> UniformalRigidBodyGen::generateP()
 
     if (!active) return auxList;
 
-    // Crear forma básica
-    PxShape* shape_ad = CreateShape(PxBoxGeometry(5, 5, 5));
-
+    
     for (int i = 0; i < nRigidBodies; i++)
     {
         // Probabilidad de generar
@@ -41,7 +39,7 @@ std::list<DynamicObj*> UniformalRigidBodyGen::generateP()
             // Posición inicial: base de la fuente con desviación aleatoria en X/Z
             float offsetX = float((_u(_mt) - 0.5) * 10.0); // ±5 unidades
             float offsetZ = float((_u(_mt) - 0.5) * 10.0); // ±5 unidades
-            PxVec3 pos = PxVec3(50.0f + offsetX, 200.0f, -80.0f + offsetZ);
+            PxVec3 pos = PxVec3(50.0f + offsetX, 150.0f, -80.0f + offsetZ);
 
             // Velocidad inicial: hacia abajo (Y negativa), con ligera dispersión en X/Z
             float velX = float((_u(_mt) - 0.5) * 2.0);   // ±1 unidades/s
@@ -58,14 +56,24 @@ std::list<DynamicObj*> UniformalRigidBodyGen::generateP()
                 baseC.w
             );
 
+            // Variación de material
+            float staticFriction = 0.0f;    // 0 a 0.3
+            float dynamicFriction = 0.0f;   // 0 a 0.3
+            float restitution = 0.9f + _u(_mt) * 0.1f;       // 0.6 a 1.0
+
+            PxMaterial* material = gPhysics->createMaterial(staticFriction, dynamicFriction, restitution);
+
+            // Crear forma con material
+            PxShape* shape = CreateShape(PxBoxGeometry(5, 5, 5));
+            shape->setMaterials(&material, 1);
 
             // Crear DynamicObj y asignar RenderItem con color
             DynamicObj* obj = new DynamicObj(
                 linVel,                         // velocidad inicial
                 PxVec3(0.0f),                   // sin rotación inicial
-                shape_ad,                        // forma
+                shape,                        // forma
                 pos,                             // posición inicial
-                0.15f,                           // densidad
+                0.1f,                           // densidad
                 5.0,                             // tiempo de vida
                 gPhysics,
                 newC

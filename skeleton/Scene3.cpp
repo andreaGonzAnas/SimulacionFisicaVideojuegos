@@ -62,7 +62,15 @@ void Scene3::init()
 
 	// SUELO
 	PxRigidStatic* Suelo = gPhysics->createRigidStatic(PxTransform({ 50, 0, -80 }));
+	
+	// Crear material del suelo: poca fricción, muy elástico
+	physx::PxMaterial* sueloMat = gPhysics->createMaterial(0.0f, 0.0f, 0.9f); // friction: 0, restitution: 0.9
+
+	// Crear forma del suelo y asignarle el material
 	physx::PxShape* shapeSuelo = CreateShape(PxBoxGeometry(100, 0.1, 100));
+	shapeSuelo->setMaterials(&sueloMat, 1);
+
+	//physx::PxShape* shapeSuelo = CreateShape(PxBoxGeometry(100, 0.1, 100));
 	Suelo->attachShape(*shapeSuelo);
 	_gScene->addActor(*Suelo);
 
