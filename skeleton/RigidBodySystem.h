@@ -3,7 +3,7 @@
 #include "PxPhysicsAPI.h"
 #include "DynamicObj.h"
 
-class ParticleForceRegistry;
+class RigidBodyForceRegistry;
 class RigidBodyGen;
 class GravityForceGenerator;
 
@@ -14,7 +14,7 @@ protected:
 	physx::PxRigidDynamic* _modelP; //rigid body modelo
 
 	//registro de fuerzas
-	ParticleForceRegistry* _registry;
+	RigidBodyForceRegistry* _registry;
 	std::list<RigidBodyGen*> _generators;
 
 	GravityForceGenerator* gravityEarth;

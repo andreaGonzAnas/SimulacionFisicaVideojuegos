@@ -1,5 +1,5 @@
 #include "ExplosionRigidBodySystem.h"
-#include "ParticleForceRegistry.h"
+#include "RigidBodyForceRegistry.h"
 #include "UniformalRigidBodyGen.h"
 #include "PxRigidDynamic.h"
 #include "GravityForceGenerator.h"
@@ -30,14 +30,14 @@ ExplosionRigidBodySystem::ExplosionRigidBodySystem(PxRigidDynamic* p, PxPhysics*
     }
 
     // Registro Fuerzas
-    _registry = new ParticleForceRegistry();
+    _registry = new RigidBodyForceRegistry();
     gravityEarth = new GravityForceGenerator();
 
-    /*
+    
     // Registrar fuerza de gravedad a todas las partículas
     for (auto p : _rigidBodies) {
-        _registry->add(p, gravityEarth);
-    }*/
+        _registry->add(p->getRigidDynamic(), gravityEarth);
+    }
 
 }
 
@@ -58,10 +58,9 @@ void ExplosionRigidBodySystem::update(double t)
             if (!newParticles.empty())
             {
                 // Registrar cada nueva partícula en el registro de fuerzas
-                /*
-                for (auto p : newParticles) {
-                    _registry->add(p, gravityEarth);
-                }*/
+                for (auto p : _rigidBodies) {
+                    _registry->add(p->getRigidDynamic(), gravityEarth);
+                }
 
                 for (auto r : newParticles)
                 {
@@ -82,6 +81,7 @@ void ExplosionRigidBodySystem::update(double t)
 
         if (obj->getTimeVida() <= 0.0)
         {
+            _registry->remove(obj->getRigidDynamic());
             _gScene->removeActor(*obj->getRigidDynamic());
             delete obj;  // llama al destructor que libera el rigid body y renderItem
             it = _rigidBodies.erase(it);

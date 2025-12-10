@@ -17,3 +17,11 @@ void GravityForceGenerator::update(Particula* particle, double t)
 	particle->addForce(fuerza);
 
 }
+
+void GravityForceGenerator::updateRigidBody(physx::PxRigidDynamic* b, double t)
+{
+	if (b->getMass() <= 0.0f) return;
+	PxVec3 fuerza = PxVec3(0.0f, -9.81f, 0.0f) * b->getMass(); // gravedad hacia abajo
+
+	b->addForce(fuerza, PxForceMode::eFORCE);
+}

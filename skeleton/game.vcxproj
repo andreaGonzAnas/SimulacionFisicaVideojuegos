@@ -264,6 +264,7 @@
     <ClCompile Include="FireParticleSystem.cpp" />
     <ClCompile Include="Proyectil.cpp" />
     <ClCompile Include="ProyectilSystem.cpp" />
+    <ClCompile Include="RigidBodyForceRegistry.cpp" />
     <ClCompile Include="RigidBodyGen.cpp" />
     <ClCompile Include="RigidBodySystem.cpp" />
     <ClCompile Include="Scene.cpp" />
@@ -304,6 +305,7 @@
     <ClInclude Include="FireParticleSystem.h" />
     <ClInclude Include="Proyectil.h" />
     <ClInclude Include="ProyectilSystem.h" />
+    <ClInclude Include="RigidBodyForceRegistry.h" />
     <ClInclude Include="RigidBodyGen.h" />
     <ClInclude Include="RigidBodySystem.h" />
     <ClInclude Include="Scene.h" />
