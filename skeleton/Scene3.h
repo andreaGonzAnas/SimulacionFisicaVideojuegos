@@ -3,10 +3,13 @@
 #include "Particula.h"
 #include <vector>
 
+class ExplosionRigidBodySystem;
+
 class Scene3 : public Scene
 {
 private:
 	std::vector<RenderItem*> _parts;
+	ExplosionRigidBodySystem* _expSys;
 
 public:
 	Scene3(PxPhysics* physics);

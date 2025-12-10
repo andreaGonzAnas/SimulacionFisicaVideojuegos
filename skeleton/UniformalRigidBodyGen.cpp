@@ -18,9 +18,9 @@ UniformalRigidBodyGen::~UniformalRigidBodyGen()
 {
 }
 
-std::list<PxRigidDynamic*> UniformalRigidBodyGen::generateP()
+std::list<physx::PxRigidDynamic*> UniformalRigidBodyGen::generateP()
 {
-	std::list<PxRigidDynamic*> auxList;
+	std::list<physx::PxRigidDynamic*> auxList;
 
 	if (!active) return auxList;
 
@@ -43,7 +43,7 @@ std::list<PxRigidDynamic*> UniformalRigidBodyGen::generateP()
 			// Pintar actor dinamico
 			RenderItem* dynamic_item;
 			dynamic_item = new RenderItem(shape_ad, new_solid, { 0.8, 0.8,0.8,1 });
-
+			
 
 			//clonedP->setRenderItem(new RenderItem(esferaShape, clonedP->getTransform(), newC));
 			auxList.push_back(new_solid);

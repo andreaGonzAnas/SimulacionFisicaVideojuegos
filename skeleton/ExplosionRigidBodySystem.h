@@ -6,9 +6,10 @@
 class ExplosionRigidBodySystem : public RigidBodySystem
 {
 private:
+	PxScene* _gScene;
 
 public:
-	ExplosionRigidBodySystem(PxRigidDynamic* p, PxPhysics* gPhysics);
+	ExplosionRigidBodySystem(PxRigidDynamic* p, PxPhysics* gPhysics, PxScene* _gScene);
 	~ExplosionRigidBodySystem();
 
 	void update(double t) override;

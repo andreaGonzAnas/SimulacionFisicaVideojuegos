@@ -7,7 +7,7 @@
 #include "PxPhysicsAPI.h"
 
 
-ExplosionRigidBodySystem::ExplosionRigidBodySystem(PxRigidDynamic* p, PxPhysics* gPhysics)
+ExplosionRigidBodySystem::ExplosionRigidBodySystem(PxRigidDynamic* p, PxPhysics* gPhysics, PxScene* gScene): _gScene(gScene)
 {
 	//crear generador
     UniformalRigidBodyGen* confettiGen = new UniformalRigidBodyGen(5, 0.5, p, gPhysics);
@@ -23,14 +23,21 @@ ExplosionRigidBodySystem::ExplosionRigidBodySystem(PxRigidDynamic* p, PxPhysics*
             _rigidBodies.splice(_rigidBodies.end(), newParticles);
     }
 
+    //añadir a escena
+    for (auto r : _rigidBodies)
+    {
+        _gScene->addActor(*r);
+    }
+
     // Registro Fuerzas
     _registry = new ParticleForceRegistry();
     gravityEarth = new GravityForceGenerator();
 
+    /*
     // Registrar fuerza de gravedad a todas las partículas
     for (auto p : _rigidBodies) {
         _registry->add(p, gravityEarth);
-    }
+    }*/
 
 }
 
@@ -51,9 +58,16 @@ void ExplosionRigidBodySystem::update(double t)
             if (!newParticles.empty())
             {
                 // Registrar cada nueva partícula en el registro de fuerzas
+                /*
                 for (auto p : newParticles) {
                     _registry->add(p, gravityEarth);
+                }*/
+
+                for (auto r : newParticles)
+                {
+                    _gScene->addActor(*r);
                 }
+
                 _rigidBodies.splice(_rigidBodies.end(), newParticles);
             }
 
@@ -66,18 +80,7 @@ void ExplosionRigidBodySystem::update(double t)
         p->integrate(t);
     }*/
 
-    _rigidBodies.remove_if([this](Particula* p) {
-        if (p->getTimeVida() <= 0.0) {
-            if (p->getRenderItem()) {
-                DeregisterRenderItem(p->getRenderItem());
-                delete p->getRenderItem();
-            }
-            _registry->remove(p);
-            delete p;
-            return true;
-        }
-        return false;
-        });
+    
 }
 
 void ExplosionRigidBodySystem::addForce()

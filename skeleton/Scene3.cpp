@@ -2,6 +2,7 @@
 #include "PxShape.h"
 #include "RenderUtils.hpp"
 #include "Vector3D.h"
+#include "ExplosionRigidBodySystem.h"
 
 #include <PxPhysicsAPI.h>
 
@@ -69,6 +70,7 @@ void Scene3::init()
 	RenderItem* item;
 	item = new RenderItem(shapeSuelo, Suelo, { 0.8, 0.8,0.8,1 });
 
+	
 	// Anadir un actor dinamico
 	PxRigidDynamic* new_solid;
 	new_solid = gPhysics->createRigidDynamic(PxTransform({ 50,200,-80 }));
@@ -78,17 +80,26 @@ void Scene3::init()
 	new_solid->attachShape(*shape_ad);
 
 	PxRigidBodyExt::updateMassAndInertia(*new_solid, 0.15);
-	_gScene->addActor(*new_solid);
+	//_gScene->addActor(*new_solid);
 
 	// Pintar actor dinamico
-	RenderItem* dynamic_item;
-	dynamic_item = new RenderItem(shape_ad, new_solid, { 0.8, 0.8,0.8,1 });
+	//RenderItem* dynamic_item;
+	//dynamic_item = new RenderItem(shape_ad, new_solid, { 0.8, 0.8,0.8,1 });
+	
 
+	_expSys = new ExplosionRigidBodySystem(new_solid, gPhysics, _gScene);
+
+	// añadir
+	/*for (auto r : _expSys->getRigidBodies())
+	{
+		_gScene->addActor(*r);
+	}*/
+	
 }
 
 void Scene3::update(double t)
 {
-
+	_expSys->update(t);
 }
 
 void Scene3::clear()

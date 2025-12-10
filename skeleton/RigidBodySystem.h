@@ -9,8 +9,8 @@ class GravityForceGenerator;
 class RigidBodySystem
 {
 protected:
-	std::list<PxRigidDynamic*> _rigidBodies;
-	PxRigidDynamic* _modelP; //rigid body modelo
+	std::list<physx::PxRigidDynamic*> _rigidBodies;
+	physx::PxRigidDynamic* _modelP; //rigid body modelo
 
 	//registro de fuerzas
 	ParticleForceRegistry* _registry;
@@ -28,5 +28,7 @@ public:
 
 	void setActive(bool a) { active = a; };
 	bool isActive() { return active; };
+
+	std::list<physx::PxRigidDynamic*> getRigidBodies() { return _rigidBodies;}
 };
 
