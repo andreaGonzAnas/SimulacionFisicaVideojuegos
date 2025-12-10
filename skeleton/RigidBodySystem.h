@@ -1,6 +1,7 @@
 #pragma once
 #include <list>
 #include "PxPhysicsAPI.h"
+#include "DynamicObj.h"
 
 class ParticleForceRegistry;
 class RigidBodyGen;
@@ -9,7 +10,7 @@ class GravityForceGenerator;
 class RigidBodySystem
 {
 protected:
-	std::list<physx::PxRigidDynamic*> _rigidBodies;
+	std::list<DynamicObj*> _rigidBodies;
 	physx::PxRigidDynamic* _modelP; //rigid body modelo
 
 	//registro de fuerzas
@@ -29,6 +30,6 @@ public:
 	void setActive(bool a) { active = a; };
 	bool isActive() { return active; };
 
-	std::list<physx::PxRigidDynamic*> getRigidBodies() { return _rigidBodies;}
+	std::list<DynamicObj*> getRigidBodies() { return _rigidBodies;}
 };
 

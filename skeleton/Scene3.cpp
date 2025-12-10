@@ -110,7 +110,10 @@ void Scene3::clear()
 		DeregisterRenderItem(p);
 	}
 
-	// Eliminar rigid bodies
+	// Eliminar suelo
+
+
+	delete _expSys; _expSys = nullptr;
 
 
 }

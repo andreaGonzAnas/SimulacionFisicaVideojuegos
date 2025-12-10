@@ -7,6 +7,7 @@
 #include <list>
 
 #include "PxPhysicsAPI.h"
+#include "DynamicObj.h"
 using namespace physx;
 
 class RigidBodyGen
@@ -34,7 +35,7 @@ protected:
 public:
 	RigidBodyGen();
 	virtual ~RigidBodyGen() {};
-	virtual std::list<PxRigidDynamic*> generateP() = 0;
+	virtual std::list<DynamicObj*> generateP() = 0;
 
 	//getters y setters
 	Vector3 getInitialPos() { return desP; }

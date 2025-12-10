@@ -259,6 +259,7 @@
     <ClCompile Include="BuoyancyParticleSystem.cpp" />
     <ClCompile Include="callbacks.cpp" />
     <ClCompile Include="ConfettiParticleSystem.cpp" />
+    <ClCompile Include="DynamicObj.cpp" />
     <ClCompile Include="ExplosionRigidBodySystem.cpp" />
     <ClCompile Include="FireParticleSystem.cpp" />
     <ClCompile Include="Proyectil.cpp" />
@@ -298,6 +299,7 @@
     <ClInclude Include="callbacks.hpp" />
     <ClInclude Include="ConfettiParticleSystem.h" />
     <ClInclude Include="core.hpp" />
+    <ClInclude Include="DynamicObj.h" />
     <ClInclude Include="ExplosionRigidBodySystem.h" />
     <ClInclude Include="FireParticleSystem.h" />
     <ClInclude Include="Proyectil.h" />

@@ -18,7 +18,7 @@ ExplosionRigidBodySystem::ExplosionRigidBodySystem(PxRigidDynamic* p, PxPhysics*
 
     // generar partículas y moverlas a _rigidBodies
     if (!_generators.empty()) {
-        std::list<PxRigidDynamic*> newParticles = _generators.front()->generateP();
+        std::list<DynamicObj*> newParticles = _generators.front()->generateP();
         if (!newParticles.empty())
             _rigidBodies.splice(_rigidBodies.end(), newParticles);
     }
@@ -26,7 +26,7 @@ ExplosionRigidBodySystem::ExplosionRigidBodySystem(PxRigidDynamic* p, PxPhysics*
     //añadir a escena
     for (auto r : _rigidBodies)
     {
-        _gScene->addActor(*r);
+        _gScene->addActor(*r->getRigidDynamic());
     }
 
     // Registro Fuerzas
@@ -65,7 +65,7 @@ void ExplosionRigidBodySystem::update(double t)
 
                 for (auto r : newParticles)
                 {
-                    _gScene->addActor(*r);
+                    _gScene->addActor(*r->getRigidDynamic());
                 }
 
                 _rigidBodies.splice(_rigidBodies.end(), newParticles);
@@ -75,12 +75,24 @@ void ExplosionRigidBodySystem::update(double t)
     }
 
     // Actualizar todas las existentes
-    /*
-    for (auto p : _particles) {
-        p->integrate(t);
-    }*/
+    for (auto it = _rigidBodies.begin(); it != _rigidBodies.end(); )
+    {
+        DynamicObj* obj = *it;
+        obj->update(t);
 
-    
+        if (obj->getTimeVida() <= 0.0)
+        {
+            _gScene->removeActor(*obj->getRigidDynamic());
+            delete obj;  // llama al destructor que libera el rigid body y renderItem
+            it = _rigidBodies.erase(it);
+        }
+        else
+        {
+            ++it;
+        }
+    }
+
+
 }
 
 void ExplosionRigidBodySystem::addForce()

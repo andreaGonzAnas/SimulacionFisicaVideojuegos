@@ -41,6 +41,7 @@
     <ClCompile Include="ExplosionRigidBodySystem.cpp" />
     <ClCompile Include="RigidBodyGen.cpp" />
     <ClCompile Include="UniformalRigidBodyGen.cpp" />
+    <ClCompile Include="DynamicObj.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="core.hpp" />
@@ -83,6 +84,7 @@
     <ClInclude Include="ExplosionRigidBodySystem.h" />
     <ClInclude Include="RigidBodyGen.h" />
     <ClInclude Include="UniformalRigidBodyGen.h" />
+    <ClInclude Include="DynamicObj.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Render">

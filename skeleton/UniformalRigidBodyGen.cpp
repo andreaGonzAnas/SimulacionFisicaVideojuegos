@@ -1,4 +1,5 @@
 #include "UniformalRigidBodyGen.h"
+#include "DynamicObj.h"
 
 UniformalRigidBodyGen::UniformalRigidBodyGen(int nPart, double prob, PxRigidDynamic* p, PxPhysics* gPhysic)
 {
@@ -18,9 +19,9 @@ UniformalRigidBodyGen::~UniformalRigidBodyGen()
 {
 }
 
-std::list<physx::PxRigidDynamic*> UniformalRigidBodyGen::generateP()
+std::list<DynamicObj*> UniformalRigidBodyGen::generateP()
 {
-	std::list<physx::PxRigidDynamic*> auxList;
+	std::list<DynamicObj*> auxList;
 
 	if (!active) return auxList;
 
@@ -30,6 +31,10 @@ std::list<physx::PxRigidDynamic*> UniformalRigidBodyGen::generateP()
 	{
 		if (_u(_mt) * 0.5 + 0.5 < getProbGen())
 		{
+			// Crear objeto dinamico
+			DynamicObj* _dynamicObj = new DynamicObj({ 0,5,0 }, { 0,0,0 }, shape_ad, { 50,200,-80 }, 0.15, 2.0, gPhysics);
+			
+			/*
 			//crear rigid body dinamico
 			PxRigidDynamic* new_solid;
 			new_solid = gPhysics->createRigidDynamic(PxTransform({ 50,200,-80 }));
@@ -43,10 +48,11 @@ std::list<physx::PxRigidDynamic*> UniformalRigidBodyGen::generateP()
 			// Pintar actor dinamico
 			RenderItem* dynamic_item;
 			dynamic_item = new RenderItem(shape_ad, new_solid, { 0.8, 0.8,0.8,1 });
-			
+			*/
 
 			//clonedP->setRenderItem(new RenderItem(esferaShape, clonedP->getTransform(), newC));
-			auxList.push_back(new_solid);
+			auxList.push_back(_dynamicObj);
+
 		}
 	}
 
