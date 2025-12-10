@@ -6,6 +6,7 @@
 class RigidBodyForceRegistry;
 class RigidBodyGen;
 class GravityForceGenerator;
+class WindForceGenerator;
 
 class RigidBodySystem
 {
@@ -18,6 +19,7 @@ protected:
 	std::list<RigidBodyGen*> _generators;
 
 	GravityForceGenerator* gravityEarth;
+	WindForceGenerator* windForce;
 
 	bool active = true;
 

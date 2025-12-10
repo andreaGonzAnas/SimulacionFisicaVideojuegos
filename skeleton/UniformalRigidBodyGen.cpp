@@ -32,7 +32,7 @@ std::list<DynamicObj*> UniformalRigidBodyGen::generateP()
 		if (_u(_mt) * 0.5 + 0.5 < getProbGen())
 		{
 			// Crear objeto dinamico
-			DynamicObj* _dynamicObj = new DynamicObj({ 0,5,0 }, { 0,0,0 }, shape_ad, { 50,200,-80 }, 0.15, 2.0, gPhysics);
+			DynamicObj* _dynamicObj = new DynamicObj({ 0,5,0 }, { 0,0,0 }, shape_ad, { 50,200,-80 }, 0.15, 5.0, gPhysics);
 			
 			/*
 			//crear rigid body dinamico

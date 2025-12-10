@@ -3,6 +3,7 @@
 #include "UniformalRigidBodyGen.h"
 #include "PxRigidDynamic.h"
 #include "GravityForceGenerator.h"
+#include "WindForceGenerator.h"
 
 #include "PxPhysicsAPI.h"
 
@@ -10,7 +11,7 @@
 ExplosionRigidBodySystem::ExplosionRigidBodySystem(PxRigidDynamic* p, PxPhysics* gPhysics, PxScene* gScene): _gScene(gScene)
 {
 	//crear generador
-    UniformalRigidBodyGen* confettiGen = new UniformalRigidBodyGen(5, 0.5, p, gPhysics);
+    UniformalRigidBodyGen* confettiGen = new UniformalRigidBodyGen(1, 0.5, p, gPhysics);
 
     //setear desviaciones
 
@@ -33,11 +34,15 @@ ExplosionRigidBodySystem::ExplosionRigidBodySystem(PxRigidDynamic* p, PxPhysics*
     _registry = new RigidBodyForceRegistry();
     gravityEarth = new GravityForceGenerator();
 
-    
+    // Añadir viento tambien
+    windForce = new WindForceGenerator(Vector3(15.0, 0.0, 0.0), 0.5, 0.8);
+
     // Registrar fuerza de gravedad a todas las partículas
     for (auto p : _rigidBodies) {
         _registry->add(p->getRigidDynamic(), gravityEarth);
+        _registry->add(p->getRigidDynamic(), windForce);
     }
+
 
 }
 
@@ -60,6 +65,7 @@ void ExplosionRigidBodySystem::update(double t)
                 // Registrar cada nueva partícula en el registro de fuerzas
                 for (auto p : _rigidBodies) {
                     _registry->add(p->getRigidDynamic(), gravityEarth);
+                    _registry->add(p->getRigidDynamic(), windForce);
                 }
 
                 for (auto r : newParticles)

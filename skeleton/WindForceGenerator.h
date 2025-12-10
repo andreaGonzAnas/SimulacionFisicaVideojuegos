@@ -17,5 +17,7 @@ public:
 
     //Update
     void update(Particula* particle, double t) override;
+
+    void updateRigidBody(physx::PxRigidDynamic* body, double t) override;
 };
 
