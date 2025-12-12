@@ -165,17 +165,17 @@ bool Scene0::handleKey(unsigned char key, const PxTransform& camera)
 			_proyectilSys->setActiveWhirlWind(_windWhirlOn);
 			break;
 		}
-		case '3': //confetti
+		case 'f': //confetti
 		{
 			_confettiPartSys->setActive(!_confettiPartSys->isActive());
 			break;
 		}
-		case '4': //fuego
+		case 'e': //fuego
 		{
 			_firePartSystem->setActive(!_firePartSystem->isActive());
 			break;
 		}
-		case '5': //fuego
+		case 'a': //fuego
 		{
 			_fireworkPartSys->setActive(!_fireworkPartSys->isActive());
 			break;

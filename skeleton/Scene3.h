@@ -10,9 +10,9 @@ class Scene3 : public Scene
 private:
 	std::vector<RenderItem*> _parts;
 	ExplosionRigidBodySystem* _expSys;
-
+	PxRigidStatic* _suelo;
 public:
-	Scene3(PxPhysics* physics);
+	Scene3(PxPhysics* physics, PxScene* scene);
 	~Scene3();
 
 	// Metodos de escena

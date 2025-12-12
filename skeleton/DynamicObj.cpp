@@ -24,16 +24,7 @@ DynamicObj::DynamicObj(const physx::PxVec3& linVel, const physx::PxVec3& angVel,
 
 DynamicObj::~DynamicObj()
 {
-	if (_renderItem) {
-		DeregisterRenderItem(_renderItem);
-		delete _renderItem;
-		_renderItem = nullptr;
-	}
-
-	if (_rigidDynamic) {
-		_rigidDynamic->release();  // PhysX libera el actor
-		_rigidDynamic = nullptr;
-	}
+	
 }
 
 void DynamicObj::update(double t)

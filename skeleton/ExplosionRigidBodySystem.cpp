@@ -48,6 +48,7 @@ ExplosionRigidBodySystem::ExplosionRigidBodySystem(PxRigidDynamic* p, PxPhysics*
 
 ExplosionRigidBodySystem::~ExplosionRigidBodySystem()
 {
+    
 }
 
 void ExplosionRigidBodySystem::update(double t)

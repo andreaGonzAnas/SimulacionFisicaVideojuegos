@@ -103,11 +103,10 @@ void initPhysics(bool interactive)
 	_scene2 = new Scene2(gPhysics);
 	_scene2->set_gScene(gScene);
 
-	_scene3 = new Scene3(gPhysics);
-	_scene3->set_gScene(gScene);
+	_scene3 = new Scene3(gPhysics, gScene);
 
 	//Setear escena actual
-	_sceneManager->setScene(_scene3);
+	_sceneManager->setScene(_scene0);
 	
 
 }
@@ -160,29 +159,28 @@ void keyPress(unsigned char key, const PxTransform& camera)
 		case '0':
 		{
 			//cambiar escena
+			_scene0->set_gScene(gScene);
 			_sceneManager->setScene(new Scene0(gPhysics));
-
 			break;
 		}
 		case '1':
 		{
 			//cambiar escena
+			_scene1->set_gScene(gScene);
 			_sceneManager->setScene(new Scene1(gPhysics));
-
 			break;
 		}
 		case '2':
 		{
 			//cambiar escena
+			_scene2->set_gScene(gScene);
 			_sceneManager->setScene(new Scene2(gPhysics));
-
 			break;
 		}
 		case '3':
 		{
 			//cambiar escena
-			_sceneManager->setScene(new Scene3(gPhysics));
-
+			_sceneManager->setScene(new Scene3(gPhysics, gScene));
 			break;
 		}
 		case ' ':
