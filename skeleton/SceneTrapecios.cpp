@@ -42,12 +42,13 @@ void SceneTrapecios::init()
     createPlayer(50.0);
 
 	// ---- SUELO (CAMA ELASTICA) ----
+    createMalla();
 
 
     // ---- PARTICULA RECOGIBLE ----
     //Material
     PxMaterial* gMaterial = gPhysics->createMaterial(0.5f, 0.5f, 0.6f);
-    _springSys = new CollectibleParticleSystem(gMaterial, physx::PxVec3(50, 53.5, 35));
+    _springSys = new CollectibleParticleSystem(gMaterial, physx::PxVec3(35, 53.5, 35));
     _staticParticle = _springSys->getStaticPart();
 }
 
@@ -83,6 +84,20 @@ void SceneTrapecios::update(double t)
 
 void SceneTrapecios::clear()
 {
+    // Muelle
+    delete _springSys; _springSys = nullptr;
+    _staticParticle = nullptr;
+    
+    
+    
+    
+    
+    
+    
+    
+    
+
+
 }
 
 bool SceneTrapecios::handleKey(unsigned char key, const PxTransform& camera)
@@ -261,6 +276,7 @@ void SceneTrapecios::createPlatforms(physx::PxVec3 pos)
     // Pintar suelo
     RenderItem* item;
     item = new RenderItem(shapeSuelo, _suelo, { 0.8, 0.8,0.8,1 });
+
 }
 
 void SceneTrapecios::createPlayer(float masa)
@@ -290,6 +306,30 @@ void SceneTrapecios::createPlayer(float masa)
 
     // Guardar referencia global para controlar
     _player = player;
+}
+
+void SceneTrapecios::createMalla()
+{
+    // SUELO
+    PxRigidStatic* _suelo = gPhysics->createRigidStatic(PxTransform({ 35, 17, 35 }));
+
+    // Crear forma del suelo y asignarle el material
+    physx::PxShape* shapeSuelo = CreateShape(PxBoxGeometry(38, 0.5, 10));
+
+    PxMaterial* sueloMat = gPhysics->createMaterial(
+        0.5f,  // fricción estática
+        0.5f,  // fricción dinámica
+        0.9f   // restitución = 0 → sin rebote
+    );
+
+    shapeSuelo->setMaterials(&sueloMat, 1);
+
+    _suelo->attachShape(*shapeSuelo);
+    _gScene->addActor(*_suelo);
+
+    // Pintar suelo
+    RenderItem* item;
+    item = new RenderItem(shapeSuelo, _suelo, { 0.8, 0.8,0.8,1 });
 }
 
 void SceneTrapecios::recogerParticula()
