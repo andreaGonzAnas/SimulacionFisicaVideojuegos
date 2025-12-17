@@ -44,6 +44,7 @@
     <ClCompile Include="DynamicObj.cpp" />
     <ClCompile Include="RigidBodyForceRegistry.cpp" />
     <ClCompile Include="SceneTrapecios.cpp" />
+    <ClCompile Include="CollectibleParticleSystem.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="core.hpp" />
@@ -89,6 +90,7 @@
     <ClInclude Include="DynamicObj.h" />
     <ClInclude Include="RigidBodyForceRegistry.h" />
     <ClInclude Include="SceneTrapecios.h" />
+    <ClInclude Include="CollectibleParticleSystem.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Render">

@@ -8,7 +8,7 @@ class SpringForceGenerator;
 class SpringParticleSystem : public ParticleSystem
 {
 private:
-	std::vector<SpringForceGenerator*> _vFuerzas;
+	std::vector<SpringForceGenerator*> _generators;
 	Particula* p3;
 
 	double pushTime = 0.0; // tiempo para el empuje

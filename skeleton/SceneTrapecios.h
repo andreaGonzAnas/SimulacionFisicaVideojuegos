@@ -3,6 +3,8 @@
 #include <vector>
 
 class RenderItem;
+class CollectibleParticleSystem;
+class Particula;
 
 struct Trapecio
 {
@@ -37,6 +39,12 @@ private:
 	// PLAYER
 	PxRigidDynamic* _player;
 
+	bool _hasJumped = false;
+	bool _hasCollectedParticle = false;
+
+	CollectibleParticleSystem* _springSys;
+	Particula* _staticParticle;
+
 
 public:
 	SceneTrapecios(PxPhysics* physics, PxScene* scene);
@@ -53,5 +61,7 @@ public:
 	void createTrapecio(physx::PxVec3 pos, bool startActive = true);
 	void createPlatforms(physx::PxVec3 pos);
 	void createPlayer(float masa);
+
+	void recogerParticula();
 };
 

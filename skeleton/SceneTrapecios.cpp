@@ -4,6 +4,8 @@
 #include "Vector3D.h"
 #include <iostream>
 
+#include "CollectibleParticleSystem.h"
+
 SceneTrapecios::SceneTrapecios(PxPhysics* physics, PxScene* scene) : Scene(physics)
 {
     set_gScene(scene);
@@ -42,6 +44,11 @@ void SceneTrapecios::init()
 	// ---- SUELO (CAMA ELASTICA) ----
 
 
+    // ---- PARTICULA RECOGIBLE ----
+    //Material
+    PxMaterial* gMaterial = gPhysics->createMaterial(0.5f, 0.5f, 0.6f);
+    _springSys = new CollectibleParticleSystem(gMaterial, physx::PxVec3(58, 53.5, 35));
+    _staticParticle = _springSys->getStaticPart();
 }
 
 void SceneTrapecios::update(double t)
@@ -58,6 +65,18 @@ void SceneTrapecios::update(double t)
         t.joint->setDriveVelocity(t.motorVel);
         t.palo2->wakeUp(); // asegura que el actor dinámico esté despierto
     }
+
+    _springSys->update(t);
+
+    if (_hasCollectedParticle && _staticParticle && _player)
+    {
+        PxVec3 playerPos = _player->getGlobalPose().p;
+
+        PxVec3 offset(0.0f, 1.0f, 0.0f); // ejemplo
+        _springSys->setStaticPos(playerPos + offset);
+    }
+
+    
 }
 
 void SceneTrapecios::clear()
@@ -82,10 +101,18 @@ bool SceneTrapecios::handleKey(unsigned char key, const PxTransform& camera)
         }
         case ' ': // espacio
         {
-            _player->wakeUp();
-            float masa = _player->getMass();
-            PxVec3 impulso(-0.6f * masa, 1.0f * masa, 0.0f);
-            _player->addForce(impulso, PxForceMode::eIMPULSE);
+            if (!_hasJumped)
+            {
+                _hasJumped = true;
+                _player->wakeUp();
+                float masa = _player->getMass();
+                PxVec3 impulso(-4.0f * masa, 15.0f * masa, 0.0f);
+                _player->addForce(impulso, PxForceMode::eIMPULSE);
+            }
+        }
+        case 'p': // espacio
+        {
+            recogerParticula();
         }
 
         default: return false;
@@ -143,7 +170,7 @@ void SceneTrapecios::createTrapecio(physx::PxVec3 pos, bool startActive)
         PxTransform(pos)
     );
 
-    PxShape* shape = CreateShape(PxBoxGeometry(1.0f, 1.0f, 1.0f));
+    physx::PxShape* shape = CreateShape(PxBoxGeometry(1.0f, 1.0f, 1.0f));
     palo1->attachShape(*shape);
 
     RenderItem* item = new RenderItem(shape, palo1, { 1.0f, 0.1f, 0.1f, 1.0f });
@@ -159,7 +186,7 @@ void SceneTrapecios::createTrapecio(physx::PxVec3 pos, bool startActive)
         PxTransform(posMovil)
     );
 
-    PxShape* shape2 = CreateShape(PxBoxGeometry(0.5f, halfHeight, 0.5f));
+    physx::PxShape* shape2 = CreateShape(PxBoxGeometry(0.5f, halfHeight, 0.5f));
     palo2->attachShape(*shape2);
 
     RenderItem* item2 = new RenderItem(shape2, palo2, { 0.0f, 0.1f, 0.8f, 1.0f });
@@ -241,7 +268,7 @@ void SceneTrapecios::createPlayer(float masa)
     PxRigidDynamic* player = gPhysics->createRigidDynamic(PxTransform(playerPos));
 
     // Crear forma (caja o esfera)
-    PxShape* playerShape = CreateShape(PxBoxGeometry(1.0f, 2.0f, 1.0f));
+    physx::PxShape* playerShape = CreateShape(PxBoxGeometry(1.0f, 2.0f, 1.0f));
     player->attachShape(*playerShape);
 
     // Masa y centro de masa
@@ -259,6 +286,11 @@ void SceneTrapecios::createPlayer(float masa)
 
     // Guardar referencia global para controlar
     _player = player;
+}
+
+void SceneTrapecios::recogerParticula()
+{
+    _hasCollectedParticle = true;
 }
 
 

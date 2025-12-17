@@ -258,6 +258,7 @@
     <ClCompile Include="BuoyancyForceGenerator.cpp" />
     <ClCompile Include="BuoyancyParticleSystem.cpp" />
     <ClCompile Include="callbacks.cpp" />
+    <ClCompile Include="CollectibleParticleSystem.cpp" />
     <ClCompile Include="ConfettiParticleSystem.cpp" />
     <ClCompile Include="DynamicObj.cpp" />
     <ClCompile Include="ExplosionRigidBodySystem.cpp" />
@@ -299,6 +300,7 @@
     <ClInclude Include="BuoyancyForceGenerator.h" />
     <ClInclude Include="BuoyancyParticleSystem.h" />
     <ClInclude Include="callbacks.hpp" />
+    <ClInclude Include="CollectibleParticleSystem.h" />
     <ClInclude Include="ConfettiParticleSystem.h" />
     <ClInclude Include="core.hpp" />
     <ClInclude Include="DynamicObj.h" />

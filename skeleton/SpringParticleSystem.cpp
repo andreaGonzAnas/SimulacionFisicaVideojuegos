@@ -46,8 +46,8 @@ SpringParticleSystem::SpringParticleSystem(PxMaterial* gMaterial)
 	SpringForceGenerator* f4 = new SpringForceGenerator(50, 1, p3); // p.mov (p3) + p.mov (p4)
 	f3->setActive(true);
 	f4->setActive(true);
-	_vFuerzas.push_back(f3);
-	_vFuerzas.push_back(f4);
+	_generators.push_back(f3);
+	_generators.push_back(f4);
 
 	//añadir al registro
 	_registry->add(p3, f3);
@@ -90,8 +90,8 @@ SpringParticleSystem::SpringParticleSystem(PxMaterial* gMaterial)
 	SpringForceGenerator* f1 = new SpringForceGenerator(50, 1, p0);
 	f0->setActive(true);
 	f1->setActive(true);
-	_vFuerzas.push_back(f0);
-	_vFuerzas.push_back(f1);
+	_generators.push_back(f0);
+	_generators.push_back(f1);
 
 	//añadir al registro
 	_registry->add(p0, f0);
@@ -103,9 +103,9 @@ SpringParticleSystem::SpringParticleSystem(PxMaterial* gMaterial)
 
 SpringParticleSystem::~SpringParticleSystem()
 {
-	for (auto f : _vFuerzas)
+	for (auto f : _generators)
 		delete f;
-	_vFuerzas.clear();
+	_generators.clear();
 
 	for (auto p : _particles)
 	{
@@ -142,7 +142,7 @@ void SpringParticleSystem::update(double t)
 void SpringParticleSystem::setK(double cant)
 {
 	// cambiar el k de todos los sistemas de muelles
-	for (auto& f : _vFuerzas)
+	for (auto& f : _generators)
 	{
 		f->setK(f->getK() + cant);
 	}
