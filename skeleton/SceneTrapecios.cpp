@@ -82,7 +82,10 @@ bool SceneTrapecios::handleKey(unsigned char key, const PxTransform& camera)
         }
         case ' ': // espacio
         {
-            
+            _player->wakeUp();
+            float masa = _player->getMass();
+            PxVec3 impulso(-0.6f * masa, 1.0f * masa, 0.0f);
+            _player->addForce(impulso, PxForceMode::eIMPULSE);
         }
 
         default: return false;
@@ -232,7 +235,7 @@ void SceneTrapecios::createPlatforms(physx::PxVec3 pos)
 void SceneTrapecios::createPlayer(float masa)
 {
     // Posición inicial del jugador en el suelo
-    PxVec3 playerPos(62, 50.5, 35);
+    PxVec3 playerPos(62, 40.5, 35);
 
     // Crear actor dinámico
     PxRigidDynamic* player = gPhysics->createRigidDynamic(PxTransform(playerPos));
