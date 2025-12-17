@@ -45,6 +45,7 @@
     <ClCompile Include="RigidBodyForceRegistry.cpp" />
     <ClCompile Include="SceneTrapecios.cpp" />
     <ClCompile Include="CollectibleParticleSystem.cpp" />
+    <ClCompile Include="MalabaresScene.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="core.hpp" />
@@ -91,6 +92,7 @@
     <ClInclude Include="RigidBodyForceRegistry.h" />
     <ClInclude Include="SceneTrapecios.h" />
     <ClInclude Include="CollectibleParticleSystem.h" />
+    <ClInclude Include="MalabaresScene.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Render">

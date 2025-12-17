@@ -45,6 +45,10 @@ private:
 	CollectibleParticleSystem* _springSys;
 	Particula* _staticParticle;
 
+	// ESTATICOS
+	std::vector<PxRigidStatic*> _statics;
+	std::vector<physx::PxRigidDynamic*> _rigids;
+
 
 public:
 	SceneTrapecios(PxPhysics* physics, PxScene* scene);

@@ -84,19 +84,63 @@ void SceneTrapecios::update(double t)
 
 void SceneTrapecios::clear()
 {
-    // Muelle
-    delete _springSys; _springSys = nullptr;
-    _staticParticle = nullptr;
-    
-    
-    
-    
-    
-    
-    
-    
-    
+    //// Muelle
+    //delete _springSys; _springSys = nullptr;
+    //_staticParticle = nullptr;
+    //
+    //// eliminar statics
 
+    //for (auto* suelo : _statics)
+    //{
+    //    if (!suelo) continue;
+
+    //    // Quitar del escenario
+    //    _gScene->removeActor(*suelo);
+
+    //    // Liberar shapes
+    //    PxU32 nShapes = suelo->getNbShapes();
+    //    std::vector<physx::PxShape*> shapes(nShapes);
+    //    suelo->getShapes(shapes.data(), nShapes);
+
+    //    for (physx::PxShape* shape : shapes)
+    //    {
+    //        if (shape) shape->release();
+    //    }
+
+    //    // Liberar el actor
+    //    suelo->release();
+    //}
+
+    //// Vaciar el vector y evitar punteros colgantes
+    //_statics.clear();
+    //
+    ////Eliminar rigidBodies
+    //for (auto r : _rigids)
+    //{
+    //    DeregisterRenderItem(r->getRenderItem());
+
+    //    // Eliminar suelo
+    //    if (r->getRigidDynamic()) {
+    //        _gScene->removeActor(*r->getRigidDynamic());
+    //    }
+
+    //    if (r->getRigidDynamic()) {
+    //        PxU32 nShapes = r->getRigidDynamic()->getNbShapes();
+    //        PxShape* shapes[8];
+    //        r->getRigidDynamic()->getShapes(shapes, nShapes);
+
+    //        for (PxU32 i = 0; i < nShapes; i++) {
+    //            shapes[i]->release();
+    //        }
+    //    }
+
+    //    // 3. Liberar el actor estático
+    //    if (r->getRigidDynamic()) {
+    //        r->getRigidDynamic()->release();
+    //        delete r;
+    //    }
+    //}
+    
 
 }
 
@@ -195,6 +239,8 @@ void SceneTrapecios::createTrapecio(physx::PxVec3 pos, bool startActive)
     RenderItem* item = new RenderItem(shape, palo1, { 1.0f, 0.1f, 0.1f, 1.0f });
     _gScene->addActor(*palo1);
 
+    _statics.push_back(palo1);
+
     // =========================
     // PALO MÓVIL (PÉNDULO CORTO)
     // =========================
@@ -210,6 +256,8 @@ void SceneTrapecios::createTrapecio(physx::PxVec3 pos, bool startActive)
 
     RenderItem* item2 = new RenderItem(shape2, palo2, { 0.0f, 0.1f, 0.8f, 1.0f });
     _gScene->addActor(*palo2);
+
+    _rigids.push_back(palo2);
 
     // =========================
     // JOINT REVOLUTE (EJE X)
@@ -277,6 +325,7 @@ void SceneTrapecios::createPlatforms(physx::PxVec3 pos)
     RenderItem* item;
     item = new RenderItem(shapeSuelo, _suelo, { 0.8, 0.8,0.8,1 });
 
+    _statics.push_back(_suelo);
 }
 
 void SceneTrapecios::createPlayer(float masa)
@@ -306,6 +355,8 @@ void SceneTrapecios::createPlayer(float masa)
 
     // Guardar referencia global para controlar
     _player = player;
+
+    _rigids.push_back(player);
 }
 
 void SceneTrapecios::createMalla()
@@ -317,9 +368,9 @@ void SceneTrapecios::createMalla()
     physx::PxShape* shapeSuelo = CreateShape(PxBoxGeometry(38, 0.5, 10));
 
     PxMaterial* sueloMat = gPhysics->createMaterial(
-        0.5f,  // fricción estática
-        0.5f,  // fricción dinámica
-        0.9f   // restitución = 0 → sin rebote
+        0.2f,  // fricción estática
+        0.2f,  // fricción dinámica
+        0.8f   // restitución = 0 → sin rebote
     );
 
     shapeSuelo->setMaterials(&sueloMat, 1);
@@ -330,6 +381,8 @@ void SceneTrapecios::createMalla()
     // Pintar suelo
     RenderItem* item;
     item = new RenderItem(shapeSuelo, _suelo, { 0.8, 0.8,0.8,1 });
+
+    _statics.push_back(_suelo);
 }
 
 void SceneTrapecios::recogerParticula()
