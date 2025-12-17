@@ -1,4 +1,4 @@
-#include "SceneTrapecios.h"
+ï»¿#include "SceneTrapecios.h"
 #include "PxShape.h"
 #include "RenderUtils.hpp"
 #include "Vector3D.h"
@@ -32,12 +32,12 @@ void SceneTrapecios::init()
 
     createTrapecio(PxVec3(20, 53.5, 35), true);
 
-    // ---- SUELOS ----
+    // ---- PLATAFORMAS ----
     createPlatforms(PxVec3(65, 33.5, 35));
     createPlatforms(PxVec3(5, 33.5, 35));
 
 	// ---- PLAYER ----
-
+    createPlayer(50.0);
 
 	// ---- SUELO (CAMA ELASTICA) ----
 
@@ -56,7 +56,7 @@ void SceneTrapecios::update(double t)
         else if (angle <= -PxPi / 4) t.motorVel = fabs(t.motorVel);
 
         t.joint->setDriveVelocity(t.motorVel);
-        t.palo2->wakeUp(); // asegura que el actor dinámico esté despierto
+        t.palo2->wakeUp(); // asegura que el actor dinÃ¡mico estÃ© despierto
     }
 }
 
@@ -72,13 +72,17 @@ bool SceneTrapecios::handleKey(unsigned char key, const PxTransform& camera)
         {
             if (!_trapecios.empty())
             {
-                _trapecios[0].active = true;                // activa la lógica del motor
+                _trapecios[0].active = true;                // activa la lÃ³gica del motor
                 _trapecios[0].motorVel = 1.0f;              // asegura velocidad inicial positiva
-                _trapecios[0].palo2->wakeUp();              // despierta el actor dinámico
+                _trapecios[0].palo2->wakeUp();              // despierta el actor dinÃ¡mico
                 _trapecios[0].joint->setDriveVelocity(_trapecios[0].motorVel); // aplica velocidad al motor
             }
 
             break;
+        }
+        case ' ': // espacio
+        {
+            
         }
 
         default: return false;
@@ -143,9 +147,9 @@ void SceneTrapecios::createTrapecio(physx::PxVec3 pos, bool startActive)
     _gScene->addActor(*palo1);
 
     // =========================
-    // PALO MÓVIL (PÉNDULO CORTO)
+    // PALO MÃ“VIL (PÃ‰NDULO CORTO)
     // =========================
-    float halfHeight = 7.5f; // altura del péndulo
+    float halfHeight = 7.5f; // altura del pÃ©ndulo
     PxVec3 posMovil = pos + PxVec3(0.0f, -(halfHeight + 1.0f), 0.0f);
 
     PxRigidDynamic* palo2 = gPhysics->createRigidDynamic(
@@ -171,7 +175,7 @@ void SceneTrapecios::createTrapecio(physx::PxVec3 pos, bool startActive)
     art->setRevoluteJointFlag(PxRevoluteJointFlag::eDRIVE_ENABLED, true); // motor habilitado
 
     // =========================
-    // LÍMITES ANGULARES
+    // LÃMITES ANGULARES
     // =========================
     art->setRevoluteJointFlag(PxRevoluteJointFlag::eLIMIT_ENABLED, true);
     art->setLimit(PxJointAngularLimitPair(-PxPi / 4, PxPi / 4, 0.01f));
@@ -186,7 +190,7 @@ void SceneTrapecios::createTrapecio(physx::PxVec3 pos, bool startActive)
     // =========================
     // CREAR EL STRUCT TRAPECIO
     // =========================
-    _trapecios.emplace_back();          // construye un Trapecio vacío
+    _trapecios.emplace_back();          // construye un Trapecio vacÃ­o
 
     _trapecios.back().palo1 = palo1;
     _trapecios.back().palo2 = palo2;
@@ -201,11 +205,19 @@ void SceneTrapecios::createPlatforms(physx::PxVec3 pos)
     // SUELO
     PxRigidStatic* _suelo = gPhysics->createRigidStatic(PxTransform(pos));
 
-    // Crear material del suelo: poca fricción, muy elástico
-    physx::PxMaterial* sueloMat = gPhysics->createMaterial(0.0f, 0.0f, 0.9f); // friction: 0, restitution: 0.9
+    // Crear material del suelo: poca fricciÃ³n, muy elÃ¡stico
+    //physx::PxMaterial* sueloMat = gPhysics->createMaterial(0.0f, 0.0f, 0.9f); // friction: 0, restitution: 0.9
 
     // Crear forma del suelo y asignarle el material
     physx::PxShape* shapeSuelo = CreateShape(PxBoxGeometry(5, 0.5, 2));
+
+    PxMaterial* sueloMat = gPhysics->createMaterial(
+        0.5f,  // fricciÃ³n estÃ¡tica
+        0.5f,  // fricciÃ³n dinÃ¡mica
+        0.0f   // restituciÃ³n = 0 â†’ sin rebote
+    );
+
+
     shapeSuelo->setMaterials(&sueloMat, 1);
 
     //physx::PxShape* shapeSuelo = CreateShape(PxBoxGeometry(100, 0.1, 100));
@@ -216,6 +228,36 @@ void SceneTrapecios::createPlatforms(physx::PxVec3 pos)
     RenderItem* item;
     item = new RenderItem(shapeSuelo, _suelo, { 0.8, 0.8,0.8,1 });
 }
+
+void SceneTrapecios::createPlayer(float masa)
+{
+    // PosiciÃ³n inicial del jugador en el suelo
+    PxVec3 playerPos(62, 50.5, 35);
+
+    // Crear actor dinÃ¡mico
+    PxRigidDynamic* player = gPhysics->createRigidDynamic(PxTransform(playerPos));
+
+    // Crear forma (caja o esfera)
+    PxShape* playerShape = CreateShape(PxBoxGeometry(1.0f, 2.0f, 1.0f));
+    player->attachShape(*playerShape);
+
+    // Masa y centro de masa
+    PxRigidBodyExt::updateMassAndInertia(*player, masa);
+
+    // AÃ±adir al escenario
+    _gScene->addActor(*player);
+
+    // Crear render item para que se vea
+    RenderItem* rPlayer = new RenderItem(playerShape, player, { 0.8f, 0.2f, 0.2f, 1.0f });
+    RegisterRenderItem(rPlayer);
+
+    // Guardar en vector de render o miembro de la clase si lo necesitas
+    _scenary.push_back(rPlayer);
+
+    // Guardar referencia global para controlar
+    _player = player;
+}
+
 
 
 

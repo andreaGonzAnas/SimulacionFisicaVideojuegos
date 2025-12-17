@@ -34,6 +34,9 @@ private:
 	// TRAPECIOS
 	std::vector<Trapecio> _trapecios;
 
+	// PLAYER
+	PxRigidDynamic* _player;
+
 
 public:
 	SceneTrapecios(PxPhysics* physics, PxScene* scene);
@@ -49,5 +52,6 @@ public:
 	void createDeco();
 	void createTrapecio(physx::PxVec3 pos, bool startActive = true);
 	void createPlatforms(physx::PxVec3 pos);
+	void createPlayer(float masa);
 };
 
