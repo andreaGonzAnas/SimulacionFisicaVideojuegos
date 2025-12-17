@@ -28,14 +28,15 @@ void MalabaresScene::init()
     cam->setHumanCannonMode(true);
 
     // ---- HANDS ----
-    _leftHand = createHand(PxVec3(15, 20, 20));
-    _rightHand = createHand(PxVec3(55, 20, 20));
-
+    _rightHand = createHand(PxVec3(15, 20, 20));
+    _leftHand = createHand(PxVec3(55, 20, 20));
+    
 
 }
 
 void MalabaresScene::update(double t)
 {
+
 }
 
 void MalabaresScene::clear()
@@ -44,32 +45,70 @@ void MalabaresScene::clear()
 
 bool MalabaresScene::handleKey(unsigned char key, const PxTransform& camera)
 {
-    return false;
+    PxTransform currentPoseL = _leftHand->getGlobalPose();
+    PxTransform currentPoseR = _rightHand->getGlobalPose();
+
+    switch (key)
+    {
+        // MANO IZQUIERDA MOVIMIENTO
+        case 'h': currentPoseL.p.x -= 0.5f; break;
+        case 'f': currentPoseL.p.x += 0.5f; break;
+
+            // MANO DERECHA MOVIMIENTO
+        case 'j': currentPoseR.p.x -= 0.5f; break;
+        case 'l': currentPoseR.p.x += 0.5f; break;
+
+            // MANO IZQUIERDA ROTACION Z
+        case 't': // girar positivo
+            _leftHandAngleZ += DELTA_ANGLE;
+            if (_leftHandAngleZ > MAX_ANGLE) _leftHandAngleZ = MAX_ANGLE;
+            break;
+        case 'g': // girar negativo
+            _leftHandAngleZ -= DELTA_ANGLE;
+            if (_leftHandAngleZ < MIN_ANGLE) _leftHandAngleZ = MIN_ANGLE;
+            break;
+
+            // MANO DERECHA ROTACION Z
+        case 'i': _rightHandAngleZ += DELTA_ANGLE;
+            if (_rightHandAngleZ > MAX_ANGLE) _rightHandAngleZ = MAX_ANGLE;
+            break;
+        case 'k': _rightHandAngleZ -= DELTA_ANGLE;
+            if (_rightHandAngleZ < MIN_ANGLE) _rightHandAngleZ = MIN_ANGLE;
+            break;
+
+        default: return false;
+    }
+
+    // Aplicar rotaciones
+    PxQuat rotL(_leftHandAngleZ, PxVec3(0, 0, 1));
+    currentPoseL.q = rotL;
+    _leftHand->setKinematicTarget(currentPoseL);
+
+    PxQuat rotR(_rightHandAngleZ, PxVec3(0, 0, 1));
+    currentPoseR.q = rotR;
+    _rightHand->setKinematicTarget(currentPoseR);
+
+    return true;
 }
 
-PxRigidStatic* MalabaresScene::createHand(physx::PxVec3 pos)
+PxRigidDynamic* MalabaresScene::createHand(physx::PxVec3 pos)
 {
-    // SUELO
-    PxRigidStatic* _suelo = gPhysics->createRigidStatic(PxTransform(pos));
+    // Crear actor dinámico
+    PxRigidDynamic* hand = gPhysics->createRigidDynamic(PxTransform(pos));
 
-    // Crear forma del suelo y asignarle el material
-    physx::PxShape* shapeSuelo = CreateShape(PxBoxGeometry(6, 0.5, 4));
+    // Crear forma (caja o esfera)
+    PxShape* handShape = CreateShape(PxBoxGeometry(5, 0.5, 2));
+    hand->attachShape(*handShape);
 
-    PxMaterial* sueloMat = gPhysics->createMaterial(
-        0.2f,  // fricción estática
-        0.2f,  // fricción dinámica
-        0.5f   // restitución = 0 → sin rebote
-    );
+    // Poner la mano como kinemática para control manual
+    hand->setRigidBodyFlag(PxRigidBodyFlag::eKINEMATIC, true);
 
-    shapeSuelo->setMaterials(&sueloMat, 1);
+    // Agregar al escenario
+    _gScene->addActor(*hand);
 
-    _suelo->attachShape(*shapeSuelo);
-    _gScene->addActor(*_suelo);
+    // Crear RenderItem para visualizar la mano
+    RenderItem* rHand = new RenderItem(handShape, hand, Vector4(1.0f, 0.85f, 0.7f, 1.0f)); // color piel aproximado
+    RegisterRenderItem(rHand);
 
-    // Pintar suelo
-    RenderItem* item;
-    item = new RenderItem(shapeSuelo, _suelo, { 0.6f, 0.4f, 0.3f, 1.0f }
-    );
-
-    return _suelo;
+    return hand;
 }
