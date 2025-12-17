@@ -28,8 +28,8 @@ void MalabaresScene::init()
     cam->setHumanCannonMode(true);
 
     // ---- HANDS ----
-    _leftHand = createHand(PxVec3(10, 20, 35));
-    _rightHand = createHand(PxVec3(60, 20, 35));
+    _leftHand = createHand(PxVec3(15, 20, 20));
+    _rightHand = createHand(PxVec3(55, 20, 20));
 
 
 }
@@ -53,7 +53,7 @@ PxRigidStatic* MalabaresScene::createHand(physx::PxVec3 pos)
     PxRigidStatic* _suelo = gPhysics->createRigidStatic(PxTransform(pos));
 
     // Crear forma del suelo y asignarle el material
-    physx::PxShape* shapeSuelo = CreateShape(PxBoxGeometry(5, 0.5, 2));
+    physx::PxShape* shapeSuelo = CreateShape(PxBoxGeometry(6, 0.5, 4));
 
     PxMaterial* sueloMat = gPhysics->createMaterial(
         0.2f,  // fricción estática
