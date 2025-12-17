@@ -47,7 +47,7 @@ void SceneTrapecios::init()
     // ---- PARTICULA RECOGIBLE ----
     //Material
     PxMaterial* gMaterial = gPhysics->createMaterial(0.5f, 0.5f, 0.6f);
-    _springSys = new CollectibleParticleSystem(gMaterial, physx::PxVec3(58, 53.5, 35));
+    _springSys = new CollectibleParticleSystem(gMaterial, physx::PxVec3(50, 53.5, 35));
     _staticParticle = _springSys->getStaticPart();
 }
 
@@ -66,7 +66,9 @@ void SceneTrapecios::update(double t)
         t.palo2->wakeUp(); // asegura que el actor dinámico esté despierto
     }
 
-    _springSys->update(t);
+    
+
+    checkPlayerCollectible();
 
     if (_hasCollectedParticle && _staticParticle && _player)
     {
@@ -76,7 +78,7 @@ void SceneTrapecios::update(double t)
         _springSys->setStaticPos(playerPos + offset);
     }
 
-    
+    _springSys->update(t);
 }
 
 void SceneTrapecios::clear()
@@ -109,10 +111,12 @@ bool SceneTrapecios::handleKey(unsigned char key, const PxTransform& camera)
                 PxVec3 impulso(-4.0f * masa, 15.0f * masa, 0.0f);
                 _player->addForce(impulso, PxForceMode::eIMPULSE);
             }
+            break;
         }
         case 'p': // espacio
         {
             recogerParticula();
+            break;
         }
 
         default: return false;
@@ -291,6 +295,28 @@ void SceneTrapecios::createPlayer(float masa)
 void SceneTrapecios::recogerParticula()
 {
     _hasCollectedParticle = true;
+}
+
+void SceneTrapecios::checkPlayerCollectible()
+{
+    if (!_player || !_springSys->getMovingPart() || _hasCollectedParticle)
+        return;
+
+    // Obtener posiciones
+    PxVec3 playerPos = _player->getGlobalPose().p;
+    PxVec3 particlePos = _springSys->getMovingPart()->getTr()->p; // o getPos()
+
+    // Definir radio de colisión
+    float playerRadius = 3.0f;
+    float particleRadius = 2.0f;
+
+    float distSq = (playerPos - particlePos).magnitudeSquared();
+
+    if (distSq <= (playerRadius + particleRadius) * (playerRadius + particleRadius))
+    {
+        // Colisión detectada
+        recogerParticula();
+    }
 }
 
 

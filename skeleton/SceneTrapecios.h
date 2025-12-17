@@ -63,5 +63,6 @@ public:
 	void createPlayer(float masa);
 
 	void recogerParticula();
+	void checkPlayerCollectible();
 };
 
