@@ -48,5 +48,6 @@ public:
 
 	void createDeco();
 	void createTrapecio(physx::PxVec3 pos, bool startActive = true);
+	void createPlatforms(physx::PxVec3 pos);
 };
 

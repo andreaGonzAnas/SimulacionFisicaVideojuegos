@@ -32,8 +32,9 @@ void SceneTrapecios::init()
 
     createTrapecio(PxVec3(20, 53.5, 35), true);
 
-    // el primero empieza parado
-
+    // ---- SUELOS ----
+    createPlatforms(PxVec3(65, 33.5, 35));
+    createPlatforms(PxVec3(5, 33.5, 35));
 
 	// ---- PLAYER ----
 
@@ -193,6 +194,27 @@ void SceneTrapecios::createTrapecio(physx::PxVec3 pos, bool startActive)
     _trapecios.back().motorVel = initialMotorVel;
     _trapecios.back().active = startActive;
 
+}
+
+void SceneTrapecios::createPlatforms(physx::PxVec3 pos)
+{
+    // SUELO
+    PxRigidStatic* _suelo = gPhysics->createRigidStatic(PxTransform(pos));
+
+    // Crear material del suelo: poca fricción, muy elástico
+    physx::PxMaterial* sueloMat = gPhysics->createMaterial(0.0f, 0.0f, 0.9f); // friction: 0, restitution: 0.9
+
+    // Crear forma del suelo y asignarle el material
+    physx::PxShape* shapeSuelo = CreateShape(PxBoxGeometry(5, 0.5, 2));
+    shapeSuelo->setMaterials(&sueloMat, 1);
+
+    //physx::PxShape* shapeSuelo = CreateShape(PxBoxGeometry(100, 0.1, 100));
+    _suelo->attachShape(*shapeSuelo);
+    _gScene->addActor(*_suelo);
+
+    // Pintar suelo
+    RenderItem* item;
+    item = new RenderItem(shapeSuelo, _suelo, { 0.8, 0.8,0.8,1 });
 }
 
 
