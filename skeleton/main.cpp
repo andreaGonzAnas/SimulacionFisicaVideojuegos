@@ -24,6 +24,7 @@
 #include "Scene1.h"
 #include "Scene2.h"
 #include "Scene3.h"
+#include "SceneTrapecios.h"
 
 
 #include <iostream>
@@ -61,6 +62,7 @@ Scene* _scene0;
 Scene* _scene1;
 Scene* _scene2;
 Scene* _scene3;
+SceneTrapecios* _sceneTrapecios;
 
 
 // Initialize physics engine
@@ -105,8 +107,10 @@ void initPhysics(bool interactive)
 
 	_scene3 = new Scene3(gPhysics, gScene);
 
+	_sceneTrapecios = new SceneTrapecios(gPhysics, gScene);
+
 	//Setear escena actual
-	_sceneManager->setScene(_scene0);
+	_sceneManager->setScene(_sceneTrapecios);
 	
 
 }
@@ -181,6 +185,12 @@ void keyPress(unsigned char key, const PxTransform& camera)
 		{
 			//cambiar escena
 			_sceneManager->setScene(new Scene3(gPhysics, gScene));
+			break;
+		}
+		case '4':
+		{
+			//cambiar escena
+			_sceneManager->setScene(new SceneTrapecios(gPhysics, gScene));
 			break;
 		}
 		case ' ':

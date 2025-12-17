@@ -273,6 +273,7 @@
     <ClCompile Include="Scene2.cpp" />
     <ClCompile Include="Scene3.cpp" />
     <ClCompile Include="SceneManager.cpp" />
+    <ClCompile Include="SceneTrapecios.cpp" />
     <ClCompile Include="SpringForceGenerator.cpp" />
     <ClCompile Include="SpringParticleSystem.cpp" />
     <ClCompile Include="UniformalRigidBodyGen.cpp" />
@@ -314,6 +315,7 @@
     <ClInclude Include="Scene2.h" />
     <ClInclude Include="Scene3.h" />
     <ClInclude Include="SceneManager.h" />
+    <ClInclude Include="SceneTrapecios.h" />
     <ClInclude Include="SpringForceGenerator.h" />
     <ClInclude Include="SpringParticleSystem.h" />
     <ClInclude Include="UniformalRigidBodyGen.h" />

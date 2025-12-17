@@ -43,6 +43,7 @@
     <ClCompile Include="UniformalRigidBodyGen.cpp" />
     <ClCompile Include="DynamicObj.cpp" />
     <ClCompile Include="RigidBodyForceRegistry.cpp" />
+    <ClCompile Include="SceneTrapecios.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="core.hpp" />
@@ -87,6 +88,7 @@
     <ClInclude Include="UniformalRigidBodyGen.h" />
     <ClInclude Include="DynamicObj.h" />
     <ClInclude Include="RigidBodyForceRegistry.h" />
+    <ClInclude Include="SceneTrapecios.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Render">
