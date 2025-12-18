@@ -52,7 +52,23 @@ extern std::string display_rossa;
 extern std::string display_left;
 extern std::string display_right;
 extern std::string display_score;
-extern bool isGame;
+
+extern std::string display_titleT;
+extern std::string display_instr1;
+extern std::string display_instr2;
+extern std::string display_instr3;
+extern std::string display_instr4;
+
+extern std::string display_win;
+extern std::string display_reiniciarWin;
+
+extern std::string display_lose;
+extern std::string display_reiniciarLose;
+
+extern bool _personas_balas;
+extern bool _victory;
+extern bool _trapeciosText;
+extern bool _lose;
 
 namespace Snippets
 {

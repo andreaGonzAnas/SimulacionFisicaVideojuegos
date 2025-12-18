@@ -33,12 +33,33 @@
 #include <thread>
 #include <cmath> 
 
+// Textos minijuego personas balas
 std::string display_title = "¡DISPARA AL HOMBRE BALA!";
 std::string display_rossa = "PULSA R Y DISPARA A ROSSA (PRIMERA PERSONA BALA DE LA HISTORIA)";
 std::string display_left = "PULSA C Y DISPARA A CALEB";
 std::string display_right = "PULSA T Y DISPARA A TIM";
 std::string display_score = "PUNTUACION: 0";
-bool isGame = false;
+
+// Textos minijuego trapecios
+std::string display_titleT = "¡DALE UNA OPORTUNIDAD A LOS TRAPECIOS!";
+std::string display_instr1 = "SALTA POR LOS TRAPECIOS, RECOGE LA PARTICULA COLGANDO";
+std::string display_instr2 = "Y LLEGA A LA PLATAFORMA FINAL";
+std::string display_instr3 = "PULSA T PARA INICIAR LA PARTIDA";
+std::string display_instr4 = "PULSA ESPACIO PARA SALTAR";
+
+// Victoria
+std::string display_win = "¡VICTORIA!";
+std::string display_reiniciarWin = "Volviendo al menu en 3 segundos...";
+
+// GameOver
+std::string display_lose = "¡TE CAISTE!";
+std::string display_reiniciarLose = "Reiniciando en 3 segundos...";
+
+
+bool _personas_balas = false;
+bool _victory = false;
+bool _lose = false;
+bool _trapeciosText = false;
 
 using namespace physx;
 

@@ -10,7 +10,8 @@
 #include "ConfettiParticleSystem.h"
 
 extern std::string display_score;
-extern bool isGame;
+extern bool _personas_balas;
+extern bool _victory;
 
 Scene2::Scene2(PxPhysics* physics): Scene(physics), _hasPassedFire(false)
 {
@@ -24,7 +25,7 @@ Scene2::~Scene2()
 
 void Scene2::init()
 {
-    isGame = true;
+    _personas_balas = true;
     
     // ---- PAREDES ----
     createWalls();
@@ -220,7 +221,8 @@ void Scene2::clear()
     cam->setTransform(_initPosCamera);
     cam->setDir(_initDirCamera);
     cam->setHumanCannonMode(false);
-    isGame = false;
+    _personas_balas = false;
+    _victory = false;
 }
 
 bool Scene2::handleKey(unsigned char key, const PxTransform& camera)
@@ -361,6 +363,9 @@ void Scene2::startCelebration()
     {
         a->setActiveWind(false);
     }
+
+    // activar texto victoria
+    _victory = true;
 }
 
 void Scene2::createNewFirework()

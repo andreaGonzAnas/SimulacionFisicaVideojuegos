@@ -2,6 +2,7 @@
 #include "Scene.h"
 #include <vector>
 
+
 class RenderItem;
 class CollectibleParticleSystem;
 class Particula;

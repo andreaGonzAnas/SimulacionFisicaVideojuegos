@@ -287,7 +287,7 @@ void startRender(const PxVec3& cameraEye, const PxVec3& cameraDir, PxReal clipNe
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	// Display text
-	if (isGame)
+	if (_personas_balas)
 	{
 		glColor4f(1.0f, 0.2f, 0.2f, 1.0f);
 		drawText(display_title, 10, 480);
@@ -303,6 +303,38 @@ void startRender(const PxVec3& cameraEye, const PxVec3& cameraDir, PxReal clipNe
 
 		glColor4f(1.0f, 0.2f, 0.2f, 1.0f);
 		drawText(display_score, 10, 360);
+	}
+
+	if (_trapeciosText)
+	{
+		glColor4f(1.0f, 0.2f, 0.2f, 1.0f);
+		drawText(display_titleT, 10, 480);
+
+		glColor4f(1.0f, 0.2f, 0.2f, 1.0f);
+		drawText(display_instr1, 10, 450);
+
+		glColor4f(1.0f, 0.2f, 0.2f, 1.0f);
+		drawText(display_instr2, 10, 420);
+
+		glColor4f(1.0f, 0.2f, 0.2f, 1.0f);
+		drawText(display_instr3, 10, 390);
+
+		glColor4f(1.0f, 0.2f, 0.2f, 1.0f);
+		drawText(display_instr4, 10, 360);
+	}
+
+	if (_victory)
+	{
+		glColor4f(0.0f, 1.0f, 0.0f, 1.0f);
+		drawText(display_win, 250, 390);
+		drawText(display_reiniciarWin, 230, 370);
+	}
+
+	if (_lose)
+	{
+		glColor4f(1.0f, 0.0f, 0.0f, 1.0f);
+		drawText(display_lose, 250, 350);
+		drawText(display_reiniciarLose, 240, 340);
 	}
 	
 

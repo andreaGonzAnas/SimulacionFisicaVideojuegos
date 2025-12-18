@@ -11,6 +11,10 @@
 
 #include <PxPhysicsAPI.h>
 
+extern bool _trapeciosText;
+extern bool _victory;
+extern bool _lose;
+
 SceneTrapecios::SceneTrapecios(PxPhysics* physics, PxScene* scene) : Scene(physics)
 {
     set_gScene(scene);
@@ -22,6 +26,9 @@ SceneTrapecios::~SceneTrapecios()
 
 void SceneTrapecios::init()
 {
+    _trapeciosText = true;
+
+
 	// CALLBACK
     _myCallback = new MyContactCallback(this);
     
@@ -84,6 +91,8 @@ void SceneTrapecios::update(double t)
             //reiniciar muelle
             _springSys->setStaticPos(initialCollectiblePos);
             _hasCollectedParticle = false;
+
+            _lose = false;
         }
         return;
     }
@@ -146,7 +155,7 @@ void SceneTrapecios::clear()
 {
     _start_game = false;
     _win_game = false;
-    isGame = false;
+    _trapeciosText = false;
 
     // 1. Limpiar Callbacks
     if (_gScene) _gScene->setSimulationEventCallback(nullptr);
@@ -220,6 +229,7 @@ void SceneTrapecios::clear()
     cam->setTransform(_initPosCamera);
     cam->setDir(_initDirCamera);
     cam->setHumanCannonMode(false);
+    _victory = false;
 }
 
 bool SceneTrapecios::handleKey(unsigned char key, const PxTransform& camera)
@@ -697,6 +707,7 @@ void SceneTrapecios::winGame()
 {
     std::cout << "ganaste" << '\n';
     _win_game = true;
+    _victory = true;
 
     // Detener al jugador para que no siga cayendo
     if (_player) {
@@ -720,6 +731,7 @@ void SceneTrapecios::loseGame()
         std::cout << "PERDISTE. Reiniciando en " << RESET_DELAY << " segundos..." << std::endl;
         _isGameOver = true;
         _gameOverTimer = 0.0f;
+        _lose = true;
     }
 }
 
