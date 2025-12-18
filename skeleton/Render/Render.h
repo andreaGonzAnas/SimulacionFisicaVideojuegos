@@ -72,6 +72,7 @@ extern std::string initial_exit;
 extern std::string level_title;
 extern std::string level_bala;
 extern std::string level_trapecios;
+extern std::string level_back;
 
 extern bool _personas_balas;
 extern bool _victory;

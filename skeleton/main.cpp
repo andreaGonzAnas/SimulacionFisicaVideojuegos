@@ -65,6 +65,7 @@ std::string initial_exit = "EXIT";
 std::string level_title = "ELIGE ACTO";
 std::string level_bala = "HUMANO BALA";
 std::string level_trapecios = "TRAPECIOS";
+std::string level_back = "VOLVER AL INICIO";
 
 
 bool _personas_balas = false;
