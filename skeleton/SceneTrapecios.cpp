@@ -720,8 +720,6 @@ void SceneTrapecios::loseGame()
         std::cout << "PERDISTE. Reiniciando en " << RESET_DELAY << " segundos..." << std::endl;
         _isGameOver = true;
         _gameOverTimer = 0.0f;
-
-        
     }
 }
 

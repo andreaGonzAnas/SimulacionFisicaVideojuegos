@@ -99,11 +99,30 @@ void Scene2::init()
 
 void Scene2::update(double t)
 {
-	// ---- CIRCULO FUEGOS -----
-	for (auto a : _firesInScene)
-	{
-		a->update(t);
-	}
+    if (!_isGameOver)
+    {
+        // ---- COMPROBAR SI TODOS LOS CÍRCULOS HAN SIDO ATRAVESADOS ----
+        if (!_hasPassedFire)
+        {
+            bool allPassed = true;
+            for (auto& circle : _fireCircles)
+            {
+                if (!circle.passed) { allPassed = false; break; }
+            }
+
+            if (allPassed)
+            {
+                startCelebration();
+                _hasPassedFire = true;
+            }
+        }
+
+        // ---- CIRCULO FUEGOS -----
+        for (auto a : _firesInScene)
+        {
+            a->update(t);
+        }
+    }
 
     // ---- PROYECTIL ----
     _proyectilSys->update(t);
@@ -133,32 +152,6 @@ void Scene2::update(double t)
         }
     }
 
-    // ---- COMPROBAR SI HA PERDIDO
-    if (_hasShotRossa && _hasShotRossa && _hasShotRossa && !_hasPassedFire)
-    {
-        // game over
-
-        // reinicio
-    }
-
-    // ---- COMPROBAR SI TODOS LOS CÍRCULOS HAN SIDO ATRAVESADOS ----
-    if (!_hasPassedFire)
-    {
-        bool allPassed = true;
-        for (auto& circle : _fireCircles)
-        {
-            if (!circle.passed) { allPassed = false; break; }
-        }
-
-        if (allPassed)
-        {
-            startCelebration();
-            _hasPassedFire = true;
-        }
-    }
-
-    
-
     // ---- ACTUALIZAR CONFETTI Y FUEGOS ARTIFICIALES ----
     for (auto a : _confettis)
     {
@@ -179,6 +172,31 @@ void Scene2::update(double t)
     else if (_hasPassedFire)
     {
         createNewFirework();
+    }
+
+
+    // ---- COMPROBAR SI HA PERDIDO
+    if (_hasShotRossa && _hasShotCaleb && _hasShotTim && !_hasPassedFire)
+    {
+        // game over
+        gameOver();
+    }
+
+    if (_isGameOver) {
+        _gameOverTimer += t;
+
+        if (_gameOverTimer >= RESET_DELAY) {
+            _isGameOver = false;
+            _gameOverTimer = 0.0f;
+
+            // reiniciar contadores
+            _hasShotRossa = false;
+            _hasShotCaleb = false;
+            _hasShotTim = false;
+
+            //texto
+        }
+        return;
     }
 
 }
@@ -511,4 +529,13 @@ void Scene2::createFireCircles()
      
 
     
+}
+
+void Scene2::gameOver()
+{
+    if (!_isGameOver) {
+        std::cout << "PERDISTE. Reiniciando en " << RESET_DELAY << " segundos..." << std::endl;
+        _isGameOver = true;
+        _gameOverTimer = 0.0f;
+    }
 }
