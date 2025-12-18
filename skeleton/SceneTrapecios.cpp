@@ -18,6 +18,7 @@ extern bool _lose;
 SceneTrapecios::SceneTrapecios(PxPhysics* physics, PxScene* scene) : Scene(physics)
 {
     set_gScene(scene);
+    changeScene = false;
 }
 
 SceneTrapecios::~SceneTrapecios()
@@ -27,7 +28,7 @@ SceneTrapecios::~SceneTrapecios()
 void SceneTrapecios::init()
 {
     _trapeciosText = true;
-
+    
 
 	// CALLBACK
     _myCallback = new MyContactCallback(this, nullptr, nullptr);
@@ -74,6 +75,58 @@ void SceneTrapecios::update(double t)
 {
     if (!_player || _statics.empty()) return;
     
+    if (!_win_game)
+    {
+        // si player tiene que ponerse en trapecio...
+        if (_pendingAttachRegistered && _pendingAttachPalo) {
+            attachPlayerToTrapecio(_pendingAttachPalo);
+            _pendingAttachRegistered = false;
+            _pendingAttachPalo = nullptr;
+        }
+
+        for (auto& t : _trapecios)
+        {
+            if (!t.active) continue;
+
+            PxReal angle = t.joint->getAngle();
+
+            if (angle >= PxPi / 4) t.motorVel = -fabs(t.motorVel);
+            else if (angle <= -PxPi / 4) t.motorVel = fabs(t.motorVel);
+
+            t.joint->setDriveVelocity(t.motorVel);
+            t.palo2->wakeUp(); // asegura que el actor dinámico esté despierto
+        }
+
+        checkPlayerCollectible();
+
+    }
+    
+    // Actualizar muelle
+    if (_hasCollectedParticle && _staticParticle && _player)
+    {
+        PxVec3 playerPos = _player->getGlobalPose().p;
+
+        PxVec3 offset(0.0f, 1.0f, 0.0f); // ejemplo
+        _springSys->setStaticPos(playerPos + offset);
+    }
+
+    _springSys->update(t);
+    
+    // confetti
+    if (_win_game)
+    {
+        for (auto c : _confettis)
+        {
+            c->update(t);
+        }
+    }
+    
+    // ---- FILA FUEGOS -----
+    for (auto a : _firesInScene)
+    {
+        a->update(t);
+    }
+
     if (_isGameOver) {
         _gameOverTimer += t;
 
@@ -112,59 +165,6 @@ void SceneTrapecios::update(double t)
             _victory = false;
         }
         return;
-    }
-    
-    if (!_win_game)
-    {
-        // si player tiene que ponerse en trapecio...
-        if (_pendingAttachRegistered && _pendingAttachPalo) {
-            attachPlayerToTrapecio(_pendingAttachPalo);
-            _pendingAttachRegistered = false;
-            _pendingAttachPalo = nullptr;
-        }
-
-        for (auto& t : _trapecios)
-        {
-            if (!t.active) continue;
-
-            PxReal angle = t.joint->getAngle();
-
-            if (angle >= PxPi / 4) t.motorVel = -fabs(t.motorVel);
-            else if (angle <= -PxPi / 4) t.motorVel = fabs(t.motorVel);
-
-            t.joint->setDriveVelocity(t.motorVel);
-            t.palo2->wakeUp(); // asegura que el actor dinámico esté despierto
-        }
-
-        checkPlayerCollectible();
-
-    }
-    
-
-    // Actualizar muelle
-    if (_hasCollectedParticle && _staticParticle && _player)
-    {
-        PxVec3 playerPos = _player->getGlobalPose().p;
-
-        PxVec3 offset(0.0f, 1.0f, 0.0f); // ejemplo
-        _springSys->setStaticPos(playerPos + offset);
-    }
-
-    _springSys->update(t);
-    
-    // confetti
-    if (_win_game)
-    {
-        for (auto c : _confettis)
-        {
-            c->update(t);
-        }
-    }
-    
-    // ---- FILA FUEGOS -----
-    for (auto a : _firesInScene)
-    {
-        a->update(t);
     }
 }
 

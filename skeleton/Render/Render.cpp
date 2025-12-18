@@ -340,18 +340,18 @@ void startRender(const PxVec3& cameraEye, const PxVec3& cameraDir, PxReal clipNe
 	if (_initialMenu)
 	{
 		glColor4f(1.0f, 0.0f, 0.0f, 1.0f);
-		drawTextBig(initial_title, 235, 400);
-		drawTextBig(initial_start, 150, 125);
-		drawTextBig(initial_exit, 350, 125);
+		drawTextBig(initial_title, 225, 400);
+		drawTextBig(initial_start, 120, 125);
+		drawTextBig(initial_exit, 370, 125);
 	}
 	
 	if (_levelMenu)
 	{
 		glColor4f(1.0f, 0.0f, 0.0f, 1.0f);
 		drawTextBig(level_title, 235, 400);
-		drawTextBig(level_bala, 115, 275);
-		drawTextBig(level_trapecios, 355, 275);
-		drawTextBig(level_back, 225, 125);
+		drawTextBig(level_bala, 115, 230);
+		drawTextBig(level_trapecios, 355, 230);
+		drawTextBig(level_back, 225, 80);
 	}
 
 

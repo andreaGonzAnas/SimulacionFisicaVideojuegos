@@ -15,7 +15,7 @@ extern bool _victory;
 
 Scene2::Scene2(PxPhysics* physics): Scene(physics), _hasPassedFire(false)
 {
-
+    changeScene = false;
 }
 
 Scene2::~Scene2()

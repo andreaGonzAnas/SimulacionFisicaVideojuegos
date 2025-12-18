@@ -32,5 +32,6 @@ public:
 
     enum SceneType { MENU, GAME, OPTIONS };
     virtual SceneType getType() = 0;
+    virtual bool shouldChangeScene() const { return false; }
 };
 

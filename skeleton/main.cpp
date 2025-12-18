@@ -50,14 +50,14 @@ std::string display_instr4 = "PULSA ESPACIO PARA SALTAR";
 
 // Victoria
 std::string display_win = "¡VICTORIA!";
-std::string display_reiniciarWin = "Volviendo al menu en 3 segundos...";
+std::string display_reiniciarWin = "Volviendo al menu en 5 segundos...";
 
 // GameOver
 std::string display_lose = "¡TE CAISTE!";
 std::string display_reiniciarLose = "Reiniciando en 3 segundos...";
 
 // Initial Menu
-std::string initial_title = "SIMULADOR DE CIRCO";
+std::string initial_title = "LITTLE CIRCUS";
 std::string initial_start = "START";
 std::string initial_exit = "EXIT";
 
@@ -168,60 +168,44 @@ void stepPhysics(bool interactive, double t)
 	gScene->simulate(t);
 	gScene->fetchResults(true);
 
-	//Update de la escena
+	// Update de la escena
 	_sceneManager->update(t);
+	Scene* current = _sceneManager->getCurrentScene();
+	int type = current->getType();
 
-	if (_sceneManager->getCurrentScene()->getType() == 0)
-	{
-		// Convertimos el puntero de Scene* a InitialMenuScene*
-		InitialMenuScene* menu = static_cast<InitialMenuScene*>(_sceneManager->getCurrentScene());
-
-		// Ahora ya puedes acceder al método específico
-		auto result = menu->getButtonResult();
-
-		if (result) //cambiar a changeLevel
-		{
+	// Menu Inicial
+	if (type == 0) {
+		InitialMenuScene* menu = static_cast<InitialMenuScene*>(current);
+		if (menu->getButtonResult()) {
 			_sceneManager->setScene(new LevelMenuScene(gPhysics, gScene));
+			return;
 		}
 	}
 
-	if (_sceneManager->getCurrentScene()->getType() == 2)
-	{
-		// Convertimos el puntero de Scene* a InitialMenuScene*
-		LevelMenuScene* menu = static_cast<LevelMenuScene*>(_sceneManager->getCurrentScene());
-
-		// Ahora ya puedes acceder al método específico
+	// Menu de niveles
+	if (type == 2) {
+		LevelMenuScene* menu = static_cast<LevelMenuScene*>(current);
 		auto result = menu->getButtonResult();
-
-		if (result == 1) //cambiar a balas
-		{
+		if (result == 1) {
 			_scene2->set_gScene(gScene);
 			_sceneManager->setScene(new Scene2(gPhysics));
+			return;
 		}
-		else if (result == 2)
-		{
+		else if (result == 2) {
 			_sceneManager->setScene(new SceneTrapecios(gPhysics, gScene));
+			return;
 		}
-		else if (result == 0)
-		{
+		else if (result == 0) {
 			_sceneManager->setScene(new InitialMenuScene(gPhysics, gScene));
+			return;
 		}
 	}
 
-	// juego
-	if (_sceneManager->getCurrentScene()->getType() == 1)
-	{
-		// Convertimos el puntero de Scene* a InitialMenuScene*
-		SceneTrapecios* trapecios = static_cast<SceneTrapecios*>(_sceneManager->getCurrentScene());
-		Scene2* balas = static_cast<Scene2*>(_sceneManager->getCurrentScene());
-
-		// Ahora ya puedes acceder al método específico
-		auto resultTrapecios = trapecios->getChangeScene();
-		auto resultBalas = balas->getChangeScene();
-
-		if (resultTrapecios || resultBalas) //cambiar a level
-		{
+	// Juegos
+	if (type == 1) {
+		if (current->shouldChangeScene()) {
 			_sceneManager->setScene(new LevelMenuScene(gPhysics, gScene));
+			return;
 		}
 	}
 

@@ -20,6 +20,8 @@ LevelMenuScene::~LevelMenuScene()
 
 void LevelMenuScene::init()
 {
+    changeToLevel = -1;
+
     // texto
     _levelMenu = true;
 
@@ -32,7 +34,7 @@ void LevelMenuScene::init()
     _initPosCamera = cam->getEye();
     _initDirCamera = cam->getDir();
     cam->setTransform(PxVec3(centro.x, centro.y - 10.0, centro.z - 45.0));
-    cam->setDir(PxVec3(0.0, -0.3, 1));
+    cam->setDir(PxVec3(0.0, -0.2, 1));
     cam->setHumanCannonMode(true);
 
     // estanterias

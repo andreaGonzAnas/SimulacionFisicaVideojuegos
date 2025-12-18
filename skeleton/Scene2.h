@@ -45,7 +45,7 @@ private:
 
 	bool changeScene = false;
 
-	const float RESET_DELAY = 3.0f; // 3 segundos
+	const float RESET_DELAY = 5.0f; // 3 segundos
 	bool _isWin = false;
 	float _winTimer = 0.0f;
 
@@ -66,6 +66,7 @@ public:
 	void createFireCircles();
 
 	SceneType getType() override { return GAME; }
-	bool getChangeScene() { return changeScene; }
+	bool getChangeScene() const { return changeScene; }
+	bool shouldChangeScene() const override { return this->getChangeScene(); }
 };
 
