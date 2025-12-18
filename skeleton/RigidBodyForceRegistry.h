@@ -62,7 +62,7 @@ public:
             {
                 for (auto* body : pair.second)
                 {
-                    fg->updateRigidBody(body, t); // Necesitas implementar updateRigidBody en tus ForceGenerators
+                    fg->updateRigidBody(body, t);
                 }
             }
         }

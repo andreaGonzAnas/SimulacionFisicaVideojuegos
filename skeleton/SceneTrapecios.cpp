@@ -28,7 +28,6 @@ SceneTrapecios::~SceneTrapecios()
 void SceneTrapecios::init()
 {
     _trapeciosText = true;
-    
 
 	// CALLBACK
     _myCallback = new MyContactCallback(this, nullptr, nullptr);
@@ -94,7 +93,7 @@ void SceneTrapecios::update(double t)
             else if (angle <= -PxPi / 4) t.motorVel = fabs(t.motorVel);
 
             t.joint->setDriveVelocity(t.motorVel);
-            t.palo2->wakeUp(); // asegura que el actor dinámico esté despierto
+            t.palo2->wakeUp();
         }
 
         checkPlayerCollectible();
@@ -106,7 +105,7 @@ void SceneTrapecios::update(double t)
     {
         PxVec3 playerPos = _player->getGlobalPose().p;
 
-        PxVec3 offset(0.0f, 1.0f, 0.0f); // ejemplo
+        PxVec3 offset(0.0f, 1.0f, 0.0f);
         _springSys->setStaticPos(playerPos + offset);
     }
 
@@ -121,7 +120,7 @@ void SceneTrapecios::update(double t)
         }
     }
     
-    // ---- FILA FUEGOS -----
+    // fuegos
     for (auto a : _firesInScene)
     {
         a->update(t);
@@ -174,19 +173,20 @@ void SceneTrapecios::clear()
     _win_game = false;
     _trapeciosText = false;
 
-    // 1. Limpiar Callbacks
+    // CALLBACKS
     if (_gScene) _gScene->setSimulationEventCallback(nullptr);
     if (_myCallback) { delete _myCallback; _myCallback = nullptr; }
 
-    // 2. VACIADO VISUAL
+    // RENDER ITEMS
     for (auto item : _scenary) {
         if (item) {
             DeregisterRenderItem(item);
             const_cast<RenderItem*>(item)->actor = nullptr;
         }
     }
-    _scenary.clear(); // Vaciamos nuestra lista de rastreo
+    _scenary.clear();
 
+    // FUEGOS
     for (auto*& a : _firesInScene)
     {
         delete a;
@@ -194,13 +194,13 @@ void SceneTrapecios::clear()
     }
     _firesInScene.clear();
 
-    // 3. ELIMINAR JOINTS (Antes que los actores)
+    // JOINTS
     if (_playerJoint) { _playerJoint->release(); _playerJoint = nullptr; }
     for (auto& t : _trapecios) {
         if (t.joint) { t.joint->release(); t.joint = nullptr; }
     }
 
-    // 4. ELIMINAR RÍGIDOS (Player y palos móviles)
+    // RÍGIDOS
     for (auto r : _rigids) {
         if (r) {
             _gScene->removeActor(*r);
@@ -218,7 +218,7 @@ void SceneTrapecios::clear()
     _rigids.clear();
     _player = nullptr;
 
-    // 5. ELIMINAR ESTÁTICOS (Malla, Suelo, Columnas)
+    // ESTÁTICOS
     for (auto s : _statics) {
         if (s) {
             _gScene->removeActor(*s);
@@ -237,11 +237,12 @@ void SceneTrapecios::clear()
     }
     _statics.clear();
 
-    // 6. Sistemas de partículas y cámara
+    // SISTEMAS
     if (_springSys) { delete _springSys; _springSys = nullptr; }
     for (auto c : _confettis) delete c;
     _confettis.clear();
 
+    // CAMARA
     Camera* cam = GetCamera();
     cam->setTransform(_initPosCamera);
     cam->setDir(_initDirCamera);
@@ -352,9 +353,7 @@ void SceneTrapecios::createDeco()
 
 void SceneTrapecios::createTrapecio(physx::PxVec3 pos, bool startActive)
 {
-    // =========================
-    // PALO FIJO (SOPORTE)
-    // =========================
+    // PALO FIJO
     PxRigidStatic* palo1 = gPhysics->createRigidStatic(
         PxTransform(pos)
     );
@@ -367,9 +366,7 @@ void SceneTrapecios::createTrapecio(physx::PxVec3 pos, bool startActive)
     _scenary.push_back(item);
     _statics.push_back(palo1);
 
-    // =========================
-    // PALO MÓVIL (PÉNDULO CORTO)
-    // =========================
+    // PALO MÓVIL
     float halfHeight = 7.5f; // altura del péndulo
     PxVec3 posMovil = pos + PxVec3(0.0f, -(halfHeight + 1.0f), 0.0f);
 
@@ -392,9 +389,7 @@ void SceneTrapecios::createTrapecio(physx::PxVec3 pos, bool startActive)
     palo2->userData = new TrapecioTag{ (int)_trapecios.size() };
 
 
-    // =========================
-    // JOINT REVOLUTE (EJE X)
-    // =========================
+    // JOINT
     PxRevoluteJoint* art = PxRevoluteJointCreate(
         *gPhysics,
         palo1,
@@ -402,25 +397,19 @@ void SceneTrapecios::createTrapecio(physx::PxVec3 pos, bool startActive)
         palo2,
         PxTransform(PxVec3(0, halfHeight, 0), PxQuat(PxHalfPi, PxVec3(0, 1, 0)))
     );
-    art->setRevoluteJointFlag(PxRevoluteJointFlag::eDRIVE_ENABLED, true); // motor habilitado
+    art->setRevoluteJointFlag(PxRevoluteJointFlag::eDRIVE_ENABLED, true);
 
-    // =========================
-    // LÍMITES ANGULARES
-    // =========================
+    // LIMITES
     art->setRevoluteJointFlag(PxRevoluteJointFlag::eLIMIT_ENABLED, true);
     art->setLimit(PxJointAngularLimitPair(-PxPi / 4, PxPi / 4, 0.01f));
 
-    // =========================
     // MOTOR
-    // =========================
     float initialMotorVel = 1.0f;
     art->setDriveForceLimit(10000.0f);
     art->setDriveVelocity(initialMotorVel);
 
-    // =========================
-    // CREAR EL STRUCT TRAPECIO
-    // =========================
-    _trapecios.emplace_back();          // construye un Trapecio vacío
+    // TRAPECIO
+    _trapecios.emplace_back();
 
     _trapecios.back().palo1 = palo1;
     _trapecios.back().palo2 = palo2;
@@ -435,21 +424,16 @@ physx::PxRigidStatic* SceneTrapecios::createPlatforms(physx::PxVec3 pos)
     // SUELO
     PxRigidStatic* _suelo = gPhysics->createRigidStatic(PxTransform(pos));
 
-    // Crear material del suelo: poca fricción, muy elástico
-    //physx::PxMaterial* sueloMat = gPhysics->createMaterial(0.0f, 0.0f, 0.9f); // friction: 0, restitution: 0.9
-
     // Crear forma del suelo y asignarle el material
     physx::PxShape* shapeSuelo = CreateShape(PxBoxGeometry(5, 0.5, 2));
 
     PxMaterial* sueloMat = gPhysics->createMaterial(
-        0.5f,  // fricción estática
-        0.5f,  // fricción dinámica
-        0.0f   // restitución = 0 → sin rebote
+        0.5f, 
+        0.5f, 
+        0.0f   
     );
 
     shapeSuelo->setMaterials(&sueloMat, 1);
-
-    //physx::PxShape* shapeSuelo = CreateShape(PxBoxGeometry(100, 0.1, 100));
     _suelo->attachShape(*shapeSuelo);
     _gScene->addActor(*_suelo);
 
@@ -468,31 +452,25 @@ void SceneTrapecios::createPlayer(float masa)
     // Posición inicial del jugador en el suelo
     PxVec3 playerPos(72, 40.5, 35);
 
-    // Crear actor dinámico
     PxRigidDynamic* player = gPhysics->createRigidDynamic(PxTransform(playerPos));
 
-    // Crear forma (caja o esfera)
     physx::PxShape* playerShape = CreateShape(PxBoxGeometry(1.0f, 2.0f, 1.0f));
     player->attachShape(*playerShape);
 
     // Masa y centro de masa
     PxRigidBodyExt::updateMassAndInertia(*player, masa);
 
-    // Añadir al escenario
     _gScene->addActor(*player);
 
 
     // Crear render item para que se vea
     RenderItem* rPlayer = new RenderItem(playerShape, player, Vector4(0.94f, 0.5f, 0.04f, 1.0f));
   
-    // Guardar en vector de render o miembro de la clase si lo necesitas
     _scenary.push_back(rPlayer);
 
-    // Guardar referencia global para controlar
     _player = player;
 
-
-    // Bloquea todas las rotaciones para que no se caiga ni gire
+    // Bloquear rotaciones
     _player->setRigidDynamicLockFlag(PxRigidDynamicLockFlag::eLOCK_ANGULAR_X, true);
     _player->setRigidDynamicLockFlag(PxRigidDynamicLockFlag::eLOCK_ANGULAR_Y, true);
     _player->setRigidDynamicLockFlag(PxRigidDynamicLockFlag::eLOCK_ANGULAR_Z, true);
@@ -506,11 +484,10 @@ void SceneTrapecios::createMalla()
     mallaActor = gPhysics->createRigidStatic(PxTransform({ 35, 17, 35 }));
 
     PxMaterial* sueloMat = gPhysics->createMaterial(
-        0.2f,  // fricción estática
-        0.2f,  // fricción dinámica
-        0.8f   // restitución = 0 → sin rebote
+        0.2f,
+        0.2f,
+        0.8f
     );
-    // Crear forma del suelo y asignarle el material
     physx::PxShape* shapeSuelo = CreateShape(PxBoxGeometry(45, 0.5, 10));
     shapeSuelo->setMaterials(&sueloMat, 1);
 
@@ -538,9 +515,9 @@ void SceneTrapecios::checkPlayerCollectible()
 
     // Obtener posiciones
     PxVec3 playerPos = _player->getGlobalPose().p;
-    PxVec3 particlePos = _springSys->getMovingPart()->getTr()->p; // o getPos()
+    PxVec3 particlePos = _springSys->getMovingPart()->getTr()->p;
 
-    // Definir radio de colisión
+    // radio de colisión
     float playerRadius = 3.0f;
     float particleRadius = 2.0f;
 
@@ -555,7 +532,7 @@ void SceneTrapecios::checkPlayerCollectible()
 
 void SceneTrapecios::handleContact(PxRigidActor* a, PxRigidActor* b)
 {
-    // Ver es el player
+    // Ver si es el player
     bool aIsPlayer = (a == _player);
     bool bIsPlayer = (b == _player);
 
@@ -573,7 +550,6 @@ void SceneTrapecios::handleContact(PxRigidActor* a, PxRigidActor* b)
 
     
     // --- SI TOCA LA MALLA ---
-    // (Asegúrate de tener guardado el puntero de la malla en _mallaActor al crearla)
     if (other == mallaActor && !_isWin)
     {
         loseGame();
@@ -581,11 +557,10 @@ void SceneTrapecios::handleContact(PxRigidActor* a, PxRigidActor* b)
     }
 
     // --- SI ESTÁ POR DEBAJO DE LA MALLA ---
-    // También es bueno comprobar la altura por si el jugador cae fuera de los límites físicos
     float playerY = _player->getGlobalPose().p.y;
     float mallaY = mallaActor->getGlobalPose().p.y;
 
-    if (playerY < (mallaY - 1.0f)) // Si cae 1 metro por debajo del nivel de la malla
+    if (playerY < (mallaY - 1.0f))
     {
         loseGame();
         return;
@@ -594,16 +569,11 @@ void SceneTrapecios::handleContact(PxRigidActor* a, PxRigidActor* b)
     // --- SI OTHER ES WINNING PLATFORM ---
     if (other == _winPlatform)
     {
-        // A. Comprobar que el jugador está por encima de la plataforma
-        // Obtenemos la altura del jugador y de la plataforma
+        // Comprobar que está por encima
         float playerY = _player->getGlobalPose().p.y;
         float platformY = _winPlatform->getGlobalPose().p.y;
-
-        // B. Comprobar que la velocidad es descendente (está aterrizando)
         float velY = _player->getLinearVelocity().y;
 
-        // Si la posición del player es mayor a la plataforma + un pequeño margen
-        // y el jugador no está subiendo como un cohete
         if ((playerY > (platformY + 0.5f) && velY <= 0.1f) && _hasCollectedParticle)
         {
             winGame();
@@ -612,14 +582,12 @@ void SceneTrapecios::handleContact(PxRigidActor* a, PxRigidActor* b)
     }
 
     // --- SI OTHER ES SUELO... ---
-    // Resetear el estado de salto
     if (other->getType() == PxActorType::eRIGID_STATIC)
     {
         _hasJumped = false;
     }
 
     // --- SI ES UN TRAPECIO... ---
-    // Attach con trapecio
     if (_playerJoint == nullptr && !_pendingAttachRegistered) // solo si se puede
     {
         for (size_t i = 0; i < _trapecios.size(); ++i)
@@ -645,7 +613,6 @@ void SceneTrapecios::attachPlayerToTrapecio(PxRigidDynamic* palo)
         palo, PxTransform(PxVec3(0, -5.5f, 0)));
 
     if (_playerJoint) {
-        // Evita que el player choque con el palo mientras están unidos
         _playerJoint->setConstraintFlag(PxConstraintFlag::eCOLLISION_ENABLED, false);
 
         _playerJoint->setDistanceJointFlag(PxDistanceJointFlag::eMAX_DISTANCE_ENABLED, true);
@@ -656,7 +623,6 @@ void SceneTrapecios::attachPlayerToTrapecio(PxRigidDynamic* palo)
 void SceneTrapecios::createConfettiSys(physx::PxVec3 pos)
 {
     // ---- SISTEMA DE RIGIDOS ----
-    // Anadir un actor dinamico
     PxRigidDynamic* new_solid;
     new_solid = gPhysics->createRigidDynamic(PxTransform({ 50,200,-80 }));
     new_solid->setLinearVelocity({ 0,5,0 });
@@ -675,21 +641,17 @@ void SceneTrapecios::createFires(physx::PxVec3 pos)
 {
     PxVec3 inicioFilaDer(pos.x + 0.0f, pos.y, pos.z);
     int numFuegosFila = 7;
-    float espaciado = 15.0f; // Distancia entre cada fuego
+    float espaciado = 15.0f; // distancia
 
     int mid = numFuegosFila / 2;
 
     for (int i = 0; i < numFuegosFila; ++i)
-    {
-        // Calculamos la X sumando el espaciado multiplicado por el índice
-        // Esto los alinea: fuego0 en X, fuego1 en X+2, fuego2 en X+4...
-        float x = inicioFilaDer.x + (i * espaciado);
+    {float x = inicioFilaDer.x + (i * espaciado);
         float y = inicioFilaDer.y;
         float z = inicioFilaDer.z;
 
         Particula* pAux = new Particula(Vector3(x, y, z), Vector3(0, 2, 0), 0.98, 0.1);
 
-        // Color naranja más claro y saturado como pediste
         pAux->setColor(Vector4(1.0f, 0.5f, 0.1f, 1.0f));
         pAux->setTimeVida(0.3);
 
@@ -728,7 +690,7 @@ void SceneTrapecios::winGame()
     _isWin = true;
     _winTimer = 0.0f;
 
-    // Detener al jugador para que no siga cayendo
+    // Detener al player para que no siga cayendo
     if (_player) {
         _player->setLinearVelocity(PxVec3(0, 0, 0));
         _player->setAngularVelocity(PxVec3(0, 0, 0));

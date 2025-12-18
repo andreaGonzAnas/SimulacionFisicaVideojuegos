@@ -106,6 +106,13 @@ void InitialMenuScene::clear()
     }
     _statics.clear();
 
+    //Volver camara a la posicion inicial
+    Camera* cam = GetCamera();
+    cam->setTransform(_initPosCamera);
+    cam->setDir(_initDirCamera);
+    cam->setHumanCannonMode(false);
+    _personas_balas = false;
+    _victory = false;
 }
 
 bool InitialMenuScene::handleKey(unsigned char key, const PxTransform& camera)

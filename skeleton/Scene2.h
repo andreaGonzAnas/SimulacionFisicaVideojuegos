@@ -45,7 +45,7 @@ private:
 
 	bool changeScene = false;
 
-	const float RESET_DELAY = 5.0f; // 3 segundos
+	const float RESET_DELAY = 5.0f;
 	bool _isWin = false;
 	float _winTimer = 0.0f;
 

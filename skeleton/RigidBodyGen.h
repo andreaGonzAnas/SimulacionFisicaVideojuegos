@@ -22,9 +22,6 @@ protected:
 	double probGeneration;
 	Vector4 desColor;
 
-	//masa e inercia
-	//friccion y elasticidad
-
 	PxPhysics* gPhysics;
 	PxRigidDynamic* _modelRigidBody;
 

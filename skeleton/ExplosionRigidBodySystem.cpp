@@ -13,8 +13,6 @@ ExplosionRigidBodySystem::ExplosionRigidBodySystem(PxRigidDynamic* p, PxPhysics*
 	//crear generador
     UniformalRigidBodyGen* confettiGen = new UniformalRigidBodyGen(1, 0.5, p, gPhysics);
 
-    //setear desviaciones
-
     _generators.push_back(confettiGen);
 
     // generar partículas y moverlas a _rigidBodies
@@ -40,7 +38,6 @@ ExplosionRigidBodySystem::ExplosionRigidBodySystem(PxRigidDynamic* p, PxPhysics*
     // Registrar fuerza de gravedad a todas las partículas
     for (auto p : _rigidBodies) {
         _registry->add(p->getRigidDynamic(), gravityEarth);
-        //_registry->add(p->getRigidDynamic(), windForce);
     }
 
 
@@ -73,9 +70,7 @@ void ExplosionRigidBodySystem::update(double t)
                     // AÑADIR A LA ESCENA
                     _gScene->addActor(*r->getRigidDynamic());
 
-                    // REGISTRAR FUERZAS SOLO A LAS NUEVAS (¡Error corregido aquí!)
                     _registry->add(r->getRigidDynamic(), gravityEarth);
-                    //_registry->add(r->getRigidDynamic(), windForce);
                 }
                 // Mover a la lista principal
                 _rigidBodies.splice(_rigidBodies.end(), newParticles);
@@ -113,7 +108,6 @@ void ExplosionRigidBodySystem::addForce()
 void ExplosionRigidBodySystem::setSystemPosition(PxVec3 pos)
 {
     if (!_generators.empty()) {
-        // Casteamos o usamos el método del padre si lo definiste en la clase base
         static_cast<UniformalRigidBodyGen*>(_generators.front())->setOrigin(pos);
     }
 }
