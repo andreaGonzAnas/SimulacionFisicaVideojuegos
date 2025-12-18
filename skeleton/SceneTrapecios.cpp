@@ -184,31 +184,17 @@ bool SceneTrapecios::handleKey(unsigned char key, const PxTransform& camera)
         {
             if (_playerJoint)
             {
-                // 1. Identificamos el trapecio para reactivar el motor
-                for (auto& trap : _trapecios)
-                {
-                    PxRigidActor* actor1;
-                    PxRigidActor* actor2;
-                    _playerJoint->getActors(actor1, actor2);
-
-                    if (actor1 == trap.palo2 || actor2 == trap.palo2)
-                    {
-                        trap.joint->setRevoluteJointFlag(PxRevoluteJointFlag::eDRIVE_ENABLED, true);
-                        trap.active = true;
-                    }
-                }
-
-                // 2. Soltamos el joint pero NO reseteamos la velocidad a (0,0,0)
+                // 1. Primero liberar
                 _playerJoint->release();
                 _playerJoint = nullptr;
 
-                // 3. Capturamos la velocidad que traía del balanceo
-                PxVec3 velocidadActual = _player->getLinearVelocity();
+                // 2. Despertar explícitamente al actor
+                _player->wakeUp();
 
-                // 4. Aplicamos el impulso de salto SUMADO a la inercia
-                // Nota: Bajamos un poco el valor del impulso (ej. 3000) porque ya lleva velocidad
-                PxVec3 fuerzaSalto(-250.0f, 500.0f, 0.0f);
-                _player->addForce(fuerzaSalto, PxForceMode::eIMPULSE);
+                // 3. Aplicar el impulso
+                // Aumentamos un poco el impulso horizontal para separarnos del palo rápido
+                PxVec3 impulsoSalto(-2500.0f, 2500.0f, 0.0f);
+                _player->addForce(impulsoSalto, PxForceMode::eIMPULSE);
 
                 _hasJumped = true;
             }
@@ -230,41 +216,57 @@ bool SceneTrapecios::handleKey(unsigned char key, const PxTransform& camera)
 void SceneTrapecios::createDeco()
 {
     //Material
-    PxMaterial* gMaterial = gPhysics->createMaterial(0.5f, 0.5f, 0.6f);
+    PxMaterial* gMaterial = gPhysics->createMaterial(0.0f, 0.3f, 0.0f);
 
-    // SUELO
+    // --- SUELO ---
     PxBoxGeometry gBox = PxBoxGeometry(60.0f, 1.0f, 50.0f);
-    physx::PxShape* squareShape = CreateShape(gBox, gMaterial);
-    PxTransform* boxTr = new PxTransform(PxVec3(35, 10, 30));
-    RenderItem* rBox = new RenderItem(squareShape, boxTr, Vector4(0.8f, 0.30f, 0.11f, 1.0f));
-    RegisterRenderItem(rBox); //y registrar item a renderizar
+    PxTransform boxPose(PxVec3(35, 10, 30));
+    // Creamos el actor estático
+    PxRigidStatic* groundActor = gPhysics->createRigidStatic(boxPose);
+    physx::PxShape* squareShape = gPhysics->createShape(gBox, *gMaterial);
+    groundActor->attachShape(*squareShape);
+    _gScene->addActor(*groundActor); // Añadir a la escena física
+
+    // Parte visual
+    RenderItem* rBox = new RenderItem(squareShape, groundActor, Vector4(0.8f, 0.30f, 0.11f, 1.0f));
+    RegisterRenderItem(rBox);
     _scenary.push_back(rBox);
 
-    // PALO IZQUIERDO
+
+    // --- PALO IZQUIERDO ---
     PxBoxGeometry gPaloIzq = PxBoxGeometry(1.0f, 36.0f, 2.0f);
-    physx::PxShape* paloShapeIzq = CreateShape(gPaloIzq, gMaterial);
-    PxTransform* paloTrIzq = new PxTransform(PxVec3(0, 20, 35));
-    RenderItem* rPaloIzq = new RenderItem(paloShapeIzq, paloTrIzq, Vector4(0.6f, 0.6f, 0.6f, 0.2f));
+    PxTransform paloPoseIzq(PxVec3(0, 20, 35));
+    PxRigidStatic* paloIzqActor = gPhysics->createRigidStatic(paloPoseIzq);
+    physx::PxShape* paloShapeIzq = gPhysics->createShape(gPaloIzq, *gMaterial);
+    paloIzqActor->attachShape(*paloShapeIzq);
+    _gScene->addActor(*paloIzqActor);
+
+    RenderItem* rPaloIzq = new RenderItem(paloShapeIzq, paloIzqActor, Vector4(0.6f, 0.6f, 0.6f, 0.2f));
     RegisterRenderItem(rPaloIzq);
-    _scenary.push_back(rPaloIzq);
 
-    // PALO DERECHO
+
+    // --- PALO DERECHO ---
     PxBoxGeometry gPaloDer = PxBoxGeometry(1.4f, 36.0f, 2.0f);
-    physx::PxShape* paloShapeDer = CreateShape(gPaloDer, gMaterial);
-    PxTransform* paloTrDer = new PxTransform(PxVec3(70, 20, 35));
-    RenderItem* rPaloDer = new RenderItem(paloShapeDer, paloTrDer, Vector4(0.6f, 0.6f, 0.6f, 0.2f));
+    PxTransform paloPoseDer(PxVec3(70, 20, 35));
+    PxRigidStatic* paloDerActor = gPhysics->createRigidStatic(paloPoseDer);
+    physx::PxShape* paloShapeDer = gPhysics->createShape(gPaloDer, *gMaterial);
+    paloDerActor->attachShape(*paloShapeDer);
+    _gScene->addActor(*paloDerActor);
+
+    RenderItem* rPaloDer = new RenderItem(paloShapeDer, paloDerActor, Vector4(0.6f, 0.6f, 0.6f, 0.2f));
     RegisterRenderItem(rPaloDer);
-    _scenary.push_back(rPaloDer);
 
-    // PALO SUPERIOR
+
+    // --- PALO SUPERIOR ---
     PxBoxGeometry gPaloSup = PxBoxGeometry(36.0f, 0.4f, 2.0f);
-    physx::PxShape* paloShapeSup = CreateShape(gPaloSup, gMaterial);
-    PxTransform* paloTrSup = new PxTransform(PxVec3(35, 54, 35));
-    RenderItem* rPaloSup = new RenderItem(paloShapeSup, paloTrSup, Vector4(0.6f, 0.6f, 0.6f, 0.2f));
+    PxTransform paloPoseSup(PxVec3(35, 54, 35));
+    PxRigidStatic* paloSupActor = gPhysics->createRigidStatic(paloPoseSup);
+    physx::PxShape* paloShapeSup = gPhysics->createShape(gPaloSup, *gMaterial);
+    paloSupActor->attachShape(*paloShapeSup);
+    _gScene->addActor(*paloSupActor);
+
+    RenderItem* rPaloSup = new RenderItem(paloShapeSup, paloSupActor, Vector4(0.6f, 0.6f, 0.6f, 0.2f));
     RegisterRenderItem(rPaloSup);
-    _scenary.push_back(rPaloSup);
-
-
 
 }
 
@@ -408,7 +410,10 @@ void SceneTrapecios::createPlayer(float masa)
     // Guardar referencia global para controlar
     _player = player;
 
-    // Bloqueamos la rotación en los tres ejes (X, Y, Z)
+    /// Bloquea el movimiento lineal en Z (no se moverá hacia el fondo ni hacia la cámara)
+    //_player->setRigidDynamicLockFlag(PxRigidDynamicLockFlag::eLOCK_LINEAR_Z, true);
+
+    // Bloquea todas las rotaciones para que no se caiga ni gire
     _player->setRigidDynamicLockFlag(PxRigidDynamicLockFlag::eLOCK_ANGULAR_X, true);
     _player->setRigidDynamicLockFlag(PxRigidDynamicLockFlag::eLOCK_ANGULAR_Y, true);
     _player->setRigidDynamicLockFlag(PxRigidDynamicLockFlag::eLOCK_ANGULAR_Z, true);
@@ -516,12 +521,15 @@ void SceneTrapecios::handleContact(PxRigidActor* a, PxRigidActor* b)
 
 void SceneTrapecios::attachPlayerToTrapecio(PxRigidDynamic* palo)
 {
-    // crear joint temporal
     _playerJoint = PxDistanceJointCreate(*gPhysics,
         _player, PxTransform(PxVec3(0, 1.0f, 0)),
-        palo, PxTransform(PxVec3(0, -6.0f, 0)));
+        palo, PxTransform(PxVec3(0, -5.5f, 0)));
 
     if (_playerJoint) {
+        // ESTA LÍNEA ES VITAL: 
+        // Evita que el player choque con el palo mientras están unidos
+        _playerJoint->setConstraintFlag(PxConstraintFlag::eCOLLISION_ENABLED, false);
+
         _playerJoint->setDistanceJointFlag(PxDistanceJointFlag::eMAX_DISTANCE_ENABLED, true);
         _playerJoint->setMaxDistance(0.1f);
     }
