@@ -114,7 +114,7 @@ void initPhysics(bool interactive)
 	_sceneMalabares = new MalabaresScene(gPhysics, gScene);
 
 	//Setear escena actual
-	_sceneManager->setScene(_sceneMalabares);
+	_sceneManager->setScene(_sceneTrapecios);
 	
 
 }
@@ -124,13 +124,14 @@ void initPhysics(bool interactive)
 // t: time passed since last call in milliseconds
 void stepPhysics(bool interactive, double t)
 {
-	//Update de la escena
-	_sceneManager->update(t);
-
+	
 	PX_UNUSED(interactive);
 
 	gScene->simulate(t);
 	gScene->fetchResults(true);
+
+	//Update de la escena
+	_sceneManager->update(t);
 
 	//slow down the simulation, necessary for Verlet integration
 	//TODO: review the physics timestep and the integrator stability

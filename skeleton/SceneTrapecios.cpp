@@ -2,6 +2,7 @@
 #include "PxShape.h"
 #include "RenderUtils.hpp"
 #include "Vector3D.h"
+#include "MyContactCallback.h"
 #include <iostream>
 
 #include "CollectibleParticleSystem.h"
@@ -17,7 +18,10 @@ SceneTrapecios::~SceneTrapecios()
 
 void SceneTrapecios::init()
 {
-	// ---- DECORACION ----
+	// CALLBACK
+    _myCallback = new MyContactCallback(this);
+    
+    // ---- DECORACION ----
 	createDeco();
 
     // ---- CAMERA ----
@@ -39,11 +43,10 @@ void SceneTrapecios::init()
     createPlatforms(PxVec3(5, 33.5, 35));
 
 	// ---- PLAYER ----
-    createPlayer(50.0);
+    createPlayer(20.0f);
 
 	// ---- SUELO (CAMA ELASTICA) ----
     createMalla();
-
 
     // ---- PARTICULA RECOGIBLE ----
     //Material
@@ -54,6 +57,13 @@ void SceneTrapecios::init()
 
 void SceneTrapecios::update(double t)
 {
+    // si player tiene que ponerse en trapecio...
+    if (_pendingAttachRegistered && _pendingAttachPalo) {
+        attachPlayerToTrapecio(_pendingAttachPalo);
+        _pendingAttachRegistered = false;
+        _pendingAttachPalo = nullptr;
+    }
+    
     for (auto& t : _trapecios)
     {
         if (!t.active) continue;
@@ -84,6 +94,15 @@ void SceneTrapecios::update(double t)
 
 void SceneTrapecios::clear()
 {
+    // CALLBACK
+    if (_myCallback)
+    {
+        _gScene->setSimulationEventCallback(nullptr);
+        delete _myCallback;
+        _myCallback = nullptr;
+    }
+
+    
     //// Muelle
     //delete _springSys; _springSys = nullptr;
     //_staticParticle = nullptr;
@@ -156,25 +175,50 @@ bool SceneTrapecios::handleKey(unsigned char key, const PxTransform& camera)
                 _trapecios[0].motorVel = 1.0f;              // asegura velocidad inicial positiva
                 _trapecios[0].palo2->wakeUp();              // despierta el actor dinámico
                 _trapecios[0].joint->setDriveVelocity(_trapecios[0].motorVel); // aplica velocidad al motor
+                
             }
 
             break;
         }
-        case ' ': // espacio
+        case ' ': // Espacio
         {
-            if (!_hasJumped)
+            if (_playerJoint)
             {
+                // 1. Identificamos el trapecio para reactivar el motor
+                for (auto& trap : _trapecios)
+                {
+                    PxRigidActor* actor1;
+                    PxRigidActor* actor2;
+                    _playerJoint->getActors(actor1, actor2);
+
+                    if (actor1 == trap.palo2 || actor2 == trap.palo2)
+                    {
+                        trap.joint->setRevoluteJointFlag(PxRevoluteJointFlag::eDRIVE_ENABLED, true);
+                        trap.active = true;
+                    }
+                }
+
+                // 2. Soltamos el joint pero NO reseteamos la velocidad a (0,0,0)
+                _playerJoint->release();
+                _playerJoint = nullptr;
+
+                // 3. Capturamos la velocidad que traía del balanceo
+                PxVec3 velocidadActual = _player->getLinearVelocity();
+
+                // 4. Aplicamos el impulso de salto SUMADO a la inercia
+                // Nota: Bajamos un poco el valor del impulso (ej. 3000) porque ya lleva velocidad
+                PxVec3 fuerzaSalto(-250.0f, 500.0f, 0.0f);
+                _player->addForce(fuerzaSalto, PxForceMode::eIMPULSE);
+
                 _hasJumped = true;
-                _player->wakeUp();
-                float masa = _player->getMass();
-                PxVec3 impulso(-4.0f * masa, 15.0f * masa, 0.0f);
-                _player->addForce(impulso, PxForceMode::eIMPULSE);
             }
-            break;
-        }
-        case 'p': // espacio
-        {
-            recogerParticula();
+            else if (!_hasJumped) // Salto normal desde el suelo
+            {
+                PxVec3 impulsoSuelo(-1000.0f, 4200.0f, 0.0f);
+                _player->addForce(impulsoSuelo, PxForceMode::eIMPULSE);
+                _hasJumped = true;
+            }
+
             break;
         }
 
@@ -254,10 +298,17 @@ void SceneTrapecios::createTrapecio(physx::PxVec3 pos, bool startActive)
     physx::PxShape* shape2 = CreateShape(PxBoxGeometry(0.5f, halfHeight, 0.5f));
     palo2->attachShape(*shape2);
 
+    PxRigidBodyExt::updateMassAndInertia(*palo2, 40.0f);
+
+
     RenderItem* item2 = new RenderItem(shape2, palo2, { 0.0f, 0.1f, 0.8f, 1.0f });
     _gScene->addActor(*palo2);
 
     _rigids.push_back(palo2);
+
+    struct TrapecioTag { int index; };
+    palo2->userData = new TrapecioTag{ (int)_trapecios.size() };
+
 
     // =========================
     // JOINT REVOLUTE (EJE X)
@@ -346,6 +397,7 @@ void SceneTrapecios::createPlayer(float masa)
     // Añadir al escenario
     _gScene->addActor(*player);
 
+
     // Crear render item para que se vea
     RenderItem* rPlayer = new RenderItem(playerShape, player, { 0.8f, 0.2f, 0.2f, 1.0f });
     RegisterRenderItem(rPlayer);
@@ -355,6 +407,11 @@ void SceneTrapecios::createPlayer(float masa)
 
     // Guardar referencia global para controlar
     _player = player;
+
+    // Bloqueamos la rotación en los tres ejes (X, Y, Z)
+    _player->setRigidDynamicLockFlag(PxRigidDynamicLockFlag::eLOCK_ANGULAR_X, true);
+    _player->setRigidDynamicLockFlag(PxRigidDynamicLockFlag::eLOCK_ANGULAR_Y, true);
+    _player->setRigidDynamicLockFlag(PxRigidDynamicLockFlag::eLOCK_ANGULAR_Z, true);
 
     _rigids.push_back(player);
 }
@@ -409,6 +466,64 @@ void SceneTrapecios::checkPlayerCollectible()
     {
         // Colisión detectada
         recogerParticula();
+    }
+}
+
+void SceneTrapecios::handleContact(PxRigidActor* a, PxRigidActor* b)
+{
+    // Ver es el player
+    bool aIsPlayer = (a == _player);
+    bool bIsPlayer = (b == _player);
+
+    // si no lo es... salir
+    if (!aIsPlayer && !bIsPlayer) return;
+
+    // Comprobar cual es el otro
+    PxRigidActor* other = nullptr;
+    if (aIsPlayer) {
+        other = b;
+    }
+    else {
+        other = a;
+    }
+
+    // --- SI OTHER ES SUELO... ---
+    // Resetear el estado de salto
+    if (other->getType() == PxActorType::eRIGID_STATIC)
+    {
+        _hasJumped = false;
+    }
+
+    // --- SI ES UN TRAPECIO... ---
+    // Attach con trapecio
+    if (_playerJoint == nullptr && !_pendingAttachRegistered) // solo si se puede
+    {
+        for (size_t i = 0; i < _trapecios.size(); ++i)
+        {
+            if (other == _trapecios[i].palo2)
+            {
+                _pendingAttachPalo = (PxRigidDynamic*)_trapecios[i].palo2;
+                _pendingAttachRegistered = true;
+
+                // en trapecio se puede saltar
+                _hasJumped = false;
+                break;
+            }
+        }
+    }
+
+}
+
+void SceneTrapecios::attachPlayerToTrapecio(PxRigidDynamic* palo)
+{
+    // crear joint temporal
+    _playerJoint = PxDistanceJointCreate(*gPhysics,
+        _player, PxTransform(PxVec3(0, 1.0f, 0)),
+        palo, PxTransform(PxVec3(0, -6.0f, 0)));
+
+    if (_playerJoint) {
+        _playerJoint->setDistanceJointFlag(PxDistanceJointFlag::eMAX_DISTANCE_ENABLED, true);
+        _playerJoint->setMaxDistance(0.1f);
     }
 }
 

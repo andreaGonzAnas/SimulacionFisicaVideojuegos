@@ -5,6 +5,7 @@
 class RenderItem;
 class CollectibleParticleSystem;
 class Particula;
+class MyContactCallback;
 
 struct Trapecio
 {
@@ -50,7 +51,15 @@ private:
 	std::vector<physx::PxRigidDynamic*> _rigids;
 
 
+	// COLISIONES
+	MyContactCallback* _myCallback = nullptr;
+	physx::PxDistanceJoint* _playerJoint = nullptr;
+	physx::PxRigidDynamic* _pendingAttachPalo = nullptr;
+	bool _pendingAttachRegistered = false;
+
 public:
+
+
 	SceneTrapecios(PxPhysics* physics, PxScene* scene);
 	~SceneTrapecios();
 
@@ -67,7 +76,13 @@ public:
 	void createPlayer(float masa);
 	void createMalla();
 
+	PxRigidDynamic* getPlayer() { return _player; }
+	std::vector<Trapecio> getTrapecios() { return _trapecios; }
+	physx::PxDistanceJoint* getPlayerjoint() { return _playerJoint; }
+
 	void recogerParticula();
 	void checkPlayerCollectible();
-};
 
+	void handleContact(PxRigidActor* a, PxRigidActor* b);
+	void attachPlayerToTrapecio(PxRigidDynamic* palo);
+};

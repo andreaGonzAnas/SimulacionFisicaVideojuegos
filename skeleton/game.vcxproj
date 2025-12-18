@@ -264,6 +264,7 @@
     <ClCompile Include="ExplosionRigidBodySystem.cpp" />
     <ClCompile Include="FireParticleSystem.cpp" />
     <ClCompile Include="MalabaresScene.cpp" />
+    <ClCompile Include="MyContactCallback.cpp" />
     <ClCompile Include="Proyectil.cpp" />
     <ClCompile Include="ProyectilSystem.cpp" />
     <ClCompile Include="RigidBodyForceRegistry.cpp" />
@@ -308,6 +309,7 @@
     <ClInclude Include="ExplosionRigidBodySystem.h" />
     <ClInclude Include="FireParticleSystem.h" />
     <ClInclude Include="MalabaresScene.h" />
+    <ClInclude Include="MyContactCallback.h" />
     <ClInclude Include="Proyectil.h" />
     <ClInclude Include="ProyectilSystem.h" />
     <ClInclude Include="RigidBodyForceRegistry.h" />
