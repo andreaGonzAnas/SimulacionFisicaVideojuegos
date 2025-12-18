@@ -56,6 +56,55 @@ void InitialMenuScene::update(double t)
 void InitialMenuScene::clear()
 {
     _initialMenu = false;
+
+    // proyectiles
+    if (prSys) { delete prSys; prSys = nullptr; }
+
+    // vacio visual
+    for (auto item : _scenary) {
+        if (item) {
+            DeregisterRenderItem(item);
+            const_cast<RenderItem*>(item)->actor = nullptr;
+        }
+    }
+    _scenary.clear();
+
+    // rigidos
+    for (auto r : _rigids) {
+        if (r) {
+            _gScene->removeActor(*r);
+            PxU32 nShapes = r->getNbShapes();
+            physx::PxShape* shapes[8];
+            r->getShapes(shapes, nShapes);
+            for (PxU32 i = 0; i < nShapes; i++) shapes[i]->release();
+
+            if (r->userData) {
+                r->userData = nullptr;
+            }
+            r->release();
+        }
+    }
+    _rigids.clear();
+
+    // estaticos
+    for (auto s : _statics) {
+        if (s) {
+            _gScene->removeActor(*s);
+
+            PxU32 nShapes = s->getNbShapes();
+            physx::PxShape* shapes[8];
+            s->getShapes(shapes, nShapes);
+
+            for (PxU32 i = 0; i < nShapes; i++) {
+                shapes[i]->release();
+            }
+
+            s->release();
+            s = nullptr;
+        }
+    }
+    _statics.clear();
+
 }
 
 bool InitialMenuScene::handleKey(unsigned char key, const PxTransform& camera)
@@ -130,7 +179,8 @@ void InitialMenuScene::createEstanteria(physx::PxVec3 pos)
 
     // Crear RenderItem para visualizar la mano
     RenderItem* rHand = new RenderItem(handShape, hand, Vector4(1.0f, 0.85f, 0.7f, 1.0f)); // color piel aproximado
-    
+    _scenary.push_back(rHand);
+    _statics.push_back(hand);
 }
 
 PxRigidDynamic* InitialMenuScene::createCubes(physx::PxVec3 pos)
@@ -144,10 +194,14 @@ PxRigidDynamic* InitialMenuScene::createCubes(physx::PxVec3 pos)
 
     PxRigidBodyExt::updateMassAndInertia(*hand, 20.0);
 
+
     // Agregar al escenario
     _gScene->addActor(*hand);
 
     // Crear RenderItem para visualizar la mano
     RenderItem* rHand = new RenderItem(handShape, hand, Vector4(1.0f, 0.0f, 0.0f, 1.0f));
+    _scenary.push_back(rHand);
+    _rigids.push_back(hand);
+    
     return hand;
 }

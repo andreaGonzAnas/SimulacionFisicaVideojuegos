@@ -4,6 +4,7 @@
 
 class MyContactCallback;
 class ProyectilRigidBodySystem;
+class RenderItem;
 
 class InitialMenuScene : public Scene
 {
@@ -21,6 +22,10 @@ private:
 	PxRigidDynamic* _exit;
 
 	bool changeToLevel = false;
+
+	std::vector<RenderItem*> _scenary;
+	std::vector<physx::PxRigidDynamic*> _rigids;
+	std::vector<PxRigidStatic*> _statics;
 
 public:
 	InitialMenuScene(PxPhysics* physics, PxScene* scene);
