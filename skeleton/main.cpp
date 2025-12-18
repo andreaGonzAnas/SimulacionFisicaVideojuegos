@@ -207,12 +207,14 @@ void stepPhysics(bool interactive, double t)
 	if (_sceneManager->getCurrentScene()->getType() == 1)
 	{
 		// Convertimos el puntero de Scene* a InitialMenuScene*
-		SceneTrapecios* menu = static_cast<SceneTrapecios*>(_sceneManager->getCurrentScene());
+		SceneTrapecios* trapecios = static_cast<SceneTrapecios*>(_sceneManager->getCurrentScene());
+		Scene2* balas = static_cast<Scene2*>(_sceneManager->getCurrentScene());
 
 		// Ahora ya puedes acceder al método específico
-		auto result = menu->getChangeScene();
+		auto resultTrapecios = trapecios->getChangeScene();
+		auto resultBalas = balas->getChangeScene();
 
-		if (result) //cambiar a level
+		if (resultTrapecios || resultBalas) //cambiar a level
 		{
 			_sceneManager->setScene(new LevelMenuScene(gPhysics, gScene));
 		}

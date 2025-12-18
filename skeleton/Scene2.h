@@ -45,6 +45,10 @@ private:
 
 	bool changeScene = false;
 
+	const float RESET_DELAY = 3.0f; // 3 segundos
+	bool _isWin = false;
+	float _winTimer = 0.0f;
+
 public:
 	Scene2(PxPhysics* physics);
 	~Scene2();
@@ -62,5 +66,6 @@ public:
 	void createFireCircles();
 
 	SceneType getType() override { return GAME; }
+	bool getChangeScene() { return changeScene; }
 };
 

@@ -100,6 +100,8 @@ void Scene2::init()
 
 void Scene2::update(double t)
 {
+    
+    
     // ---- COMPROBAR SI TODOS LOS CÍRCULOS HAN SIDO ATRAVESADOS ----
     if (!_hasPassedFire)
     {
@@ -186,6 +188,20 @@ void Scene2::update(double t)
     else if (_hasPassedFire)
     {
         createNewFirework();
+    }
+
+    if (_isWin) {
+        _winTimer += t;
+
+        if (_winTimer >= RESET_DELAY) {
+            _isWin = false;
+            _winTimer = 0.0f;
+
+            //cambiar de escena
+            changeScene = true;
+            _victory = false;
+        }
+        return;
     }
 
 }
@@ -368,7 +384,17 @@ void Scene2::startCelebration()
     _victory = true;
 
     // timer para cambiar de escena
+    _isWin = true;
+    _winTimer = 0.0f;
 
+    // Centrar camara
+    PxVec3 centro(35, 40, 35);
+    Camera* cam = GetCamera();
+    _initPosCamera = cam->getEye();
+    _initDirCamera = cam->getDir();
+    cam->setTransform(PxVec3(centro.x, centro.y - 10.0, centro.z - 45.0));
+    cam->setDir(PxVec3(0.0, 0.0, 1));
+    cam->setHumanCannonMode(true);
 }
 
 void Scene2::createNewFirework()
