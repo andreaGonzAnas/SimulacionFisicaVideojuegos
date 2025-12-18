@@ -130,32 +130,30 @@ void Scene3::clear()
 		_suelo = nullptr;
 	}
 
-	//Eliminar rigidBodies
-	for (auto r : _expSys->getRigidBodies())
-	{
-		DeregisterRenderItem(r->getRenderItem());
-		
-		// Eliminar suelo
-		if (r->getRigidDynamic()) {
-			_gScene->removeActor(*r->getRigidDynamic());
-		}
+	////Eliminar rigidBodies
+	//for (auto r : _expSys->getRigidBodies())
+	//{
+	//	// Eliminar suelo
+	//	if (r->getRigidDynamic()) {
+	//		_gScene->removeActor(*r->getRigidDynamic());
+	//	}
 
-		if (r->getRigidDynamic()) {
-			PxU32 nShapes = r->getRigidDynamic()->getNbShapes();
-			PxShape* shapes[8];
-			r->getRigidDynamic()->getShapes(shapes, nShapes);
+	//	if (r->getRigidDynamic()) {
+	//		PxU32 nShapes = r->getRigidDynamic()->getNbShapes();
+	//		PxShape* shapes[8];
+	//		r->getRigidDynamic()->getShapes(shapes, nShapes);
 
-			for (PxU32 i = 0; i < nShapes; i++) {
-				shapes[i]->release();
-			}
-		}
+	//		for (PxU32 i = 0; i < nShapes; i++) {
+	//			shapes[i]->release();
+	//		}
+	//	}
 
-		// 3. Liberar el actor estático
-		if (r->getRigidDynamic()) {
-			r->getRigidDynamic()->release();
-			delete r;
-		}
-	}
+	//	// 3. Liberar el actor estático
+	//	if (r->getRigidDynamic()) {
+	//		r->getRigidDynamic()->release();
+	//		delete r;
+	//	}
+	//}
 	
 	
 	delete _expSys; _expSys = nullptr;
