@@ -40,7 +40,7 @@ void SceneTrapecios::init()
 
     // ---- PLATAFORMAS ----
     createPlatforms(PxVec3(75, 33.5, 35));
-    createPlatforms(PxVec3(-5, 33.5, 35));
+    _winPlatform = createPlatforms(PxVec3(-5, 33.5, 35));
 
 	// ---- PLAYER ----
     createPlayer(20.0f);
@@ -78,7 +78,6 @@ void SceneTrapecios::update(double t)
     }
 
     
-
     checkPlayerCollectible();
 
     if (_hasCollectedParticle && _staticParticle && _player)
@@ -169,42 +168,36 @@ bool SceneTrapecios::handleKey(unsigned char key, const PxTransform& camera)
     {
         case 't':
         {
-            if (!_trapecios.empty())
-            {
-                _trapecios[0].active = true;                // activa la lógica del motor
-                _trapecios[0].motorVel = 1.0f;              // asegura velocidad inicial positiva
-                _trapecios[0].palo2->wakeUp();              // despierta el actor dinámico
-                _trapecios[0].joint->setDriveVelocity(_trapecios[0].motorVel); // aplica velocidad al motor
-                
-            }
+            startGame();
 
             break;
         }
-        case ' ': // Espacio
+        case ' ': // Salto
         {
-            if (_playerJoint)
+            if (_start_game)
             {
-                // 1. Primero liberar
-                _playerJoint->release();
-                _playerJoint = nullptr;
+                if (_playerJoint)
+                {
+                    // liberar
+                    _playerJoint->release();
+                    _playerJoint = nullptr;
 
-                // 2. Despertar explícitamente al actor
-                _player->wakeUp();
+                    // despertar al actor
+                    _player->wakeUp();
 
-                // 3. Aplicar el impulso
-                // Aumentamos un poco el impulso horizontal para separarnos del palo rápido
-                PxVec3 impulsoSalto(-2500.0f, 2500.0f, 0.0f);
-                _player->addForce(impulsoSalto, PxForceMode::eIMPULSE);
+                    // aplicar el impulso
+                    PxVec3 impulsoSalto(-2500.0f, 2500.0f, 0.0f);
+                    _player->addForce(impulsoSalto, PxForceMode::eIMPULSE);
 
-                _hasJumped = true;
+                    _hasJumped = true;
+                }
+                else if (!_hasJumped) // Salto normal desde el suelo
+                {
+                    PxVec3 impulsoSuelo(-1000.0f, 4200.0f, 0.0f);
+                    _player->addForce(impulsoSuelo, PxForceMode::eIMPULSE);
+                    _hasJumped = true;
+                }
             }
-            else if (!_hasJumped) // Salto normal desde el suelo
-            {
-                PxVec3 impulsoSuelo(-1000.0f, 4200.0f, 0.0f);
-                _player->addForce(impulsoSuelo, PxForceMode::eIMPULSE);
-                _hasJumped = true;
-            }
-
             break;
         }
 
@@ -350,7 +343,7 @@ void SceneTrapecios::createTrapecio(physx::PxVec3 pos, bool startActive)
 
 }
 
-void SceneTrapecios::createPlatforms(physx::PxVec3 pos)
+physx::PxRigidStatic* SceneTrapecios::createPlatforms(physx::PxVec3 pos)
 {
     // SUELO
     PxRigidStatic* _suelo = gPhysics->createRigidStatic(PxTransform(pos));
@@ -378,6 +371,8 @@ void SceneTrapecios::createPlatforms(physx::PxVec3 pos)
     item = new RenderItem(shapeSuelo, _suelo, { 0.8, 0.8,0.8,1 });
 
     _statics.push_back(_suelo);
+
+    return _suelo;
 }
 
 void SceneTrapecios::createPlayer(float masa)
@@ -491,6 +486,26 @@ void SceneTrapecios::handleContact(PxRigidActor* a, PxRigidActor* b)
         other = a;
     }
 
+    // --- SI OTHER ES WINNING PLATFORM ---
+    if (other == _winPlatform)
+    {
+        // A. Comprobar que el jugador está por encima de la plataforma
+        // Obtenemos la altura del jugador y de la plataforma
+        float playerY = _player->getGlobalPose().p.y;
+        float platformY = _winPlatform->getGlobalPose().p.y;
+
+        // B. Comprobar que la velocidad es descendente (está aterrizando)
+        float velY = _player->getLinearVelocity().y;
+
+        // Si la posición del player es mayor a la plataforma + un pequeño margen
+        // y el jugador no está subiendo como un cohete
+        if (playerY > (platformY + 0.5f) && velY <= 0.1f)
+        {
+            winGame();
+            return;
+        }
+    }
+
     // --- SI OTHER ES SUELO... ---
     // Resetear el estado de salto
     if (other->getType() == PxActorType::eRIGID_STATIC)
@@ -525,13 +540,33 @@ void SceneTrapecios::attachPlayerToTrapecio(PxRigidDynamic* palo)
         palo, PxTransform(PxVec3(0, -5.5f, 0)));
 
     if (_playerJoint) {
-        // ESTA LÍNEA ES VITAL: 
         // Evita que el player choque con el palo mientras están unidos
         _playerJoint->setConstraintFlag(PxConstraintFlag::eCOLLISION_ENABLED, false);
 
         _playerJoint->setDistanceJointFlag(PxDistanceJointFlag::eMAX_DISTANCE_ENABLED, true);
         _playerJoint->setMaxDistance(0.1f);
     }
+}
+
+void SceneTrapecios::startGame()
+{
+    // empezar a mover primer trapecio
+    if (!_trapecios.empty())
+    {
+        _trapecios[0].active = true;                // activa la lógica del motor
+        _trapecios[0].motorVel = 1.0f;              // asegura velocidad inicial positiva
+        _trapecios[0].palo2->wakeUp();              // despierta el actor dinámico
+        _trapecios[0].joint->setDriveVelocity(_trapecios[0].motorVel); // aplica velocidad al motor
+
+    }
+
+    // habilitar salto
+    _start_game = true;
+}
+
+void SceneTrapecios::winGame()
+{
+    std::cout << "ganaste" << '\n';
 }
 
 

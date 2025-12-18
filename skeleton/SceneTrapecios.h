@@ -57,6 +57,11 @@ private:
 	physx::PxRigidDynamic* _pendingAttachPalo = nullptr;
 	bool _pendingAttachRegistered = false;
 
+
+	// GAME
+	bool _start_game = false;
+	physx::PxRigidStatic* _winPlatform = nullptr;
+
 public:
 
 
@@ -72,7 +77,7 @@ public:
 
 	void createDeco();
 	void createTrapecio(physx::PxVec3 pos, bool startActive = true);
-	void createPlatforms(physx::PxVec3 pos);
+	physx::PxRigidStatic* createPlatforms(physx::PxVec3 pos);
 	void createPlayer(float masa);
 	void createMalla();
 
@@ -85,4 +90,9 @@ public:
 
 	void handleContact(PxRigidActor* a, PxRigidActor* b);
 	void attachPlayerToTrapecio(PxRigidDynamic* palo);
+
+
+	// GAMEPLAY
+	void startGame();
+	void winGame();
 };
