@@ -40,7 +40,7 @@ ExplosionRigidBodySystem::ExplosionRigidBodySystem(PxRigidDynamic* p, PxPhysics*
     // Registrar fuerza de gravedad a todas las partículas
     for (auto p : _rigidBodies) {
         _registry->add(p->getRigidDynamic(), gravityEarth);
-        _registry->add(p->getRigidDynamic(), windForce);
+        //_registry->add(p->getRigidDynamic(), windForce);
     }
 
 
@@ -70,7 +70,7 @@ void ExplosionRigidBodySystem::update(double t)
 
                     // REGISTRAR FUERZAS SOLO A LAS NUEVAS (¡Error corregido aquí!)
                     _registry->add(r->getRigidDynamic(), gravityEarth);
-                    _registry->add(r->getRigidDynamic(), windForce);
+                    //_registry->add(r->getRigidDynamic(), windForce);
                 }
                 // Mover a la lista principal
                 _rigidBodies.splice(_rigidBodies.end(), newParticles);
@@ -103,4 +103,12 @@ void ExplosionRigidBodySystem::update(double t)
 
 void ExplosionRigidBodySystem::addForce()
 {
+}
+
+void ExplosionRigidBodySystem::setSystemPosition(PxVec3 pos)
+{
+    if (!_generators.empty()) {
+        // Casteamos o usamos el método del padre si lo definiste en la clase base
+        static_cast<UniformalRigidBodyGen*>(_generators.front())->setOrigin(pos);
+    }
 }

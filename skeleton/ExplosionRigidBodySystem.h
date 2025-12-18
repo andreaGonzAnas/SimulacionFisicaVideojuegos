@@ -14,5 +14,6 @@ public:
 
 	void update(double t) override;
 	void addForce();
+	void setSystemPosition(PxVec3 pos);
 };
 

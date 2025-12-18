@@ -64,6 +64,8 @@ void SceneTrapecios::init()
     physx::PxShape* shape_ad = CreateShape(PxBoxGeometry(5, 5, 5));
     new_solid->attachShape(*shape_ad);
     _expSys = new ExplosionRigidBodySystem(new_solid, gPhysics, _gScene);
+
+    _expSys->setSystemPosition(PxVec3(70, 60.5, 35));
 }
 
 void SceneTrapecios::update(double t)
