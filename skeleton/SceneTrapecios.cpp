@@ -47,7 +47,7 @@ void SceneTrapecios::init()
     _winPlatform = createPlatforms(PxVec3(-5, 33.5, 35));
 
 	// ---- PLAYER ----
-    createPlayer(20.0f);
+    createPlayer(60.0f);
 
 	// ---- SUELO (CAMA ELASTICA) ----
     createMalla();
@@ -246,14 +246,14 @@ bool SceneTrapecios::handleKey(unsigned char key, const PxTransform& camera)
                     _player->wakeUp();
 
                     // aplicar el impulso
-                    PxVec3 impulsoSalto(-2500.0f, 2500.0f, 0.0f);
+                    PxVec3 impulsoSalto(-5500.0f, 5500.0f, 0.0f);
                     _player->addForce(impulsoSalto, PxForceMode::eIMPULSE);
 
                     _hasJumped = true;
                 }
                 else if (!_hasJumped) // Salto normal desde el suelo
                 {
-                    PxVec3 impulsoSuelo(-1000.0f, 4200.0f, 0.0f);
+                    PxVec3 impulsoSuelo(-6000.0f, 10200.0f, 0.0f);
                     _player->addForce(impulsoSuelo, PxForceMode::eIMPULSE);
                     _hasJumped = true;
                 }

@@ -111,8 +111,6 @@ void initPhysics(bool interactive)
 
 	_sceneTrapecios = new SceneTrapecios(gPhysics, gScene);
 
-	//_sceneMalabares = new MalabaresScene(gPhysics, gScene);
-
 	//Setear escena actual
 	_sceneManager->setScene(_sceneTrapecios);
 	
@@ -196,12 +194,6 @@ void keyPress(unsigned char key, const PxTransform& camera)
 		{
 			//cambiar escena
 			_sceneManager->setScene(new SceneTrapecios(gPhysics, gScene));
-			break;
-		}
-		case '5':
-		{
-			//cambiar escena
-			_sceneMalabares = new MalabaresScene(gPhysics, gScene);
 			break;
 		}
 		case ' ':
