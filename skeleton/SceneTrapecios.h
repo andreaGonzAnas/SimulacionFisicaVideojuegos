@@ -109,4 +109,6 @@ public:
 	void startGame();
 	void winGame();
 	void loseGame();
+
+	SceneType getType() override { return GAME; }
 };

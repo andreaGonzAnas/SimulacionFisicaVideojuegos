@@ -21,5 +21,6 @@ public:
 	void clear() override;
 
 	bool handleKey(unsigned char key, const PxTransform& camera);
+	SceneType getType() override { return GAME; }
 };
 

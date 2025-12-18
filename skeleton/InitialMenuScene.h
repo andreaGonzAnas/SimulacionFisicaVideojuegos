@@ -20,6 +20,8 @@ private:
 	PxRigidDynamic* _play;
 	PxRigidDynamic* _exit;
 
+	bool changeToLevel = false;
+
 public:
 	InitialMenuScene(PxPhysics* physics, PxScene* scene);
 	~InitialMenuScene();
@@ -34,5 +36,8 @@ public:
 
 	void createEstanteria(physx::PxVec3 pos);
 	PxRigidDynamic* createCubes(physx::PxVec3 pos);
+
+	bool getChangeLevel() { return changeToLevel; }
+	SceneType getType() override { return MENU; }
 };
 

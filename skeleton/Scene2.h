@@ -58,5 +58,7 @@ public:
 	void createNewFirework();
 	void createWalls();
 	void createFireCircles();
+
+	SceneType getType() override { return GAME; }
 };
 

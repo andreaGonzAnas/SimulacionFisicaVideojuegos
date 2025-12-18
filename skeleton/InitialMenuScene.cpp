@@ -104,6 +104,7 @@ void InitialMenuScene::handleContact(PxRigidActor* a, PxRigidActor* b)
         if (a == _play || b == _play)
         {
             std::cout << "¡PLAY! Iniciando nivel..." << std::endl;
+            changeToLevel = true;
         }
         else if (a == _exit || b == _exit)
         {

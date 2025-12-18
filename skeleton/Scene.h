@@ -30,5 +30,7 @@ public:
         _gScene = scene;
     }
 
+    enum SceneType { MENU, GAME, OPTIONS };
+    virtual SceneType getType() = 0;
 };
 

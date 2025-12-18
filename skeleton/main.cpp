@@ -166,6 +166,11 @@ void stepPhysics(bool interactive, double t)
 	//Update de la escena
 	_sceneManager->update(t);
 
+	if (_sceneManager->getCurrentScene()->getType() == 0) 
+	{
+
+	}
+
 	//slow down the simulation, necessary for Verlet integration
 	//TODO: review the physics timestep and the integrator stability
 	std::this_thread::sleep_for(std::chrono::microseconds(10));
