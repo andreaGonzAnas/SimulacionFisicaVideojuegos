@@ -55,7 +55,7 @@ void SceneTrapecios::init()
     // ---- PARTICULA RECOGIBLE ----
     //Material
     PxMaterial* gMaterial = gPhysics->createMaterial(0.5f, 0.5f, 0.6f);
-    _springSys = new CollectibleParticleSystem(gMaterial, physx::PxVec3(35, 53.5, 35));
+    _springSys = new CollectibleParticleSystem(gMaterial, initialCollectiblePos);
     _staticParticle = _springSys->getStaticPart();
 
     // CONFETTIS
@@ -66,6 +66,23 @@ void SceneTrapecios::init()
 void SceneTrapecios::update(double t)
 {
     if (!_player || _statics.empty()) return;
+    
+    if (_isGameOver) {
+        _gameOverTimer += t;
+
+        if (_gameOverTimer >= RESET_DELAY) {
+            _isGameOver = false;
+            _gameOverTimer = 0.0f;
+
+            // reiniciar pos player
+            _player->setGlobalPose({ 72, 40.5, 35 });
+
+            //reiniciar muelle
+            _springSys->setStaticPos(initialCollectiblePos);
+            _hasCollectedParticle = false;
+        }
+        return;
+    }
     
     if (!_win_game)
     {
@@ -95,7 +112,6 @@ void SceneTrapecios::update(double t)
     
 
     // Actualizar muelle
-
     if (_hasCollectedParticle && _staticParticle && _player)
     {
         PxVec3 playerPos = _player->getGlobalPose().p;
@@ -456,7 +472,7 @@ void SceneTrapecios::createPlayer(float masa)
 void SceneTrapecios::createMalla()
 {
     // SUELO
-    PxRigidStatic* mallaActor = gPhysics->createRigidStatic(PxTransform({ 35, 17, 35 }));
+    mallaActor = gPhysics->createRigidStatic(PxTransform({ 35, 17, 35 }));
 
     PxMaterial* sueloMat = gPhysics->createMaterial(
         0.2f,  // fricción estática
@@ -522,6 +538,26 @@ void SceneTrapecios::handleContact(PxRigidActor* a, PxRigidActor* b)
     }
     else {
         other = a;
+    }
+
+    
+    // --- SI TOCA LA MALLA ---
+    // (Asegúrate de tener guardado el puntero de la malla en _mallaActor al crearla)
+    if (other == mallaActor)
+    {
+        loseGame();
+        return;
+    }
+
+    // --- SI ESTÁ POR DEBAJO DE LA MALLA ---
+    // También es bueno comprobar la altura por si el jugador cae fuera de los límites físicos
+    float playerY = _player->getGlobalPose().p.y;
+    float mallaY = mallaActor->getGlobalPose().p.y;
+
+    if (playerY < (mallaY - 1.0f)) // Si cae 1 metro por debajo del nivel de la malla
+    {
+        loseGame();
+        return;
     }
 
     // --- SI OTHER ES WINNING PLATFORM ---
@@ -666,6 +702,21 @@ void SceneTrapecios::winGame()
 
     // activar remolino
     _middleFire->setActiveWhirlWind(true);
+}
+
+void SceneTrapecios::loseGame()
+{
+    if (!_isGameOver) {
+        std::cout << "PERDISTE. Reiniciando en " << RESET_DELAY << " segundos..." << std::endl;
+        _isGameOver = true;
+        _gameOverTimer = 0.0f;
+
+        // Opcional: Detener al jugador para que no siga cayendo
+        if (_player) {
+            _player->setLinearVelocity(PxVec3(0, 0, 0));
+            _player->setAngularVelocity(PxVec3(0, 0, 0));
+        }
+    }
 }
 
 

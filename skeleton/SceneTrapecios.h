@@ -65,6 +65,11 @@ private:
 	bool _start_game = false;
 	bool _win_game = false;
 	physx::PxRigidStatic* _winPlatform = nullptr;
+	physx::PxRigidStatic* mallaActor = nullptr;
+	bool _isGameOver = false;
+	float _gameOverTimer = 0.0f;
+	const float RESET_DELAY = 3.0f; // 3 segundos
+	PxVec3 initialCollectiblePos = { 35, 53.5, 35 };
 
 
 public:
@@ -103,4 +108,5 @@ public:
 	// GAMEPLAY
 	void startGame();
 	void winGame();
+	void loseGame();
 };
