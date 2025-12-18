@@ -293,13 +293,16 @@ void startRender(const PxVec3& cameraEye, const PxVec3& cameraDir, PxReal clipNe
 		drawText(display_title, 10, 480);
 
 		glColor4f(1.0f, 0.2f, 0.2f, 1.0f);
-		drawText(display_left, 10, 450);
+		drawText(display_rossa, 10, 450);
 
 		glColor4f(1.0f, 0.2f, 0.2f, 1.0f);
-		drawText(display_right, 10, 420);
+		drawText(display_left, 10, 420);
 
 		glColor4f(1.0f, 0.2f, 0.2f, 1.0f);
-		drawText(display_score, 10, 390);
+		drawText(display_right, 10, 390);
+
+		glColor4f(1.0f, 0.2f, 0.2f, 1.0f);
+		drawText(display_score, 10, 360);
 	}
 	
 

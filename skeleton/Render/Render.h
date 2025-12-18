@@ -48,6 +48,7 @@
 #include <string>
 
 extern std::string display_title;
+extern std::string display_rossa;
 extern std::string display_left;
 extern std::string display_right;
 extern std::string display_score;
