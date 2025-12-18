@@ -59,7 +59,7 @@ private:
 	bool _pendingAttachRegistered = false;
 
 	// RIGIDS
-	ExplosionRigidBodySystem* _expSys;
+	std::vector<ExplosionRigidBodySystem*> _confettis;
 
 	// GAME
 	bool _start_game = false;
@@ -94,6 +94,8 @@ public:
 	void handleContact(PxRigidActor* a, PxRigidActor* b);
 	void attachPlayerToTrapecio(PxRigidDynamic* palo);
 
+	// CONFETTI
+	void createConfettiSys(physx::PxVec3 pos);
 
 	// GAMEPLAY
 	void startGame();

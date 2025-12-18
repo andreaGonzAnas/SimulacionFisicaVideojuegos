@@ -55,17 +55,9 @@ void SceneTrapecios::init()
     _springSys = new CollectibleParticleSystem(gMaterial, physx::PxVec3(35, 53.5, 35));
     _staticParticle = _springSys->getStaticPart();
 
-    // ---- SISTEMA DE RIGIDOS ----
-    // Anadir un actor dinamico
-    PxRigidDynamic* new_solid;
-    new_solid = gPhysics->createRigidDynamic(PxTransform({ 50,200,-80 }));
-    new_solid->setLinearVelocity({ 0,5,0 });
-    new_solid->setAngularVelocity({ 0,0,0 });
-    physx::PxShape* shape_ad = CreateShape(PxBoxGeometry(5, 5, 5));
-    new_solid->attachShape(*shape_ad);
-    _expSys = new ExplosionRigidBodySystem(new_solid, gPhysics, _gScene);
-
-    _expSys->setSystemPosition(PxVec3(70, 60.5, 35));
+    // CONFETTIS
+    createConfettiSys(PxVec3(70, 60.5, 35));
+    createConfettiSys(PxVec3(10, 60.5, 35));
 }
 
 void SceneTrapecios::update(double t)
@@ -102,7 +94,12 @@ void SceneTrapecios::update(double t)
     }
 
     _springSys->update(t);
-    _expSys->update(t);
+    
+    // confetti
+    for (auto c : _confettis)
+    {
+        c->update(t);
+    }
 }
 
 void SceneTrapecios::clear()
@@ -560,6 +557,23 @@ void SceneTrapecios::attachPlayerToTrapecio(PxRigidDynamic* palo)
         _playerJoint->setDistanceJointFlag(PxDistanceJointFlag::eMAX_DISTANCE_ENABLED, true);
         _playerJoint->setMaxDistance(0.1f);
     }
+}
+
+void SceneTrapecios::createConfettiSys(physx::PxVec3 pos)
+{
+    // ---- SISTEMA DE RIGIDOS ----
+    // Anadir un actor dinamico
+    PxRigidDynamic* new_solid;
+    new_solid = gPhysics->createRigidDynamic(PxTransform({ 50,200,-80 }));
+    new_solid->setLinearVelocity({ 0,5,0 });
+    new_solid->setAngularVelocity({ 0,0,0 });
+    physx::PxShape* shape_ad = CreateShape(PxBoxGeometry(5, 5, 5));
+    new_solid->attachShape(*shape_ad);
+    ExplosionRigidBodySystem* _expSys = new ExplosionRigidBodySystem(new_solid, gPhysics, _gScene);
+
+    _expSys->setSystemPosition(pos);
+
+    _confettis.push_back(_expSys);
 }
 
 void SceneTrapecios::startGame()
