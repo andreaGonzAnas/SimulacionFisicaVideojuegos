@@ -20,6 +20,7 @@ private:
 
 	PxRigidDynamic* _balas;
 	PxRigidDynamic* _trapecios;
+	PxRigidDynamic* _back;
 
 	int changeToLevel = -1;
 

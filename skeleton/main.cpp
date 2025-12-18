@@ -201,6 +201,10 @@ void stepPhysics(bool interactive, double t)
 		{
 			_sceneManager->setScene(new SceneTrapecios(gPhysics, gScene));
 		}
+		else if (result == 0)
+		{
+			_sceneManager->setScene(new InitialMenuScene(gPhysics, gScene));
+		}
 	}
 
 	// juego

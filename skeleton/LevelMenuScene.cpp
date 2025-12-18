@@ -38,10 +38,12 @@ void LevelMenuScene::init()
     // estanterias
     createEstanteria(PxVec3(20, 25, 20));
     createEstanteria(PxVec3(50, 25, 20));
+    createEstanteria(PxVec3(35, 15, 20));
 
     // cubos
     _trapecios = createCubes(PxVec3(20, 30, 20));
     _balas = createCubes(PxVec3(50, 30, 20));
+    _back = createCubes(PxVec3(35, 20, 20));
 
     // sistema proyectiles rigidos
     prSys = new ProyectilRigidBodySystem(gPhysics, _gScene);
@@ -162,6 +164,11 @@ void LevelMenuScene::handleContact(PxRigidActor* a, PxRigidActor* b)
         {
             std::cout << "a los trapecios" << std::endl;
             changeToLevel = 2;
+        }
+        else if (a == _back || b == _back)
+        {
+            std::cout << "al menu inicial" << std::endl;
+            changeToLevel = 0;
         }
     }
 }
