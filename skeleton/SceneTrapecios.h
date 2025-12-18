@@ -25,6 +25,7 @@ private:
 	// DECO
 	std::vector<RenderItem*> _scenary;
 	std::vector<FireParticleSystem*> _firesInScene;
+	FireParticleSystem* _middleFire;
 
 	// CAMERA
 	physx::PxVec3 _initPosCamera;

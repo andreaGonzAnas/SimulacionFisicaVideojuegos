@@ -537,7 +537,7 @@ void SceneTrapecios::handleContact(PxRigidActor* a, PxRigidActor* b)
 
         // Si la posición del player es mayor a la plataforma + un pequeño margen
         // y el jugador no está subiendo como un cohete
-        if (playerY > (platformY + 0.5f) && velY <= 0.1f)
+        if ((playerY > (platformY + 0.5f) && velY <= 0.1f) && _hasCollectedParticle)
         {
             winGame();
             return;
@@ -610,6 +610,8 @@ void SceneTrapecios::createFires(physx::PxVec3 pos)
     int numFuegosFila = 7;
     float espaciado = 15.0f; // Distancia entre cada fuego
 
+    int mid = numFuegosFila / 2;
+
     for (int i = 0; i < numFuegosFila; ++i)
     {
         // Calculamos la X sumando el espaciado multiplicado por el índice
@@ -628,6 +630,10 @@ void SceneTrapecios::createFires(physx::PxVec3 pos)
         _firePartSystem->setActiveWhirlWind(false);
         _firePartSystem->setActiveWind(true);
         _firesInScene.push_back(_firePartSystem);
+
+        if (i == mid) {
+            _middleFire = _firePartSystem;
+        }
     }
 }
 
@@ -657,6 +663,9 @@ void SceneTrapecios::winGame()
     {
         c->setActive(true);
     }
+
+    // activar remolino
+    _middleFire->setActiveWhirlWind(true);
 }
 
 
