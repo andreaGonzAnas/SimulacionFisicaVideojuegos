@@ -3,6 +3,7 @@
 #include <vector>
 
 class MyContactCallback;
+class ProyectilRigidBodySystem;
 
 class InitialMenuScene : public Scene
 {
@@ -13,6 +14,11 @@ private:
 	// CAMERA
 	physx::PxVec3 _initPosCamera;
 	physx::PxVec3 _initDirCamera;
+
+	ProyectilRigidBodySystem* prSys;
+
+	PxRigidDynamic* _play;
+	PxRigidDynamic* _exit;
 
 public:
 	InitialMenuScene(PxPhysics* physics, PxScene* scene);
@@ -27,6 +33,6 @@ public:
 	void handleContact(PxRigidActor* a, PxRigidActor* b);
 
 	void createEstanteria(physx::PxVec3 pos);
-	void createCubes(physx::PxVec3 pos);
+	PxRigidDynamic* createCubes(physx::PxVec3 pos);
 };
 

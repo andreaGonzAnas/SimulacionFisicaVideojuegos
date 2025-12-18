@@ -267,6 +267,8 @@
     <ClCompile Include="MalabaresScene.cpp" />
     <ClCompile Include="MyContactCallback.cpp" />
     <ClCompile Include="Proyectil.cpp" />
+    <ClCompile Include="ProyectilRigidBody.cpp" />
+    <ClCompile Include="ProyectilRigidBodySystem.cpp" />
     <ClCompile Include="ProyectilSystem.cpp" />
     <ClCompile Include="RigidBodyForceRegistry.cpp" />
     <ClCompile Include="RigidBodyGen.cpp" />
@@ -313,6 +315,8 @@
     <ClInclude Include="MalabaresScene.h" />
     <ClInclude Include="MyContactCallback.h" />
     <ClInclude Include="Proyectil.h" />
+    <ClInclude Include="ProyectilRigidBody.h" />
+    <ClInclude Include="ProyectilRigidBodySystem.h" />
     <ClInclude Include="ProyectilSystem.h" />
     <ClInclude Include="RigidBodyForceRegistry.h" />
     <ClInclude Include="RigidBodyGen.h" />

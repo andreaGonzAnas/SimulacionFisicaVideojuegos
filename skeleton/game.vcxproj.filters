@@ -48,6 +48,8 @@
     <ClCompile Include="MalabaresScene.cpp" />
     <ClCompile Include="MyContactCallback.cpp" />
     <ClCompile Include="InitialMenuScene.cpp" />
+    <ClCompile Include="ProyectilRigidBody.cpp" />
+    <ClCompile Include="ProyectilRigidBodySystem.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="core.hpp" />
@@ -97,6 +99,8 @@
     <ClInclude Include="MalabaresScene.h" />
     <ClInclude Include="MyContactCallback.h" />
     <ClInclude Include="InitialMenuScene.h" />
+    <ClInclude Include="ProyectilRigidBody.h" />
+    <ClInclude Include="ProyectilRigidBodySystem.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Render">
