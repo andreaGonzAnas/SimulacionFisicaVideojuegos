@@ -35,12 +35,12 @@ void InitialMenuScene::init()
     cam->setHumanCannonMode(true);
 
     // estanterias
-    createEstanteria(PxVec3(20, 20, 20));
-    createEstanteria(PxVec3(50, 20, 20));
+    createEstanteria(PxVec3(20, 25, 20));
+    createEstanteria(PxVec3(50, 25, 20));
 
     // cubos
-    _exit = createCubes(PxVec3(20, 25, 20));
-    _play = createCubes(PxVec3(50, 25, 20));
+    _exit = createCubes(PxVec3(20, 30, 20));
+    _play = createCubes(PxVec3(50, 30, 20));
     
     // sistema proyectiles rigidos
     prSys = new ProyectilRigidBodySystem(gPhysics, _gScene);
