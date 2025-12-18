@@ -61,6 +61,7 @@ void LevelMenuScene::update(double t)
 
 void LevelMenuScene::clear()
 {
+    _isPendingDestroy = true;
     _levelMenu = false;
 
     // proyectiles
@@ -150,19 +151,22 @@ bool LevelMenuScene::handleKey(unsigned char key, const PxTransform& camera)
 
 void LevelMenuScene::handleContact(PxRigidActor* a, PxRigidActor* b)
 {
-    // 1. Identificamos quién es quién. 
     // Necesitamos saber si uno de los dos es un proyectil.
     bool involucraProyectil = false;
 
+    if (_isPendingDestroy || prSys == nullptr) {
+        return;
+    }
+
     // Recorremos los proyectiles activos para ver si 'a' o 'b' es uno de ellos
-    for (auto p : prSys->getRigidBodies()) { // Necesitarás un getter en prSys que devuelva la lista
+    for (auto p : prSys->getRigidBodies()) {
         if (a == p->getRigidDynamic() || b == p->getRigidDynamic()) {
             involucraProyectil = true;
             break;
         }
     }
 
-    // 2. Solo ejecutamos la lógica si un proyectil está involucrado
+    // Si un proyectil está involucrado
     if (involucraProyectil)
     {
         if (a == _balas || b == _balas)

@@ -14,7 +14,6 @@ ProyectilSystem::ProyectilSystem()
     _registry = new ParticleForceRegistry();
 
     //añadir fuerza gravitatoria
-    // Crear dos generadores de gravedad diferentes
     gravityEarth = new GravityForceGenerator();
 
     // Registrar fuerzas

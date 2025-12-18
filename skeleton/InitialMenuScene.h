@@ -26,6 +26,7 @@ private:
 	std::vector<RenderItem*> _scenary;
 	std::vector<physx::PxRigidDynamic*> _rigids;
 	std::vector<PxRigidStatic*> _statics;
+	bool _isPendingDestroy = false;
 
 public:
 	InitialMenuScene(PxPhysics* physics, PxScene* scene);

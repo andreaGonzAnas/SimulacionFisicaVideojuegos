@@ -11,7 +11,6 @@ ProyectilRigidBodySystem::ProyectilRigidBodySystem(PxPhysics* gPhysics, PxScene*
     _registry = new RigidBodyForceRegistry();
 
     //añadir fuerza gravitatoria
-    // Crear dos generadores de gravedad diferentes
     gravityEarth = new GravityForceGenerator();
 
     // Registrar fuerzas
@@ -43,7 +42,7 @@ void ProyectilRigidBodySystem::update(double t)
         {
             _registry->remove(obj->getRigidDynamic());
             _gScene->removeActor(*obj->getRigidDynamic());
-            delete obj;  // llama al destructor que libera el rigid body y renderItem
+            delete obj;
             it = _rigidBodies.erase(it);
         }
         else
