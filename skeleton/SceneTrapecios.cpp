@@ -76,6 +76,10 @@ void SceneTrapecios::update(double t)
 
             // reiniciar pos player
             _player->setGlobalPose({ 72, 40.5, 35 });
+            if (_player) {
+                _player->setLinearVelocity(PxVec3(0, 0, 0));
+                _player->setAngularVelocity(PxVec3(0, 0, 0));
+            }
 
             //reiniciar muelle
             _springSys->setStaticPos(initialCollectiblePos);
@@ -694,6 +698,12 @@ void SceneTrapecios::winGame()
     std::cout << "ganaste" << '\n';
     _win_game = true;
 
+    // Detener al jugador para que no siga cayendo
+    if (_player) {
+        _player->setLinearVelocity(PxVec3(0, 0, 0));
+        _player->setAngularVelocity(PxVec3(0, 0, 0));
+    }
+
     // activar confetti
     for (auto c : _confettis)
     {
@@ -711,11 +721,7 @@ void SceneTrapecios::loseGame()
         _isGameOver = true;
         _gameOverTimer = 0.0f;
 
-        // Opcional: Detener al jugador para que no siga cayendo
-        if (_player) {
-            _player->setLinearVelocity(PxVec3(0, 0, 0));
-            _player->setAngularVelocity(PxVec3(0, 0, 0));
-        }
+        
     }
 }
 
