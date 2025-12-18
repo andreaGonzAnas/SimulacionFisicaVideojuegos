@@ -63,6 +63,7 @@ private:
 
 	// GAME
 	bool _start_game = false;
+	bool _win_game = false;
 	physx::PxRigidStatic* _winPlatform = nullptr;
 
 public:

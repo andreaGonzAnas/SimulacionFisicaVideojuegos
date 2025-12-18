@@ -56,34 +56,40 @@ void SceneTrapecios::init()
     _staticParticle = _springSys->getStaticPart();
 
     // CONFETTIS
-    createConfettiSys(PxVec3(70, 60.5, 35));
-    createConfettiSys(PxVec3(10, 60.5, 35));
+    createConfettiSys(PxVec3(70, 60, 35));
+    createConfettiSys(PxVec3(10, 60, 35));
 }
 
 void SceneTrapecios::update(double t)
 {
-    // si player tiene que ponerse en trapecio...
-    if (_pendingAttachRegistered && _pendingAttachPalo) {
-        attachPlayerToTrapecio(_pendingAttachPalo);
-        _pendingAttachRegistered = false;
-        _pendingAttachPalo = nullptr;
-    }
-    
-    for (auto& t : _trapecios)
+    if (!_win_game)
     {
-        if (!t.active) continue;
+        // si player tiene que ponerse en trapecio...
+        if (_pendingAttachRegistered && _pendingAttachPalo) {
+            attachPlayerToTrapecio(_pendingAttachPalo);
+            _pendingAttachRegistered = false;
+            _pendingAttachPalo = nullptr;
+        }
 
-        PxReal angle = t.joint->getAngle();
+        for (auto& t : _trapecios)
+        {
+            if (!t.active) continue;
 
-        if (angle >= PxPi / 4) t.motorVel = -fabs(t.motorVel);
-        else if (angle <= -PxPi / 4) t.motorVel = fabs(t.motorVel);
+            PxReal angle = t.joint->getAngle();
 
-        t.joint->setDriveVelocity(t.motorVel);
-        t.palo2->wakeUp(); // asegura que el actor dinámico esté despierto
+            if (angle >= PxPi / 4) t.motorVel = -fabs(t.motorVel);
+            else if (angle <= -PxPi / 4) t.motorVel = fabs(t.motorVel);
+
+            t.joint->setDriveVelocity(t.motorVel);
+            t.palo2->wakeUp(); // asegura que el actor dinámico esté despierto
+        }
+
+        checkPlayerCollectible();
+
     }
-
     
-    checkPlayerCollectible();
+
+    // Actualizar muelle
 
     if (_hasCollectedParticle && _staticParticle && _player)
     {
@@ -96,10 +102,14 @@ void SceneTrapecios::update(double t)
     _springSys->update(t);
     
     // confetti
-    for (auto c : _confettis)
+    if (_win_game)
     {
-        c->update(t);
+        for (auto c : _confettis)
+        {
+            c->update(t);
+        }
     }
+    
 }
 
 void SceneTrapecios::clear()
@@ -572,6 +582,7 @@ void SceneTrapecios::createConfettiSys(physx::PxVec3 pos)
     ExplosionRigidBodySystem* _expSys = new ExplosionRigidBodySystem(new_solid, gPhysics, _gScene);
 
     _expSys->setSystemPosition(pos);
+    _expSys->setActive(false);
 
     _confettis.push_back(_expSys);
 }
@@ -595,6 +606,13 @@ void SceneTrapecios::startGame()
 void SceneTrapecios::winGame()
 {
     std::cout << "ganaste" << '\n';
+    _win_game = true;
+
+    // activar confetti
+    for (auto c : _confettis)
+    {
+        c->setActive(true);
+    }
 }
 
 
