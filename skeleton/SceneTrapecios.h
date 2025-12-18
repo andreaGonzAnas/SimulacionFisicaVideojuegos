@@ -21,9 +21,6 @@ struct Trapecio
 class SceneTrapecios : public Scene
 {
 private:
-	// SISTEMAS
-
-
 	// DECO
 	std::vector<RenderItem*> _scenary;
 
