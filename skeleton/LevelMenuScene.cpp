@@ -57,7 +57,7 @@ void LevelMenuScene::update(double t)
 
 void LevelMenuScene::clear()
 {
-    _initialMenu = false;
+    _levelMenu = false;
 
     // proyectiles
     if (prSys) { delete prSys; prSys = nullptr; }
