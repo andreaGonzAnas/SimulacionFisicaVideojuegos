@@ -166,9 +166,18 @@ void stepPhysics(bool interactive, double t)
 	//Update de la escena
 	_sceneManager->update(t);
 
-	if (_sceneManager->getCurrentScene()->getType() == 0) 
+	if (_sceneManager->getCurrentScene()->getType() == 0)
 	{
+		// Convertimos el puntero de Scene* a InitialMenuScene*
+		InitialMenuScene* menu = static_cast<InitialMenuScene*>(_sceneManager->getCurrentScene());
 
+		// Ahora ya puedes acceder al método específico
+		auto result = menu->getButtonResult();
+
+		if (result) //cambiar a changeLevel
+		{
+			_sceneManager->setScene(new SceneTrapecios(gPhysics, gScene));
+		}
 	}
 
 	//slow down the simulation, necessary for Verlet integration

@@ -337,11 +337,14 @@ void startRender(const PxVec3& cameraEye, const PxVec3& cameraDir, PxReal clipNe
 		drawText(display_reiniciarLose, 240, 340);
 	}
 
-
-	glColor4f(1.0f, 0.0f, 0.0f, 1.0f);
-	drawTextBig(initial_title, 235, 400);
-	drawTextBig(initial_start, 150, 125);
-	drawTextBig(initial_exit, 350, 125);
+	if (_initialMenu)
+	{
+		glColor4f(1.0f, 0.0f, 0.0f, 1.0f);
+		drawTextBig(initial_title, 235, 400);
+		drawTextBig(initial_start, 150, 125);
+		drawTextBig(initial_exit, 350, 125);
+	}
+	
 
 
 	

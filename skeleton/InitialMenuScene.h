@@ -37,7 +37,7 @@ public:
 	void createEstanteria(physx::PxVec3 pos);
 	PxRigidDynamic* createCubes(physx::PxVec3 pos);
 
-	bool getChangeLevel() { return changeToLevel; }
+	bool getButtonResult() { return changeToLevel; }
 	SceneType getType() override { return MENU; }
 };
 

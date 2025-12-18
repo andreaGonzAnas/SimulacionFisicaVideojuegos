@@ -19,6 +19,7 @@ InitialMenuScene::~InitialMenuScene()
 void InitialMenuScene::init()
 {
     // texto
+    _initialMenu = true;
 
     // Callback
     _myCallback = new MyContactCallback(nullptr, this);
@@ -54,6 +55,7 @@ void InitialMenuScene::update(double t)
 
 void InitialMenuScene::clear()
 {
+    _initialMenu = false;
 }
 
 bool InitialMenuScene::handleKey(unsigned char key, const PxTransform& camera)
