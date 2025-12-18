@@ -34,13 +34,13 @@ void SceneTrapecios::init()
     cam->setHumanCannonMode(true);
 
 	// ---- JOINTS/TRAPECIOS ----
-    createTrapecio(PxVec3(50, 53.5, 35), false);
+    createTrapecio(PxVec3(60, 53.5, 35), false);
 
     createTrapecio(PxVec3(20, 53.5, 35), true);
 
     // ---- PLATAFORMAS ----
-    createPlatforms(PxVec3(65, 33.5, 35));
-    createPlatforms(PxVec3(5, 33.5, 35));
+    createPlatforms(PxVec3(75, 33.5, 35));
+    createPlatforms(PxVec3(-5, 33.5, 35));
 
 	// ---- PLAYER ----
     createPlayer(20.0f);
@@ -235,7 +235,7 @@ void SceneTrapecios::createDeco()
 
     // --- PALO IZQUIERDO ---
     PxBoxGeometry gPaloIzq = PxBoxGeometry(1.0f, 36.0f, 2.0f);
-    PxTransform paloPoseIzq(PxVec3(0, 20, 35));
+    PxTransform paloPoseIzq(PxVec3(-10, 20, 35));
     PxRigidStatic* paloIzqActor = gPhysics->createRigidStatic(paloPoseIzq);
     physx::PxShape* paloShapeIzq = gPhysics->createShape(gPaloIzq, *gMaterial);
     paloIzqActor->attachShape(*paloShapeIzq);
@@ -247,7 +247,7 @@ void SceneTrapecios::createDeco()
 
     // --- PALO DERECHO ---
     PxBoxGeometry gPaloDer = PxBoxGeometry(1.4f, 36.0f, 2.0f);
-    PxTransform paloPoseDer(PxVec3(70, 20, 35));
+    PxTransform paloPoseDer(PxVec3(80, 20, 35));
     PxRigidStatic* paloDerActor = gPhysics->createRigidStatic(paloPoseDer);
     physx::PxShape* paloShapeDer = gPhysics->createShape(gPaloDer, *gMaterial);
     paloDerActor->attachShape(*paloShapeDer);
@@ -258,7 +258,7 @@ void SceneTrapecios::createDeco()
 
 
     // --- PALO SUPERIOR ---
-    PxBoxGeometry gPaloSup = PxBoxGeometry(36.0f, 0.4f, 2.0f);
+    PxBoxGeometry gPaloSup = PxBoxGeometry(45.0f, 0.4f, 2.0f);
     PxTransform paloPoseSup(PxVec3(35, 54, 35));
     PxRigidStatic* paloSupActor = gPhysics->createRigidStatic(paloPoseSup);
     physx::PxShape* paloShapeSup = gPhysics->createShape(gPaloSup, *gMaterial);
@@ -367,7 +367,6 @@ void SceneTrapecios::createPlatforms(physx::PxVec3 pos)
         0.0f   // restitución = 0 → sin rebote
     );
 
-
     shapeSuelo->setMaterials(&sueloMat, 1);
 
     //physx::PxShape* shapeSuelo = CreateShape(PxBoxGeometry(100, 0.1, 100));
@@ -384,7 +383,7 @@ void SceneTrapecios::createPlatforms(physx::PxVec3 pos)
 void SceneTrapecios::createPlayer(float masa)
 {
     // Posición inicial del jugador en el suelo
-    PxVec3 playerPos(62, 40.5, 35);
+    PxVec3 playerPos(72, 40.5, 35);
 
     // Crear actor dinámico
     PxRigidDynamic* player = gPhysics->createRigidDynamic(PxTransform(playerPos));
@@ -427,7 +426,7 @@ void SceneTrapecios::createMalla()
     PxRigidStatic* _suelo = gPhysics->createRigidStatic(PxTransform({ 35, 17, 35 }));
 
     // Crear forma del suelo y asignarle el material
-    physx::PxShape* shapeSuelo = CreateShape(PxBoxGeometry(38, 0.5, 10));
+    physx::PxShape* shapeSuelo = CreateShape(PxBoxGeometry(45, 0.5, 10));
 
     PxMaterial* sueloMat = gPhysics->createMaterial(
         0.2f,  // fricción estática
