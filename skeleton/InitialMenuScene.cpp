@@ -126,7 +126,7 @@ bool InitialMenuScene::handleKey(unsigned char key, const PxTransform& camera)
             Vector3 dir = GetCamera()->getDir() * 50.0f;
 
             // Creamos el proyectil
-            prSys->createProyectil(gPhysics, _gScene, bolaShape, pos, dir, 0.5, 10.0, Vector4(1.0f, 0.0f, 0.0f, 1.0f));
+            prSys->createProyectil(gPhysics, _gScene, bolaShape, pos, dir, 0.5, 10.0, Vector4(1.0f, 0.6f, 0.0f, 1.0f));
 
             break;
         }
@@ -179,7 +179,7 @@ void InitialMenuScene::createEstanteria(physx::PxVec3 pos)
     _gScene->addActor(*hand);
 
     // Crear RenderItem para visualizar la mano
-    RenderItem* rHand = new RenderItem(handShape, hand, Vector4(1.0f, 0.85f, 0.7f, 1.0f)); // color piel aproximado
+    RenderItem* rHand = new RenderItem(handShape, hand, Vector4(0.52f, 0.22f, 0.022f, 1.0f));
     _scenary.push_back(rHand);
     _statics.push_back(hand);
 }
