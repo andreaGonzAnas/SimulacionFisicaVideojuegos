@@ -6,6 +6,7 @@ class RenderItem;
 class CollectibleParticleSystem;
 class Particula;
 class MyContactCallback;
+class ExplosionRigidBodySystem;
 
 struct Trapecio
 {
@@ -57,6 +58,8 @@ private:
 	physx::PxRigidDynamic* _pendingAttachPalo = nullptr;
 	bool _pendingAttachRegistered = false;
 
+	// RIGIDS
+	ExplosionRigidBodySystem* _expSys;
 
 	// GAME
 	bool _start_game = false;

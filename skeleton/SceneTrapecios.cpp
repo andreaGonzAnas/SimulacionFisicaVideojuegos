@@ -6,6 +6,7 @@
 #include <iostream>
 
 #include "CollectibleParticleSystem.h"
+#include "ExplosionRigidBodySystem.h"
 
 SceneTrapecios::SceneTrapecios(PxPhysics* physics, PxScene* scene) : Scene(physics)
 {
@@ -53,6 +54,16 @@ void SceneTrapecios::init()
     PxMaterial* gMaterial = gPhysics->createMaterial(0.5f, 0.5f, 0.6f);
     _springSys = new CollectibleParticleSystem(gMaterial, physx::PxVec3(35, 53.5, 35));
     _staticParticle = _springSys->getStaticPart();
+
+    // ---- SISTEMA DE RIGIDOS ----
+    // Anadir un actor dinamico
+    PxRigidDynamic* new_solid;
+    new_solid = gPhysics->createRigidDynamic(PxTransform({ 50,200,-80 }));
+    new_solid->setLinearVelocity({ 0,5,0 });
+    new_solid->setAngularVelocity({ 0,0,0 });
+    physx::PxShape* shape_ad = CreateShape(PxBoxGeometry(5, 5, 5));
+    new_solid->attachShape(*shape_ad);
+    _expSys = new ExplosionRigidBodySystem(new_solid, gPhysics, _gScene);
 }
 
 void SceneTrapecios::update(double t)
@@ -89,6 +100,7 @@ void SceneTrapecios::update(double t)
     }
 
     _springSys->update(t);
+    _expSys->update(t);
 }
 
 void SceneTrapecios::clear()

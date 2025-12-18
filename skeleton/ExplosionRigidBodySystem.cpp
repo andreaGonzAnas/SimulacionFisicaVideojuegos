@@ -63,17 +63,16 @@ void ExplosionRigidBodySystem::update(double t)
             auto newParticles = _generators.front()->generateP();
             if (!newParticles.empty())
             {
-                // Registrar cada nueva partícula en el registro de fuerzas
-                for (auto p : _rigidBodies) {
-                    _registry->add(p->getRigidDynamic(), gravityEarth);
-                    _registry->add(p->getRigidDynamic(), windForce);
-                }
-
                 for (auto r : newParticles)
                 {
+                    // AÑADIR A LA ESCENA
                     _gScene->addActor(*r->getRigidDynamic());
-                }
 
+                    // REGISTRAR FUERZAS SOLO A LAS NUEVAS (¡Error corregido aquí!)
+                    _registry->add(r->getRigidDynamic(), gravityEarth);
+                    _registry->add(r->getRigidDynamic(), windForce);
+                }
+                // Mover a la lista principal
                 _rigidBodies.splice(_rigidBodies.end(), newParticles);
             }
 

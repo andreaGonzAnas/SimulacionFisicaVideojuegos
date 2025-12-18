@@ -111,7 +111,7 @@ void initPhysics(bool interactive)
 
 	_sceneTrapecios = new SceneTrapecios(gPhysics, gScene);
 
-	_sceneMalabares = new MalabaresScene(gPhysics, gScene);
+	//_sceneMalabares = new MalabaresScene(gPhysics, gScene);
 
 	//Setear escena actual
 	_sceneManager->setScene(_sceneTrapecios);

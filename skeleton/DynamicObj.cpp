@@ -24,7 +24,14 @@ DynamicObj::DynamicObj(const physx::PxVec3& linVel, const physx::PxVec3& angVel,
 
 DynamicObj::~DynamicObj()
 {
-	
+	if (_renderItem) {
+		// Método que uses para quitarlo de tu motor de renderizado
+		DeregisterRenderItem(_renderItem);
+		delete _renderItem;
+	}
+	if (_rigidDynamic) {
+		_rigidDynamic->release(); // Importante para PhysX
+	}
 }
 
 void DynamicObj::update(double t)
