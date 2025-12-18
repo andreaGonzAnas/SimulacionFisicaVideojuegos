@@ -88,9 +88,12 @@ void SceneTrapecios::update(double t)
                 _player->setAngularVelocity(PxVec3(0, 0, 0));
             }
 
-            //reiniciar muelle
+            // reiniciar muelle
             _springSys->setStaticPos(initialCollectiblePos);
             _hasCollectedParticle = false;
+
+            // reiniciar trapecio
+            startGame();
 
             _lose = false;
         }
