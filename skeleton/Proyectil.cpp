@@ -5,7 +5,7 @@
 Proyectil::Proyectil(Vector4 color, double masaR, double velR, double velS, physx::PxShape* esferaShape)
 {
 	//PARA PROYECTIL
-	double energiaR = 1 / 2 * masaR * velR * velR;
+	double energiaR = 0.5 * masaR * velR * velR;
 
 	//energia simulada
 	double energiaS = energiaR;

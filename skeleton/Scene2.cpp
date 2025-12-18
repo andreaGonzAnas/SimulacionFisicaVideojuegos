@@ -241,7 +241,7 @@ bool Scene2::handleKey(unsigned char key, const PxTransform& camera)
                 // masa = 70 kg
                 // vel = 40 m/s
 
-                _proyectilSys->createProyectil(Vector4(0.0f, 0.404f, 0.249f, 1.0f), 60, 42, 30, esferaShape);
+                _proyectilSys->createProyectil(Vector4(0.0f, 0.404f, 0.249f, 1.0f), 60, 40, 60, esferaShape);
                 _who_has_shot = 0;
             }
 
@@ -261,7 +261,7 @@ bool Scene2::handleKey(unsigned char key, const PxTransform& camera)
                 // masa = 70 kg
                 // vel = 40 m/s
 
-                _proyectilSys->createProyectil(Vector4(0.0f, 0.404f, 0.249f, 1.0f), 60, 42, 30, esferaShape);
+                _proyectilSys->createProyectil(Vector4(0.0f, 0.204f, 0.5f, 1.0f), 80, 30, 50, esferaShape);
                 _who_has_shot = 1;
             }
 
@@ -281,7 +281,7 @@ bool Scene2::handleKey(unsigned char key, const PxTransform& camera)
                 // masa = 80 kg
                 // vel = 25 m/s
 
-                _proyectilSys->createProyectil(Vector4(0.6f, 0.0f, 1.0f, 1.0f), 85, 22, 60, esferaShape);
+                _proyectilSys->createProyectil(Vector4(0.6f, 0.0f, 1.0f, 1.0f), 120, 22, 30, esferaShape);
                 _who_has_shot = 2;
             }
             
