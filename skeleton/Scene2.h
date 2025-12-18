@@ -41,12 +41,7 @@ private:
 	bool _hasShotRossa = false;
 	bool _hasShotCaleb = false;
 	bool _hasShotTim = false;
-
-	// game over
-	float _gameOverTimer = 0.0f;
-	const float RESET_DELAY = 3.0f; // 3 segundos
-	PxVec3 initialCollectiblePos = { 35, 53.5, 35 };
-	bool _isGameOver = false;
+	int _who_has_shot = -1;
 
 public:
 	Scene2(PxPhysics* physics);
@@ -63,6 +58,5 @@ public:
 	void createNewFirework();
 	void createWalls();
 	void createFireCircles();
-	void gameOver();
 };
 

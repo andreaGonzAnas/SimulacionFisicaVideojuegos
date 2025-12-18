@@ -99,29 +99,26 @@ void Scene2::init()
 
 void Scene2::update(double t)
 {
-    if (!_isGameOver)
+    // ---- COMPROBAR SI TODOS LOS CÍRCULOS HAN SIDO ATRAVESADOS ----
+    if (!_hasPassedFire)
     {
-        // ---- COMPROBAR SI TODOS LOS CÍRCULOS HAN SIDO ATRAVESADOS ----
-        if (!_hasPassedFire)
+        bool allPassed = true;
+        for (auto& circle : _fireCircles)
         {
-            bool allPassed = true;
-            for (auto& circle : _fireCircles)
-            {
-                if (!circle.passed) { allPassed = false; break; }
-            }
-
-            if (allPassed)
-            {
-                startCelebration();
-                _hasPassedFire = true;
-            }
+            if (!circle.passed) { allPassed = false; break; }
         }
 
-        // ---- CIRCULO FUEGOS -----
-        for (auto a : _firesInScene)
+        if (allPassed)
         {
-            a->update(t);
+            startCelebration();
+            _hasPassedFire = true;
         }
+    }
+
+    // ---- CIRCULO FUEGOS -----
+    for (auto a : _firesInScene)
+    {
+        a->update(t);
     }
 
     // ---- PROYECTIL ----
@@ -147,6 +144,22 @@ void Scene2::update(double t)
                     circle.passed = true;
                     puntuacion += 100;
                     display_score = "PUNTUACION: " + std::to_string(puntuacion);
+
+                    if (_who_has_shot == 0)
+                    {
+                        _hasShotRossa = true;
+                        _who_has_shot = -1;
+                    }
+                    else if (_who_has_shot == 1)
+                    {
+                        _hasShotCaleb = true;
+                        _who_has_shot = -1;
+                    }
+                    else if(_who_has_shot == 2)
+                    {
+                        _hasShotTim = true;
+                        _who_has_shot = -1;
+                    }
                 }
             }
         }
@@ -172,31 +185,6 @@ void Scene2::update(double t)
     else if (_hasPassedFire)
     {
         createNewFirework();
-    }
-
-
-    // ---- COMPROBAR SI HA PERDIDO
-    if (_hasShotRossa && _hasShotCaleb && _hasShotTim && !_hasPassedFire)
-    {
-        // game over
-        gameOver();
-    }
-
-    if (_isGameOver) {
-        _gameOverTimer += t;
-
-        if (_gameOverTimer >= RESET_DELAY) {
-            _isGameOver = false;
-            _gameOverTimer = 0.0f;
-
-            // reiniciar contadores
-            _hasShotRossa = false;
-            _hasShotCaleb = false;
-            _hasShotTim = false;
-
-            //texto
-        }
-        return;
     }
 
 }
@@ -254,9 +242,8 @@ bool Scene2::handleKey(unsigned char key, const PxTransform& camera)
                 // vel = 40 m/s
 
                 _proyectilSys->createProyectil(Vector4(0.0f, 0.404f, 0.249f, 1.0f), 60, 42, 30, esferaShape);
-                _hasShotRossa = true;
+                _who_has_shot = 0;
             }
-            
 
             break;
         }
@@ -275,13 +262,12 @@ bool Scene2::handleKey(unsigned char key, const PxTransform& camera)
                 // vel = 40 m/s
 
                 _proyectilSys->createProyectil(Vector4(0.0f, 0.404f, 0.249f, 1.0f), 60, 42, 30, esferaShape);
-                _hasShotCaleb = true;
+                _who_has_shot = 1;
             }
-            
 
             break;
         }
-        case 't': // humano2
+        case 't': // humano3
         {
             if (!_hasShotTim)
             {
@@ -296,9 +282,9 @@ bool Scene2::handleKey(unsigned char key, const PxTransform& camera)
                 // vel = 25 m/s
 
                 _proyectilSys->createProyectil(Vector4(0.6f, 0.0f, 1.0f, 1.0f), 85, 22, 60, esferaShape);
-                _hasShotTim = true;
+                _who_has_shot = 2;
             }
-
+            
             break;
         }
         case 'g':
@@ -528,14 +514,5 @@ void Scene2::createFireCircles()
     }
      
 
-    
 }
 
-void Scene2::gameOver()
-{
-    if (!_isGameOver) {
-        std::cout << "PERDISTE. Reiniciando en " << RESET_DELAY << " segundos..." << std::endl;
-        _isGameOver = true;
-        _gameOverTimer = 0.0f;
-    }
-}
