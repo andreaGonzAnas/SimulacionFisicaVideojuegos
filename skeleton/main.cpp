@@ -152,7 +152,7 @@ void initPhysics(bool interactive)
 
 	_levelMenuScene = new LevelMenuScene(gPhysics, gScene);
 
-	//Setear escena actual
+	//Setear escena inicial proyecto final
 	_sceneManager->setScene(_initialMenuScene);
 	
 }
@@ -230,7 +230,7 @@ void cleanupPhysics(bool interactive)
 	transport->release();
 	
 	gFoundation->release();
-	}
+}
 
 
 
