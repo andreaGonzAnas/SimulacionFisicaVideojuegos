@@ -7,6 +7,7 @@
 
 #include "CollectibleParticleSystem.h"
 #include "ExplosionRigidBodySystem.h"
+#include "FireParticleSystem.h"
 
 #include <PxPhysicsAPI.h>
 
@@ -26,6 +27,7 @@ void SceneTrapecios::init()
     
     // ---- DECORACION ----
 	createDeco();
+    createFires(physx::PxVec3(-10, 55, 35));
 
     // ---- CAMERA ----
     PxVec3 centro(35, 40, 35);
@@ -113,6 +115,11 @@ void SceneTrapecios::update(double t)
         }
     }
     
+    // ---- FILA FUEGOS -----
+    for (auto a : _firesInScene)
+    {
+        a->update(t);
+    }
 }
 
 void SceneTrapecios::clear()
@@ -133,6 +140,13 @@ void SceneTrapecios::clear()
         }
     }
     _scenary.clear(); // Vaciamos nuestra lista de rastreo
+
+    for (auto*& a : _firesInScene)
+    {
+        delete a;
+        a = nullptr;
+    }
+    _firesInScene.clear();
 
     // 3. ELIMINAR JOINTS (Antes que los actores)
     if (_playerJoint) { _playerJoint->release(); _playerJoint = nullptr; }
@@ -588,6 +602,33 @@ void SceneTrapecios::createConfettiSys(physx::PxVec3 pos)
     _expSys->setActive(false);
 
     _confettis.push_back(_expSys);
+}
+
+void SceneTrapecios::createFires(physx::PxVec3 pos)
+{
+    PxVec3 inicioFilaDer(pos.x + 0.0f, pos.y, pos.z);
+    int numFuegosFila = 7;
+    float espaciado = 15.0f; // Distancia entre cada fuego
+
+    for (int i = 0; i < numFuegosFila; ++i)
+    {
+        // Calculamos la X sumando el espaciado multiplicado por el índice
+        // Esto los alinea: fuego0 en X, fuego1 en X+2, fuego2 en X+4...
+        float x = inicioFilaDer.x + (i * espaciado);
+        float y = inicioFilaDer.y;
+        float z = inicioFilaDer.z;
+
+        Particula* pAux = new Particula(Vector3(x, y, z), Vector3(0, 2, 0), 0.98, 0.1);
+
+        // Color naranja más claro y saturado como pediste
+        pAux->setColor(Vector4(1.0f, 0.5f, 0.1f, 1.0f));
+        pAux->setTimeVida(0.3);
+
+        FireParticleSystem* _firePartSystem = new FireParticleSystem(pAux, gPhysics);
+        _firePartSystem->setActiveWhirlWind(false);
+        _firePartSystem->setActiveWind(true);
+        _firesInScene.push_back(_firePartSystem);
+    }
 }
 
 void SceneTrapecios::startGame()

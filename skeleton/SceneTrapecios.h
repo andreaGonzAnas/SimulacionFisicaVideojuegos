@@ -7,6 +7,7 @@ class CollectibleParticleSystem;
 class Particula;
 class MyContactCallback;
 class ExplosionRigidBodySystem;
+class FireParticleSystem;
 
 struct Trapecio
 {
@@ -23,6 +24,7 @@ class SceneTrapecios : public Scene
 private:
 	// DECO
 	std::vector<RenderItem*> _scenary;
+	std::vector<FireParticleSystem*> _firesInScene;
 
 	// CAMERA
 	physx::PxVec3 _initPosCamera;
@@ -63,6 +65,7 @@ private:
 	bool _win_game = false;
 	physx::PxRigidStatic* _winPlatform = nullptr;
 
+
 public:
 
 
@@ -94,6 +97,7 @@ public:
 
 	// CONFETTI
 	void createConfettiSys(physx::PxVec3 pos);
+	void createFires(physx::PxVec3 pos);
 
 	// GAMEPLAY
 	void startGame();
