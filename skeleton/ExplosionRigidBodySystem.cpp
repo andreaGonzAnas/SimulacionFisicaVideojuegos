@@ -48,7 +48,12 @@ ExplosionRigidBodySystem::ExplosionRigidBodySystem(PxRigidDynamic* p, PxPhysics*
 
 ExplosionRigidBodySystem::~ExplosionRigidBodySystem()
 {
-    
+    for (auto item : _rigidBodies) {
+        if (item) {
+            DeregisterRenderItem(item->getRenderItem());
+            const_cast<RenderItem*>(item->getRenderItem())->actor = nullptr;
+        }
+    }
 }
 
 void ExplosionRigidBodySystem::update(double t)

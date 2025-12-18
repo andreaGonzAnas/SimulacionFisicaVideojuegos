@@ -8,7 +8,7 @@
 #include "CollectibleParticleSystem.h"
 #include "ExplosionRigidBodySystem.h"
 
-
+#include <PxPhysicsAPI.h>
 
 SceneTrapecios::SceneTrapecios(PxPhysics* physics, PxScene* scene) : Scene(physics)
 {
@@ -25,7 +25,7 @@ void SceneTrapecios::init()
     _myCallback = new MyContactCallback(this);
     
     // ---- DECORACION ----
-	//createDeco();
+	createDeco();
 
     // ---- CAMERA ----
     PxVec3 centro(35, 40, 35);
@@ -37,9 +37,8 @@ void SceneTrapecios::init()
     cam->setHumanCannonMode(true);
 
 	// ---- JOINTS/TRAPECIOS ----
-    //createTrapecio(PxVec3(60, 53.5, 35), false);
-
-    //createTrapecio(PxVec3(20, 53.5, 35), true);
+    createTrapecio(PxVec3(60, 53.5, 35), false);
+    createTrapecio(PxVec3(20, 53.5, 35), true);
 
     // ---- PLATAFORMAS ----
     createPlatforms(PxVec3(75, 33.5, 35));
@@ -49,7 +48,7 @@ void SceneTrapecios::init()
     createPlayer(20.0f);
 
 	// ---- SUELO (CAMA ELASTICA) ----
-   // createMalla();
+    createMalla();
 
     // ---- PARTICULA RECOGIBLE ----
     //Material
@@ -66,148 +65,127 @@ void SceneTrapecios::update(double t)
 {
     if (!_player || _statics.empty()) return;
     
-    //if (!_win_game)
-    //{
-    //    // si player tiene que ponerse en trapecio...
-    //    if (_pendingAttachRegistered && _pendingAttachPalo) {
-    //        attachPlayerToTrapecio(_pendingAttachPalo);
-    //        _pendingAttachRegistered = false;
-    //        _pendingAttachPalo = nullptr;
-    //    }
+    if (!_win_game)
+    {
+        // si player tiene que ponerse en trapecio...
+        if (_pendingAttachRegistered && _pendingAttachPalo) {
+            attachPlayerToTrapecio(_pendingAttachPalo);
+            _pendingAttachRegistered = false;
+            _pendingAttachPalo = nullptr;
+        }
 
-    //    for (auto& t : _trapecios)
-    //    {
-    //        if (!t.active) continue;
+        for (auto& t : _trapecios)
+        {
+            if (!t.active) continue;
 
-    //        PxReal angle = t.joint->getAngle();
+            PxReal angle = t.joint->getAngle();
 
-    //        if (angle >= PxPi / 4) t.motorVel = -fabs(t.motorVel);
-    //        else if (angle <= -PxPi / 4) t.motorVel = fabs(t.motorVel);
+            if (angle >= PxPi / 4) t.motorVel = -fabs(t.motorVel);
+            else if (angle <= -PxPi / 4) t.motorVel = fabs(t.motorVel);
 
-    //        t.joint->setDriveVelocity(t.motorVel);
-    //        t.palo2->wakeUp(); // asegura que el actor dinámico esté despierto
-    //    }
+            t.joint->setDriveVelocity(t.motorVel);
+            t.palo2->wakeUp(); // asegura que el actor dinámico esté despierto
+        }
 
-    //    checkPlayerCollectible();
+        checkPlayerCollectible();
 
-    //}
-    //
+    }
+    
 
-    //// Actualizar muelle
+    // Actualizar muelle
 
-    //if (_hasCollectedParticle && _staticParticle && _player)
-    //{
-    //    PxVec3 playerPos = _player->getGlobalPose().p;
+    if (_hasCollectedParticle && _staticParticle && _player)
+    {
+        PxVec3 playerPos = _player->getGlobalPose().p;
 
-    //    PxVec3 offset(0.0f, 1.0f, 0.0f); // ejemplo
-    //    _springSys->setStaticPos(playerPos + offset);
-    //}
+        PxVec3 offset(0.0f, 1.0f, 0.0f); // ejemplo
+        _springSys->setStaticPos(playerPos + offset);
+    }
 
-    //_springSys->update(t);
-    //
-    //// confetti
-    //if (_win_game)
-    //{
-    //    for (auto c : _confettis)
-    //    {
-    //        c->update(t);
-    //    }
-    //}
+    _springSys->update(t);
+    
+    // confetti
+    if (_win_game)
+    {
+        for (auto c : _confettis)
+        {
+            c->update(t);
+        }
+    }
     
 }
 
 void SceneTrapecios::clear()
 {
-    // 1. Bloqueo de seguridad y Callbacks
     _start_game = false;
     _win_game = false;
     isGame = false;
 
-    if (_myCallback) {
-        _gScene->setSimulationEventCallback(nullptr);
-        delete _myCallback;
-        _myCallback = nullptr;
-    }
+    // 1. Limpiar Callbacks
+    if (_gScene) _gScene->setSimulationEventCallback(nullptr);
+    if (_myCallback) { delete _myCallback; _myCallback = nullptr; }
 
-    std::cout << "Iniciando limpieza de " << _scenary.size() << " objetos visuales." << std::endl;
-
-    // 2. Vaciado del Render (Paso Crítico para evitar el crash de getGlobalPose)
+    // 2. VACIADO VISUAL
     for (auto item : _scenary) {
         if (item) {
             DeregisterRenderItem(item);
             const_cast<RenderItem*>(item)->actor = nullptr;
         }
     }
-    _scenary.clear();
+    _scenary.clear(); // Vaciamos nuestra lista de rastreo
 
     // 3. ELIMINAR JOINTS (Antes que los actores)
-    // Joint del jugador
-    if (_playerJoint) {
-        _playerJoint->release();
-        _playerJoint = nullptr;
-    }
-    // Joints de los trapecios
+    if (_playerJoint) { _playerJoint->release(); _playerJoint = nullptr; }
     for (auto& t : _trapecios) {
-        if (t.joint) {
-            t.joint->release();
-            t.joint = nullptr;
-        }
+        if (t.joint) { t.joint->release(); t.joint = nullptr; }
     }
 
-    //3. ELIMINAR RIGIDBODIES(Física)
-        for (auto r : _rigids) {
-            if (r) {
-                _gScene->removeActor(*r);
+    // 4. ELIMINAR RÍGIDOS (Player y palos móviles)
+    for (auto r : _rigids) {
+        if (r) {
+            _gScene->removeActor(*r);
+            PxU32 nShapes = r->getNbShapes();
+            physx::PxShape* shapes[8];
+            r->getShapes(shapes, nShapes);
+            for (PxU32 i = 0; i < nShapes; i++) shapes[i]->release();
 
-                // Limpieza profunda de shapes (tu lógica)
-                PxU32 nShapes = r->getNbShapes();
-                physx::PxShape* shapes[8];
-                r->getShapes(shapes, nShapes);
-                for (PxU32 i = 0; i < nShapes; i++) shapes[i]->release();
-
-                // Si es el player, nos aseguramos de limpiar la referencia específica
-                if (r == _player) _player = nullptr;
-
-                r->release();
+            if (r->userData) {
+                r->userData = nullptr;
             }
+            r->release();
         }
+    }
     _rigids.clear();
+    _player = nullptr;
 
-    // 5. ELIMINAR ESTÁTICOS (_statics: Suelo, Soportes, Plataformas)
+    // 5. ELIMINAR ESTÁTICOS (Malla, Suelo, Columnas)
     for (auto s : _statics) {
         if (s) {
             _gScene->removeActor(*s);
-
+            
             PxU32 nShapes = s->getNbShapes();
             physx::PxShape* shapes[8];
             s->getShapes(shapes, nShapes);
-            for (PxU32 i = 0; i < nShapes; i++) {
-                if (shapes[i]) shapes[i]->release();
-            }
 
+            for (PxU32 i = 0; i < nShapes; i++) {
+                shapes[i]->release();
+            }
+            
             s->release();
+            s = nullptr;
         }
     }
     _statics.clear();
 
-
-    // 6. Limpieza de sistemas y punteros restantes
+    // 6. Sistemas de partículas y cámara
     if (_springSys) { delete _springSys; _springSys = nullptr; }
-
-    // Limpiar confetis (suponiendo que tienen su propio destructor)
-    for (auto c : _confettis) { if (c) delete c; }
+    for (auto c : _confettis) delete c;
     _confettis.clear();
 
-    _winPlatform = nullptr;
-
-    // volver camara a su sitio
     Camera* cam = GetCamera();
     cam->setTransform(_initPosCamera);
     cam->setDir(_initDirCamera);
     cam->setHumanCannonMode(false);
-    isGame = false;
-
-    std::cout << "Items en scenary borrados. Quedan vivos en el motor: " << _scenary.size() << std::endl;
 }
 
 bool SceneTrapecios::handleKey(unsigned char key, const PxTransform& camera)
@@ -271,7 +249,6 @@ void SceneTrapecios::createDeco()
 
     // Parte visual
     RenderItem* rBox = new RenderItem(squareShape, groundActor, Vector4(0.8f, 0.30f, 0.11f, 1.0f));
-    RegisterRenderItem(rBox);
     _scenary.push_back(rBox);
 
 
@@ -285,7 +262,6 @@ void SceneTrapecios::createDeco()
     _statics.push_back(paloIzqActor);
 
     RenderItem* rPaloIzq = new RenderItem(paloShapeIzq, paloIzqActor, Vector4(0.6f, 0.6f, 0.6f, 0.2f));
-    RegisterRenderItem(rPaloIzq);
     _scenary.push_back(rPaloIzq);
 
     // --- PALO DERECHO ---
@@ -298,7 +274,6 @@ void SceneTrapecios::createDeco()
     _statics.push_back(paloDerActor);
 
     RenderItem* rPaloDer = new RenderItem(paloShapeDer, paloDerActor, Vector4(0.6f, 0.6f, 0.6f, 0.2f));
-    RegisterRenderItem(rPaloDer);
     _scenary.push_back(rPaloDer);
 
     // --- PALO SUPERIOR ---
@@ -311,7 +286,6 @@ void SceneTrapecios::createDeco()
     _statics.push_back(paloSupActor);
 
     RenderItem* rPaloSup = new RenderItem(paloShapeSup, paloSupActor, Vector4(0.6f, 0.6f, 0.6f, 0.2f));
-    RegisterRenderItem(rPaloSup);
     _scenary.push_back(rPaloSup);
 }
 
@@ -328,7 +302,6 @@ void SceneTrapecios::createTrapecio(physx::PxVec3 pos, bool startActive)
     palo1->attachShape(*shape);
 
     RenderItem* item = new RenderItem(shape, palo1, { 1.0f, 0.1f, 0.1f, 1.0f });
-    RegisterRenderItem(item);
     _gScene->addActor(*palo1);
     _scenary.push_back(item);
     _statics.push_back(palo1);
@@ -350,7 +323,6 @@ void SceneTrapecios::createTrapecio(physx::PxVec3 pos, bool startActive)
 
 
     RenderItem* item2 = new RenderItem(shape2, palo2, { 0.0f, 0.1f, 0.8f, 1.0f });
-    RegisterRenderItem(item2);
     _gScene->addActor(*palo2);
     _scenary.push_back(item2);
     _rigids.push_back(palo2);
@@ -451,8 +423,7 @@ void SceneTrapecios::createPlayer(float masa)
 
     // Crear render item para que se vea
     RenderItem* rPlayer = new RenderItem(playerShape, player, { 0.8f, 0.2f, 0.2f, 1.0f });
-    RegisterRenderItem(rPlayer);
-
+  
     // Guardar en vector de render o miembro de la clase si lo necesitas
     _scenary.push_back(rPlayer);
 
@@ -473,28 +444,27 @@ void SceneTrapecios::createPlayer(float masa)
 void SceneTrapecios::createMalla()
 {
     // SUELO
-    PxRigidStatic* _suelo = gPhysics->createRigidStatic(PxTransform({ 35, 17, 35 }));
-
-    // Crear forma del suelo y asignarle el material
-    physx::PxShape* shapeSuelo = CreateShape(PxBoxGeometry(45, 0.5, 10));
+    PxRigidStatic* mallaActor = gPhysics->createRigidStatic(PxTransform({ 35, 17, 35 }));
 
     PxMaterial* sueloMat = gPhysics->createMaterial(
         0.2f,  // fricción estática
         0.2f,  // fricción dinámica
         0.8f   // restitución = 0 → sin rebote
     );
-
+    // Crear forma del suelo y asignarle el material
+    physx::PxShape* shapeSuelo = CreateShape(PxBoxGeometry(45, 0.5, 10));
     shapeSuelo->setMaterials(&sueloMat, 1);
 
-    _suelo->attachShape(*shapeSuelo);
-    _gScene->addActor(*_suelo);
+    mallaActor->attachShape(*shapeSuelo);
+    _gScene->addActor(*mallaActor);
 
     // Pintar suelo
     RenderItem* item;
-    item = new RenderItem(shapeSuelo, _suelo, { 0.8, 0.8,0.8,1 });
-    RegisterRenderItem(item);
+    item = new RenderItem(shapeSuelo, mallaActor, { 0.8, 0.8,0.8,1 });
+   
     _scenary.push_back(item);
-    _statics.push_back(_suelo);
+    
+    _statics.push_back(mallaActor);
 }
 
 void SceneTrapecios::recogerParticula()
