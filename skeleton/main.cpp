@@ -203,6 +203,21 @@ void stepPhysics(bool interactive, double t)
 		}
 	}
 
+	// juego
+	if (_sceneManager->getCurrentScene()->getType() == 1)
+	{
+		// Convertimos el puntero de Scene* a InitialMenuScene*
+		SceneTrapecios* menu = static_cast<SceneTrapecios*>(_sceneManager->getCurrentScene());
+
+		// Ahora ya puedes acceder al método específico
+		auto result = menu->getChangeScene();
+
+		if (result) //cambiar a level
+		{
+			_sceneManager->setScene(new LevelMenuScene(gPhysics, gScene));
+		}
+	}
+
 	//slow down the simulation, necessary for Verlet integration
 	//TODO: review the physics timestep and the integrator stability
 	std::this_thread::sleep_for(std::chrono::microseconds(10));

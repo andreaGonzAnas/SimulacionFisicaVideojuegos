@@ -99,6 +99,20 @@ void SceneTrapecios::update(double t)
         }
         return;
     }
+
+    if (_isWin) {
+        _winTimer += t;
+
+        if (_winTimer >= RESET_DELAY) {
+            _isWin = false;
+            _winTimer = 0.0f;
+
+            //cambiar de escena
+            changeScene = true;
+            _victory = false;
+        }
+        return;
+    }
     
     if (!_win_game)
     {
@@ -560,7 +574,7 @@ void SceneTrapecios::handleContact(PxRigidActor* a, PxRigidActor* b)
     
     // --- SI TOCA LA MALLA ---
     // (Asegúrate de tener guardado el puntero de la malla en _mallaActor al crearla)
-    if (other == mallaActor)
+    if (other == mallaActor && !_isWin)
     {
         loseGame();
         return;
@@ -711,6 +725,8 @@ void SceneTrapecios::winGame()
     std::cout << "ganaste" << '\n';
     _win_game = true;
     _victory = true;
+    _isWin = true;
+    _winTimer = 0.0f;
 
     // Detener al jugador para que no siga cayendo
     if (_player) {

@@ -67,11 +67,17 @@ private:
 	bool _win_game = false;
 	physx::PxRigidStatic* _winPlatform = nullptr;
 	physx::PxRigidStatic* mallaActor = nullptr;
+
 	bool _isGameOver = false;
 	float _gameOverTimer = 0.0f;
 	const float RESET_DELAY = 3.0f; // 3 segundos
+
+	bool _isWin = false;
+	float _winTimer = 0.0f;
+
 	PxVec3 initialCollectiblePos = { 35, 53.5, 35 };
 
+	bool changeScene = false;
 
 public:
 
@@ -111,4 +117,5 @@ public:
 	void loseGame();
 
 	SceneType getType() override { return GAME; }
+	bool getChangeScene() { return changeScene; }
 };

@@ -366,6 +366,9 @@ void Scene2::startCelebration()
 
     // activar texto victoria
     _victory = true;
+
+    // timer para cambiar de escena
+
 }
 
 void Scene2::createNewFirework()

@@ -43,6 +43,8 @@ private:
 	bool _hasShotTim = false;
 	int _who_has_shot = -1;
 
+	bool changeScene = false;
+
 public:
 	Scene2(PxPhysics* physics);
 	~Scene2();
