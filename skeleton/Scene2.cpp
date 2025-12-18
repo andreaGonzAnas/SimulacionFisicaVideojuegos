@@ -133,6 +133,14 @@ void Scene2::update(double t)
         }
     }
 
+    // ---- COMPROBAR SI HA PERDIDO
+    if (_hasShotRossa && _hasShotRossa && _hasShotRossa && !_hasPassedFire)
+    {
+        // game over
+
+        // reinicio
+    }
+
     // ---- COMPROBAR SI TODOS LOS CÍRCULOS HAN SIDO ATRAVESADOS ----
     if (!_hasPassedFire)
     {
@@ -148,6 +156,8 @@ void Scene2::update(double t)
             _hasPassedFire = true;
         }
     }
+
+    
 
     // ---- ACTUALIZAR CONFETTI Y FUEGOS ARTIFICIALES ----
     for (auto a : _confettis)
@@ -211,35 +221,65 @@ bool Scene2::handleKey(unsigned char key, const PxTransform& camera)
 {
     switch (key)
     {
-        case 'c': // humano1
+        case 'r': // humano1
         {
-            //Geometria
-            PxMaterial* gMaterial = gPhysics->createMaterial(0.5f, 0.5f, 0.6f);
-            PxSphereGeometry gSphere = PxSphereGeometry();
-            gSphere.radius = 0.8;
-            physx::PxShape* esferaShape = CreateShape(gSphere, gMaterial);
+            if (!_hasShotRossa)
+            {
+                //Geometria
+                PxMaterial* gMaterial = gPhysics->createMaterial(0.5f, 0.5f, 0.6f);
+                PxSphereGeometry gSphere = PxSphereGeometry();
+                gSphere.radius = 0.8;
+                physx::PxShape* esferaShape = CreateShape(gSphere, gMaterial);
 
-            // Masa y velocidad real propias de un human cannonball
-            // masa = 70 kg
-            // vel = 40 m/s
+                // Masa y velocidad real propias de un human cannonball
+                // masa = 70 kg
+                // vel = 40 m/s
 
-            _proyectilSys->createProyectil(Vector4(0.0f, 0.404f, 0.249f, 1.0f), 60, 42, 30, esferaShape);
+                _proyectilSys->createProyectil(Vector4(0.0f, 0.404f, 0.249f, 1.0f), 60, 42, 30, esferaShape);
+                _hasShotRossa = true;
+            }
+            
+
+            break;
+        }
+        case 'c': // humano2
+        {
+            if (!_hasShotCaleb)
+            {
+                //Geometria
+                PxMaterial* gMaterial = gPhysics->createMaterial(0.5f, 0.5f, 0.6f);
+                PxSphereGeometry gSphere = PxSphereGeometry();
+                gSphere.radius = 0.8;
+                physx::PxShape* esferaShape = CreateShape(gSphere, gMaterial);
+
+                // Masa y velocidad real propias de un human cannonball
+                // masa = 70 kg
+                // vel = 40 m/s
+
+                _proyectilSys->createProyectil(Vector4(0.0f, 0.404f, 0.249f, 1.0f), 60, 42, 30, esferaShape);
+                _hasShotCaleb = true;
+            }
+            
 
             break;
         }
         case 't': // humano2
         {
-            //Geometria
-            PxMaterial* gMaterial = gPhysics->createMaterial(0.5f, 0.5f, 0.6f);
-            PxSphereGeometry gSphere = PxSphereGeometry();
-            gSphere.radius = 0.8;
-            physx::PxShape* esferaShape = CreateShape(gSphere, gMaterial);
+            if (!_hasShotTim)
+            {
+                //Geometria
+                PxMaterial* gMaterial = gPhysics->createMaterial(0.5f, 0.5f, 0.6f);
+                PxSphereGeometry gSphere = PxSphereGeometry();
+                gSphere.radius = 0.8;
+                physx::PxShape* esferaShape = CreateShape(gSphere, gMaterial);
 
-            // Masa y velocidad real propias de un human cannonball
-            // masa = 80 kg
-            // vel = 25 m/s
+                // Masa y velocidad real propias de un human cannonball
+                // masa = 80 kg
+                // vel = 25 m/s
 
-            _proyectilSys->createProyectil(Vector4(0.0f, 0.204f, 0.449f, 1.0f), 85, 22, 60, esferaShape);
+                _proyectilSys->createProyectil(Vector4(0.6f, 0.0f, 1.0f, 1.0f), 85, 22, 60, esferaShape);
+                _hasShotTim = true;
+            }
 
             break;
         }

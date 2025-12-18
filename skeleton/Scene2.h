@@ -38,6 +38,11 @@ private:
 
 	int puntuacion = 0;
 
+	bool _hasShotRossa = false;
+	bool _hasShotCaleb = false;
+	bool _hasShotTim = false;
+
+
 public:
 	Scene2(PxPhysics* physics);
 	~Scene2();

@@ -112,7 +112,7 @@ void initPhysics(bool interactive)
 	_sceneTrapecios = new SceneTrapecios(gPhysics, gScene);
 
 	//Setear escena actual
-	_sceneManager->setScene(_sceneTrapecios);
+	_sceneManager->setScene(_scene2);
 	
 
 }
