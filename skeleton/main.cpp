@@ -55,11 +55,23 @@ std::string display_reiniciarWin = "Volviendo al menu en 3 segundos...";
 std::string display_lose = "¡TE CAISTE!";
 std::string display_reiniciarLose = "Reiniciando en 3 segundos...";
 
+// Initial Menu
+std::string initial_title = "SIMULADOR DE CIRCO";
+std::string initial_start = "START";
+std::string initial_exit = "EXIT";
+
+// Level Menu
+std::string level_title = "ELIGE ACTO";
+std::string level_bala = "HUMANO BALA";
+std::string level_trapecios = "TRAPECIOS";
+
 
 bool _personas_balas = false;
 bool _victory = false;
 bool _lose = false;
 bool _trapeciosText = false;
+bool _initialMenu = false;
+bool _levelMenu = false;
 
 using namespace physx;
 

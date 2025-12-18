@@ -336,6 +336,14 @@ void startRender(const PxVec3& cameraEye, const PxVec3& cameraDir, PxReal clipNe
 		drawText(display_lose, 250, 350);
 		drawText(display_reiniciarLose, 240, 340);
 	}
+
+
+	glColor4f(1.0f, 0.0f, 0.0f, 1.0f);
+	drawTextBig(initial_title, 235, 400);
+	drawTextBig(initial_start, 150, 125);
+	drawTextBig(initial_exit, 350, 125);
+
+
 	
 
 	// Setup camera
@@ -452,6 +460,32 @@ void drawText(const std::string& text, int x, int y)
 	glMatrixMode(GL_PROJECTION);
 	glLoadMatrixd(matrix);
 	glMatrixMode(GL_MODELVIEW);
+}
+
+void drawTextBig(std::string text, int x, int y) {
+	glMatrixMode(GL_PROJECTION);
+	double* matrix = new double[16];
+	glGetDoublev(GL_PROJECTION_MATRIX, matrix);
+	glLoadIdentity();
+	glOrtho(0, 512, 0, 512, -5, 5);
+	glMatrixMode(GL_MODELVIEW);
+	glLoadIdentity();
+	glPushMatrix();
+
+	glRasterPos2i(x, y);
+
+	int length = text.length();
+	for (int i = 0; i < length; i++) {
+		// CAMBIO AQUÍ: Usamos la fuente de 24 puntos
+		glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24, (int)text[i]);
+	}
+
+	glPopMatrix();
+	glMatrixMode(GL_PROJECTION);
+	glLoadMatrixd(matrix);
+	glMatrixMode(GL_MODELVIEW);
+
+	delete[] matrix; // ¡Importante! No olvides liberar la memoria
 }
 
 
