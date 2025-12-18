@@ -261,7 +261,7 @@ void SceneTrapecios::createDeco()
     _gScene->addActor(*paloIzqActor);
     _statics.push_back(paloIzqActor);
 
-    RenderItem* rPaloIzq = new RenderItem(paloShapeIzq, paloIzqActor, Vector4(0.6f, 0.6f, 0.6f, 0.2f));
+    RenderItem* rPaloIzq = new RenderItem(paloShapeIzq, paloIzqActor, Vector4(0.8f, 0.30f, 0.11f, 1.0f));
     _scenary.push_back(rPaloIzq);
 
     // --- PALO DERECHO ---
@@ -273,7 +273,7 @@ void SceneTrapecios::createDeco()
     _gScene->addActor(*paloDerActor);
     _statics.push_back(paloDerActor);
 
-    RenderItem* rPaloDer = new RenderItem(paloShapeDer, paloDerActor, Vector4(0.6f, 0.6f, 0.6f, 0.2f));
+    RenderItem* rPaloDer = new RenderItem(paloShapeDer, paloDerActor, Vector4(0.8f, 0.30f, 0.11f, 1.0f));
     _scenary.push_back(rPaloDer);
 
     // --- PALO SUPERIOR ---
@@ -285,7 +285,7 @@ void SceneTrapecios::createDeco()
     _gScene->addActor(*paloSupActor);
     _statics.push_back(paloSupActor);
 
-    RenderItem* rPaloSup = new RenderItem(paloShapeSup, paloSupActor, Vector4(0.6f, 0.6f, 0.6f, 0.2f));
+    RenderItem* rPaloSup = new RenderItem(paloShapeSup, paloSupActor, Vector4(0.8f, 0.30f, 0.11f, 1.0f));
     _scenary.push_back(rPaloSup);
 }
 
@@ -301,7 +301,7 @@ void SceneTrapecios::createTrapecio(physx::PxVec3 pos, bool startActive)
     physx::PxShape* shape = CreateShape(PxBoxGeometry(1.0f, 1.0f, 1.0f));
     palo1->attachShape(*shape);
 
-    RenderItem* item = new RenderItem(shape, palo1, { 1.0f, 0.1f, 0.1f, 1.0f });
+    RenderItem* item = new RenderItem(shape, palo1, Vector4(0.94f, 0.5f, 0.04f, 1.0f));
     _gScene->addActor(*palo1);
     _scenary.push_back(item);
     _statics.push_back(palo1);
@@ -322,7 +322,7 @@ void SceneTrapecios::createTrapecio(physx::PxVec3 pos, bool startActive)
     PxRigidBodyExt::updateMassAndInertia(*palo2, 40.0f);
 
 
-    RenderItem* item2 = new RenderItem(shape2, palo2, { 0.0f, 0.1f, 0.8f, 1.0f });
+    RenderItem* item2 = new RenderItem(shape2, palo2, Vector4(0.8f, 0.07f, 0.07f, 1.0f));
     _gScene->addActor(*palo2);
     _scenary.push_back(item2);
     _rigids.push_back(palo2);
@@ -394,7 +394,7 @@ physx::PxRigidStatic* SceneTrapecios::createPlatforms(physx::PxVec3 pos)
 
     // Pintar suelo
     RenderItem* item;
-    item = new RenderItem(shapeSuelo, _suelo, { 0.8, 0.8,0.8,1 });
+    item = new RenderItem(shapeSuelo, _suelo, Vector4(0.8f, 0.07f, 0.07f, 1.0f));
 
     _statics.push_back(_suelo);
     _scenary.push_back(item);
@@ -422,7 +422,7 @@ void SceneTrapecios::createPlayer(float masa)
 
 
     // Crear render item para que se vea
-    RenderItem* rPlayer = new RenderItem(playerShape, player, { 0.8f, 0.2f, 0.2f, 1.0f });
+    RenderItem* rPlayer = new RenderItem(playerShape, player, Vector4(0.94f, 0.5f, 0.04f, 1.0f));
   
     // Guardar en vector de render o miembro de la clase si lo necesitas
     _scenary.push_back(rPlayer);
@@ -430,8 +430,6 @@ void SceneTrapecios::createPlayer(float masa)
     // Guardar referencia global para controlar
     _player = player;
 
-    /// Bloquea el movimiento lineal en Z (no se moverá hacia el fondo ni hacia la cámara)
-    //_player->setRigidDynamicLockFlag(PxRigidDynamicLockFlag::eLOCK_LINEAR_Z, true);
 
     // Bloquea todas las rotaciones para que no se caiga ni gire
     _player->setRigidDynamicLockFlag(PxRigidDynamicLockFlag::eLOCK_ANGULAR_X, true);
@@ -460,7 +458,7 @@ void SceneTrapecios::createMalla()
 
     // Pintar suelo
     RenderItem* item;
-    item = new RenderItem(shapeSuelo, mallaActor, { 0.8, 0.8,0.8,1 });
+    item = new RenderItem(shapeSuelo, mallaActor, Vector4(1.0f, 0.6f, 0.3f, 1.0f));
    
     _scenary.push_back(item);
     

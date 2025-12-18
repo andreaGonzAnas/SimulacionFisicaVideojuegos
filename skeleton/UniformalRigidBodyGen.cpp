@@ -54,12 +54,14 @@ std::list<DynamicObj*> UniformalRigidBodyGen::generateP()
             PxVec3 linVel = PxVec3(velX, velY, velZ);
 
             // Color con ligera variación
-            Vector4 baseC = Vector4(0.8f, 0.0f, 0.8f, 1.0f);
+            Vector4 baseC = Vector4(0.23f, 1.0f, 0.84f, 1.0f); // Tu Turquesa
+            float randomVal = static_cast<float>(_u(_mt));    // Aleatorio entre 0.0 y 1.0
+
             Vector4 newC = Vector4(
-                std::clamp<float>(baseC.x + static_cast<float>(_u(_mt)) * 0.4f, 0.0f, 1.0f),
-                std::clamp<float>(baseC.y + static_cast<float>(_u(_mt)) * 0.5f, 0.0f, 1.0f),
-                std::clamp<float>(baseC.z + static_cast<float>(_u(_mt)) * 0.2f, 0.7f, 1.0f),
-                baseC.w
+                std::clamp(baseC.x, 0.1f, 0.3f),                     // Rojo: Bajo
+                1.0f,                                               // Verde: SIEMPRE al máximo
+                std::clamp(baseC.z - (randomVal * 0.6f), 0.0f, 0.5f), // Azul: REDUCIDO para que tire a verde
+                1.0f
             );
 
             // Variación de material

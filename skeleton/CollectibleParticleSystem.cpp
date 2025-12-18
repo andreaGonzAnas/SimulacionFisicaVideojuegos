@@ -16,7 +16,7 @@ CollectibleParticleSystem::CollectibleParticleSystem(PxMaterial* gMaterial, phys
 	gSphere.radius = 0.5;
 	physx::PxShape* esferaShape = CreateShape(gSphere, gMaterial);
 
-	RenderItem* renderItem2 = new RenderItem(esferaShape, _staticParticle->getTr(), Vector4(1.0f, 1.0f, 0.0f, 1.0f));
+	RenderItem* renderItem2 = new RenderItem(esferaShape, _staticParticle->getTr(), Vector4(0.23f, 1.0f, 0.84f, 1.0f));
 	_staticParticle->setRenderItem(renderItem2);
 
 	// Particula 3 que se mueve
@@ -25,7 +25,7 @@ CollectibleParticleSystem::CollectibleParticleSystem(PxMaterial* gMaterial, phys
 	gSphere.radius = 0.5;
 	esferaShape = CreateShape(gSphere, gMaterial);
 
-	RenderItem* renderItem3 = new RenderItem(esferaShape, _movingParticle->getTr(), Vector4(1.0f, 1.0f, 0.0f, 1.0f));
+	RenderItem* renderItem3 = new RenderItem(esferaShape, _movingParticle->getTr(), Vector4(0.23f, 1.0f, 0.84f, 1.0f));
 	_movingParticle->setRenderItem(renderItem3);
 	_movingParticle->setTimeVida(70000);
 
