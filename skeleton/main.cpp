@@ -26,6 +26,7 @@
 #include "Scene3.h"
 #include "SceneTrapecios.h"
 #include "InitialMenuScene.h"
+#include "LevelMenuScene.h"
 
 
 #include <iostream>
@@ -99,6 +100,7 @@ Scene* _scene2;
 Scene* _scene3;
 SceneTrapecios* _sceneTrapecios;
 InitialMenuScene* _initialMenuScene;
+LevelMenuScene* _levelMenuScene;
 
 
 // Initialize physics engine
@@ -147,6 +149,8 @@ void initPhysics(bool interactive)
 
 	_initialMenuScene = new InitialMenuScene(gPhysics, gScene);
 
+	_levelMenuScene = new LevelMenuScene(gPhysics, gScene);
+
 	//Setear escena actual
 	_sceneManager->setScene(_initialMenuScene);
 	
@@ -175,6 +179,25 @@ void stepPhysics(bool interactive, double t)
 		auto result = menu->getButtonResult();
 
 		if (result) //cambiar a changeLevel
+		{
+			_sceneManager->setScene(new LevelMenuScene(gPhysics, gScene));
+		}
+	}
+
+	if (_sceneManager->getCurrentScene()->getType() == 2)
+	{
+		// Convertimos el puntero de Scene* a InitialMenuScene*
+		LevelMenuScene* menu = static_cast<LevelMenuScene*>(_sceneManager->getCurrentScene());
+
+		// Ahora ya puedes acceder al método específico
+		auto result = menu->getButtonResult();
+
+		if (result == 1) //cambiar a balas
+		{
+			_scene2->set_gScene(gScene);
+			_sceneManager->setScene(new Scene2(gPhysics));
+		}
+		else if (result == 2)
 		{
 			_sceneManager->setScene(new SceneTrapecios(gPhysics, gScene));
 		}

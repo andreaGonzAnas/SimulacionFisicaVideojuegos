@@ -6,12 +6,14 @@
 
 class SceneTrapecios;
 class InitialMenuScene;
+class LevelMenuScene;
 
 class MyContactCallback : public physx::PxSimulationEventCallback
 {
 public:
     SceneTrapecios* scene;
 	InitialMenuScene* initialMenu;
+	LevelMenuScene* levelMenu;
 
 	void onContact(
 		const physx::PxContactPairHeader& pairHeader,
@@ -19,7 +21,7 @@ public:
 		physx::PxU32 nbPairs
 	) override;
 
-	MyContactCallback(SceneTrapecios* scene, InitialMenuScene* initialMenu);
+	MyContactCallback(SceneTrapecios* scene, InitialMenuScene* initialMenu, LevelMenuScene* levelMenu);
 	~MyContactCallback();
 
 	// Heredado vía PxSimulationEventCallback

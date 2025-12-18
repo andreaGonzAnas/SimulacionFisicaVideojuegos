@@ -1,20 +1,23 @@
 #include "MyContactCallback.h"
 #include "SceneTrapecios.h"
 #include "InitialMenuScene.h"
+#include "LevelMenuScene.h"
 
 using namespace physx;
 
 
-MyContactCallback::MyContactCallback(SceneTrapecios* _scene, InitialMenuScene* _initialMenu): scene(_scene), initialMenu(_initialMenu)
+MyContactCallback::MyContactCallback(SceneTrapecios* _scene, InitialMenuScene* _initialMenu, LevelMenuScene* _levelMenu): scene(_scene), initialMenu(_initialMenu), levelMenu(_levelMenu)
 {
     if (scene) scene->get_gScene()->setSimulationEventCallback(this);
     if (initialMenu) initialMenu->get_gScene()->setSimulationEventCallback(this);
+    if (levelMenu) levelMenu->get_gScene()->setSimulationEventCallback(this);
 }
 
 MyContactCallback::~MyContactCallback()
 {
     if (scene) scene->get_gScene()->setSimulationEventCallback(nullptr);
     if (initialMenu) initialMenu->get_gScene()->setSimulationEventCallback(nullptr);
+    if (levelMenu) levelMenu->get_gScene()->setSimulationEventCallback(nullptr);
 }
 
 void MyContactCallback::onConstraintBreak(PxConstraintInfo* constraints, PxU32 count)
@@ -41,6 +44,8 @@ void MyContactCallback::onContact(const PxContactPairHeader& pairHeader, const P
             if(scene) scene->handleContact(pairHeader.actors[0], pairHeader.actors[1]);
 
             if(initialMenu) initialMenu->handleContact(pairHeader.actors[0], pairHeader.actors[1]);
+            
+            if(levelMenu) levelMenu->handleContact(pairHeader.actors[0], pairHeader.actors[1]);
         }
     }
 }

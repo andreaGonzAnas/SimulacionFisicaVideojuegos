@@ -1,4 +1,4 @@
-#include "InitialMenuScene.h"
+#include "LevelMenuScene.h"
 #include "MyContactCallback.h"
 #include "ProyectilRigidBodySystem.h"
 #include "PxShape.h"
@@ -7,25 +7,24 @@
 
 #include <PxPhysicsAPI.h>
 
-extern bool _initialMenu;
+extern bool _levelMenu;
 
-InitialMenuScene::InitialMenuScene(PxPhysics* physics, PxScene* scene) : Scene(physics)
+LevelMenuScene::LevelMenuScene(PxPhysics* physics, PxScene* scene) : Scene(physics)
 {
     set_gScene(scene);
 }
 
-InitialMenuScene::~InitialMenuScene()
+LevelMenuScene::~LevelMenuScene()
 {
 }
 
-void InitialMenuScene::init()
+void LevelMenuScene::init()
 {
     // texto
-    _initialMenu = true;
+    _levelMenu = true;
 
     // Callback
-    _myCallback = new MyContactCallback(nullptr, this, nullptr);
-
+    _myCallback = new MyContactCallback(nullptr, nullptr, this);
 
     // Camera
     PxVec3 centro(35, 40, 35);
@@ -41,20 +40,22 @@ void InitialMenuScene::init()
     createEstanteria(PxVec3(50, 25, 20));
 
     // cubos
-    _exit = createCubes(PxVec3(20, 30, 20));
-    _play = createCubes(PxVec3(50, 30, 20));
-    
+    _trapecios = createCubes(PxVec3(20, 30, 20));
+    _balas = createCubes(PxVec3(50, 30, 20));
+
     // sistema proyectiles rigidos
     prSys = new ProyectilRigidBodySystem(gPhysics, _gScene);
 
+
+
 }
 
-void InitialMenuScene::update(double t)
+void LevelMenuScene::update(double t)
 {
     prSys->update(t);
 }
 
-void InitialMenuScene::clear()
+void LevelMenuScene::clear()
 {
     _initialMenu = false;
 
@@ -105,38 +106,37 @@ void InitialMenuScene::clear()
         }
     }
     _statics.clear();
-
 }
 
-bool InitialMenuScene::handleKey(unsigned char key, const PxTransform& camera)
+bool LevelMenuScene::handleKey(unsigned char key, const PxTransform& camera)
 {
     switch (key)
     {
-        case ' ': // Disparar
-        {
-            PxMaterial* gMaterial = gPhysics->createMaterial(0.5f, 0.5f, 0.6f);
-            PxShape* bolaShape = gPhysics->createShape(PxSphereGeometry(1.0f), *gMaterial);
+    case ' ': // Disparar
+    {
+        PxMaterial* gMaterial = gPhysics->createMaterial(0.5f, 0.5f, 0.6f);
+        PxShape* bolaShape = gPhysics->createShape(PxSphereGeometry(1.0f), *gMaterial);
 
-            bolaShape->setSimulationFilterData(PxFilterData(1, 1, 1, 1));
-            bolaShape->setFlag(PxShapeFlag::eSIMULATION_SHAPE, true);
-            bolaShape->setFlag(PxShapeFlag::eSCENE_QUERY_SHAPE, true);
+        bolaShape->setSimulationFilterData(PxFilterData(1, 1, 1, 1));
+        bolaShape->setFlag(PxShapeFlag::eSIMULATION_SHAPE, true);
+        bolaShape->setFlag(PxShapeFlag::eSCENE_QUERY_SHAPE, true);
 
-            // Obtenemos posición y dirección de la cámara
-            Vector3 pos = GetCamera()->getTransform().p;
-            Vector3 dir = GetCamera()->getDir() * 50.0f;
+        // Obtenemos posición y dirección de la cámara
+        Vector3 pos = GetCamera()->getTransform().p;
+        Vector3 dir = GetCamera()->getDir() * 50.0f;
 
-            // Creamos el proyectil
-            prSys->createProyectil(gPhysics, _gScene, bolaShape, pos, dir, 0.5, 10.0, Vector4(1.0f, 0.0f, 0.0f, 1.0f));
+        // Creamos el proyectil
+        prSys->createProyectil(gPhysics, _gScene, bolaShape, pos, dir, 0.5, 10.0, Vector4(1.0f, 0.0f, 0.0f, 1.0f));
 
-            break;
-        }
+        break;
+    }
 
-        default: return false;
+    default: return false;
     }
     return true;
 }
 
-void InitialMenuScene::handleContact(PxRigidActor* a, PxRigidActor* b)
+void LevelMenuScene::handleContact(PxRigidActor* a, PxRigidActor* b)
 {
     // 1. Identificamos quién es quién. 
     // Necesitamos saber si uno de los dos es un proyectil.
@@ -144,7 +144,7 @@ void InitialMenuScene::handleContact(PxRigidActor* a, PxRigidActor* b)
 
     // Recorremos los proyectiles activos para ver si 'a' o 'b' es uno de ellos
     for (auto p : prSys->getRigidBodies()) { // Necesitarás un getter en prSys que devuelva la lista
-        if (a == p->getRigidDynamic()|| b == p->getRigidDynamic()) {
+        if (a == p->getRigidDynamic() || b == p->getRigidDynamic()) {
             involucraProyectil = true;
             break;
         }
@@ -153,20 +153,20 @@ void InitialMenuScene::handleContact(PxRigidActor* a, PxRigidActor* b)
     // 2. Solo ejecutamos la lógica si un proyectil está involucrado
     if (involucraProyectil)
     {
-        if (a == _play || b == _play)
+        if (a == _balas || b == _balas)
         {
-            std::cout << "¡PLAY! Iniciando nivel..." << std::endl;
-            changeToLevel = true;
+            std::cout << "a las balas" << std::endl;
+            changeToLevel = 1;
         }
-        else if (a == _exit || b == _exit)
+        else if (a == _trapecios || b == _trapecios)
         {
-            std::cout << "¡EXIT! Saliendo..." << std::endl;
-            exit(0);
+            std::cout << "a los trapecios" << std::endl;
+            changeToLevel = 2;
         }
     }
 }
 
-void InitialMenuScene::createEstanteria(physx::PxVec3 pos)
+void LevelMenuScene::createEstanteria(physx::PxVec3 pos)
 {
     // Crear actor dinámico
     PxRigidStatic* hand = gPhysics->createRigidStatic(PxTransform(pos));
@@ -184,7 +184,7 @@ void InitialMenuScene::createEstanteria(physx::PxVec3 pos)
     _statics.push_back(hand);
 }
 
-PxRigidDynamic* InitialMenuScene::createCubes(physx::PxVec3 pos)
+PxRigidDynamic* LevelMenuScene::createCubes(physx::PxVec3 pos)
 {
     // Crear actor dinámico
     PxRigidDynamic* hand = gPhysics->createRigidDynamic(PxTransform(pos));
@@ -203,6 +203,6 @@ PxRigidDynamic* InitialMenuScene::createCubes(physx::PxVec3 pos)
     RenderItem* rHand = new RenderItem(handShape, hand, Vector4(1.0f, 0.0f, 0.0f, 1.0f));
     _scenary.push_back(rHand);
     _rigids.push_back(hand);
-    
+
     return hand;
 }
