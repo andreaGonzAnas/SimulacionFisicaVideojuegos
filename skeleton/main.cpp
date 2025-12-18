@@ -25,7 +25,7 @@
 #include "Scene2.h"
 #include "Scene3.h"
 #include "SceneTrapecios.h"
-#include "MalabaresScene.h"
+#include "InitialMenuScene.h"
 
 
 #include <iostream>
@@ -86,7 +86,7 @@ Scene* _scene1;
 Scene* _scene2;
 Scene* _scene3;
 SceneTrapecios* _sceneTrapecios;
-MalabaresScene* _sceneMalabares;
+InitialMenuScene* _initialMenuScene;
 
 
 // Initialize physics engine
@@ -133,10 +133,11 @@ void initPhysics(bool interactive)
 
 	_sceneTrapecios = new SceneTrapecios(gPhysics, gScene);
 
-	//Setear escena actual
-	_sceneManager->setScene(_scene2);
-	
+	_initialMenuScene = new InitialMenuScene(gPhysics, gScene);
 
+	//Setear escena actual
+	_sceneManager->setScene(_initialMenuScene);
+	
 }
 
 // Function to configure what happens in each step of physics

@@ -263,6 +263,7 @@
     <ClCompile Include="DynamicObj.cpp" />
     <ClCompile Include="ExplosionRigidBodySystem.cpp" />
     <ClCompile Include="FireParticleSystem.cpp" />
+    <ClCompile Include="InitialMenuScene.cpp" />
     <ClCompile Include="MalabaresScene.cpp" />
     <ClCompile Include="MyContactCallback.cpp" />
     <ClCompile Include="Proyectil.cpp" />
@@ -308,6 +309,7 @@
     <ClInclude Include="DynamicObj.h" />
     <ClInclude Include="ExplosionRigidBodySystem.h" />
     <ClInclude Include="FireParticleSystem.h" />
+    <ClInclude Include="InitialMenuScene.h" />
     <ClInclude Include="MalabaresScene.h" />
     <ClInclude Include="MyContactCallback.h" />
     <ClInclude Include="Proyectil.h" />

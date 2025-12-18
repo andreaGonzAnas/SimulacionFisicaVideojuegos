@@ -47,6 +47,7 @@
     <ClCompile Include="CollectibleParticleSystem.cpp" />
     <ClCompile Include="MalabaresScene.cpp" />
     <ClCompile Include="MyContactCallback.cpp" />
+    <ClCompile Include="InitialMenuScene.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="core.hpp" />
@@ -95,6 +96,7 @@
     <ClInclude Include="CollectibleParticleSystem.h" />
     <ClInclude Include="MalabaresScene.h" />
     <ClInclude Include="MyContactCallback.h" />
+    <ClInclude Include="InitialMenuScene.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Render">
