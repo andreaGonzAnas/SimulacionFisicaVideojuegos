@@ -1,10 +1,18 @@
 #pragma once
 #include "Scene.h"
+#include <vector>
+
+class MyContactCallback;
 
 class InitialMenuScene : public Scene
 {
 private:
+	// COLISIONES
+	MyContactCallback* _myCallback = nullptr;
 
+	// CAMERA
+	physx::PxVec3 _initPosCamera;
+	physx::PxVec3 _initDirCamera;
 
 public:
 	InitialMenuScene(PxPhysics* physics, PxScene* scene);
@@ -16,5 +24,9 @@ public:
 	void clear() override;
 	bool handleKey(unsigned char key, const PxTransform& camera);
 
+	void handleContact(PxRigidActor* a, PxRigidActor* b);
+
+	void createEstanteria(physx::PxVec3 pos);
+	void createCubes(physx::PxVec3 pos);
 };
 

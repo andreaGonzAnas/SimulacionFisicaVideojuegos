@@ -1,17 +1,20 @@
 #include "MyContactCallback.h"
 #include "SceneTrapecios.h"
+#include "InitialMenuScene.h"
 
 using namespace physx;
 
 
-MyContactCallback::MyContactCallback(SceneTrapecios* _scene): scene(_scene)
+MyContactCallback::MyContactCallback(SceneTrapecios* _scene, InitialMenuScene* _initialMenu): scene(_scene), initialMenu(_initialMenu)
 {
-    scene->get_gScene()->setSimulationEventCallback(this);
+    if (scene) scene->get_gScene()->setSimulationEventCallback(this);
+    if (initialMenu) initialMenu->get_gScene()->setSimulationEventCallback(this);
 }
 
 MyContactCallback::~MyContactCallback()
 {
-    scene->get_gScene()->setSimulationEventCallback(nullptr);
+    if (scene) scene->get_gScene()->setSimulationEventCallback(nullptr);
+    if (initialMenu) initialMenu->get_gScene()->setSimulationEventCallback(nullptr);
 }
 
 void MyContactCallback::onConstraintBreak(PxConstraintInfo* constraints, PxU32 count)
@@ -35,7 +38,9 @@ void MyContactCallback::onContact(const PxContactPairHeader& pairHeader, const P
         if (pairs[i].events & PxPairFlag::eNOTIFY_TOUCH_FOUND)
         {
             // pasar los dos actores de colision
-            scene->handleContact(pairHeader.actors[0], pairHeader.actors[1]);
+            if(scene) scene->handleContact(pairHeader.actors[0], pairHeader.actors[1]);
+
+            if(initialMenu) initialMenu->handleContact(pairHeader.actors[0], pairHeader.actors[1]);
         }
     }
 }

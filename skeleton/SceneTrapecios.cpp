@@ -30,7 +30,7 @@ void SceneTrapecios::init()
 
 
 	// CALLBACK
-    _myCallback = new MyContactCallback(this);
+    _myCallback = new MyContactCallback(this, nullptr);
     
     // ---- DECORACION ----
 	createDeco();
